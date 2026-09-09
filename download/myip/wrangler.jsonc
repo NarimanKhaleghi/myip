@@ -1,0 +1,31 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // Cloudflare Workers configuration for myip (via OpenNext).
+  // Docs: https://developers.cloudflare.com/workers/frameworks/framework-guides/next-js/
+  "name": "myip",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2025-09-23",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 0.05
+  }
+
+  // ── Optional: custom domain ────────────────────────────────────────────────
+  // Requires the thepm.ir zone to be in the same Cloudflare account.
+  // Uncomment, commit & push — Cloudflare redeploys automatically:
+  //
+  // "routes": [{ "pattern": "myip.thepm.ir", "custom_domain": true }]
+
+  // ── Optional: KV cache for IP lookups (higher cache hit-rate across isolates)
+  // 1) Create a namespace: dashboard → Storage & Databases → KV → Create namespace "myip-cache"
+  //    (or run: npx wrangler kv namespace create CACHE)
+  // 2) Paste its id below and push. The app also works perfectly WITHOUT KV
+  //    (it falls back to a per-isolate in-memory cache).
+  //
+  // "kv_namespaces": [{ "binding": "CACHE", "id": "REPLACE_WITH_YOUR_KV_NAMESPACE_ID" }]
+}

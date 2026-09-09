@@ -64,3 +64,22 @@ Stage Summary:
 - myip.thepm.ir is now strictly black & white per the uploaded design system: sharp corners, hard shadows, invert-on-hover, engineering grid + grain, Lalezar display type, mono tags with pattern-based status.
 - GitHub integration: github.com/NarimanKhaleghi/myip with GitHub logo in header, hero, footer (+ open-source MIT statement); contact email pm@thepm.ir; footer credit "ساخته شده با ❤️ توسط نریمان" / "Made with ❤️ by Nariman" (grayscale heart).
 - All functionality preserved: 5 API sources, DNSBL, WebRTC test, speed test, compare, history, export, QR, bilingual RTL/LTR, dark/light.
+
+---
+Task ID: 3
+Agent: Super Z (main)
+Task: Prepare myip for GitHub + Cloudflare Workers auto-deploy; write bilingual READMEs (fa/en) matching the user's Markdown_Converter style; add all GitHub/Cloudflare files.
+
+Work Log:
+- Cleaned repo at /home/z/my-project/myip: 76 files — src (app/components/lib, prisma+db.ts removed as unused), pruned ui/ to the 7 components actually imported, deps slimmed to 16 runtime + 10 dev.
+- Cloudflare Workers adaptation: @opennextjs/cloudflare 1.20.6 + wrangler 4.130.0; fixed peer conflict by upgrading next 16.1.1 → 16.3.4; next.config.ts (standalone, build ignores), wrangler.jsonc (nodejs_compat, .open-next/worker.js, assets binding, optional custom-domain + KV blocks commented), open-next.config.ts.
+- SEO/PWA additions: layout.tsx manifest + apple icon + OG/Twitter images (1200x630), public/manifest.webmanifest (fa/rtl), PIL-generated mono icons (192/512/apple) + og-image.png + new B&W favicon.svg (old one still had colored gradient!) + logo.svg wordmark.
+- VALIDATED on the real workerd runtime (opennextjs-cloudflare preview): build OK; / (82KB HTML), /api/v1/ip, /api/v1/ip/8.8.8.8 (full report saved to docs/sample-response.json), IPv6 lookup 5/5 sources, /api/v1/dnsbl (6 zones), /api/v1/headers, invalid-input 400, all 8 static assets 200. tsc clean; eslint src clean; npm ci dry-run in sync.
+- README.md + README_FA.md: Markdown_Converter style (centered header, lang badges cross-linking each other + a one-line note in the other language, social/tech badges, live-demo badge, screenshots from verified session, features/tables, full REST API docs + sample JSON, 3 deploy paths incl. detailed git-push + Cloudflare-connect steps, architecture mermaid, mono design system, privacy, Google Search Console submission guide, roadmap, contributing, FAQ, contact pm@thepm.ir, MIT, "ساخته شده با ❤️ توسط نریمان / Made with ❤️ by Nariman" footer).
+- GitHub files: CI workflow (npm ci + lint + typecheck + build:worker), bug/feature issue templates, PR template, dependabot (next minor pinned for OpenNext compat), LICENSE (MIT 2026), CONTRIBUTING, SECURITY (pm@thepm.ir), CHANGELOG 1.0.0.
+- Delivered: /home/z/my-project/download/myip/ (clean, node_modules/.next/.open-next excluded) + myip-github-repo.zip (1.9 MB).
+
+Stage Summary:
+- Repo is push-and-forget: connect it in Cloudflare dashboard (build: npx opennextjs-cloudflare build / deploy: npx opennextjs-cloudflare deploy) and every push to main auto-deploys. No env vars, no DB, no keys.
+- Deploy button: https://deploy.workers.cloudflare.com/?url=https://github.com/NarimanKhaleghi/myip
+- Chat delivered 3 step-by-step Persian guides: git push from local machine, Cloudflare Workers Git connection + custom domain + optional KV, Google Search Console submission.

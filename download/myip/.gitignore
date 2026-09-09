@@ -1,0 +1,26 @@
+# dependencies
+node_modules/
+
+# build output
+.next/
+.open-next/
+out/
+build/
+dist/
+.wrangler/
+
+# logs
+*.log
+
+# os junk
+.DS_Store
+Thumbs.db
+
+# env / secrets
+.env
+.env.*
+.dev.vars
+.dev.vars.*
+
+# typescript
+*.tsbuildinfo

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 140">
+  <!-- myip wordmark — pure black & white -->
+  <rect width="560" height="140" rx="18" fill="#0a0a0a"/>
+  <rect x="5" y="5" width="550" height="130" rx="14" fill="none" stroke="#f5f5f5" stroke-width="3"/>
+  <text x="34" y="95" font-family="ui-monospace, 'JetBrains Mono', Menlo, Consolas, monospace" font-size="62" font-weight="700" fill="#f5f5f5">myip</text>
+  <text x="250" y="92" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="27" fill="#f5f5f5" opacity="0.78">.thepm.ir</text>
+  <g fill="none" stroke="#f5f5f5" stroke-width="3.5" stroke-linecap="round">
+    <circle cx="470" cy="70" r="27"/>
+    <path d="M443 70h54"/>
+    <path d="M470 43c14.5 14.5 14.5 39.5 0 54"/>
+    <path d="M470 43c-14.5 14.5-14.5 39.5 0 54"/>
+  </g>
+  <rect x="508" y="98" width="22" height="22" rx="5" fill="#f5f5f5"/>
+  <rect x="514" y="104" width="10" height="10" fill="#0a0a0a"/>
+</svg>
