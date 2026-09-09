@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, JetBrains_Mono, Vazirmatn } from "next/font/google";
+import { Inter, JetBrains_Mono, Lalezar, Vazirmatn } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { I18nProvider } from "@/components/myip/i18n-provider";
@@ -23,6 +23,14 @@ const jetbrains = JetBrains_Mono({
   display: "swap",
 });
 
+const lalezar = Lalezar({
+  variable: "--font-lalezar",
+  subsets: ["arabic", "latin"],
+  weight: "400",
+  display: "swap",
+});
+
+const GITHUB_URL = "https://github.com/NarimanKhaleghi/myip";
 const SITE_URL = "https://myip.thepm.ir";
 
 export const metadata: Metadata = {
@@ -51,8 +59,8 @@ export const metadata: Metadata = {
     "dnsbl",
     "proxy detection",
   ],
-  authors: [{ name: "myip.thepm.ir", url: SITE_URL }],
-  creator: "myip.thepm.ir",
+  authors: [{ name: "Nariman Khaleghi", url: GITHUB_URL }],
+  creator: "Nariman Khaleghi",
   metadataBase: new URL(SITE_URL),
   alternates: {
     canonical: "/",
@@ -87,8 +95,8 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#0F172A" },
-    { media: "(prefers-color-scheme: light)", color: "#F8FAFC" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+    { media: "(prefers-color-scheme: light)", color: "#f5f5f5" },
   ],
 };
 
@@ -102,8 +110,11 @@ const jsonLd = {
       url: SITE_URL,
       applicationCategory: "UtilitiesApplication",
       operatingSystem: "Any",
+      author: { "@type": "Person", name: "Nariman Khaleghi", url: GITHUB_URL },
+      license: "https://opensource.org/licenses/MIT",
+      isAccessibleForFree: true,
       description:
-        "Free IP intelligence platform: geolocation, ISP, ASN, proxy/VPN detection, DNSBL checks and IP tools.",
+        "Free and open-source IP intelligence platform: geolocation, ISP, ASN, proxy/VPN detection, DNSBL checks and IP tools.",
       inLanguage: ["fa", "en"],
       offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
       featureList: [
@@ -149,7 +160,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${vazirmatn.variable} ${inter.variable} ${jetbrains.variable} antialiased bg-background text-foreground font-fa`}
+        className={`${vazirmatn.variable} ${inter.variable} ${jetbrains.variable} ${lalezar.variable} antialiased bg-background text-foreground font-fa`}
       >
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
           <I18nProvider>{children}</I18nProvider>

@@ -3,124 +3,139 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ================================================================
+   MONOCHROME DESIGN SYSTEM — v1.0
+   Style: «Neo-brutalism Monochrome + Swiss Typography + Blueprint»
+   Rule: ONLY black & white. No hue, no saturation, anywhere.
+   ================================================================ */
+
+/* ---- Base tokens (motion / type / spacing / border / shadow) ---- */
+:root {
+  /* Motion */
+  --ease: cubic-bezier(0.22, 0.7, 0.16, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-fast: 0.18s;
+  --dur-mid: 0.35s;
+  --dur-slow: 0.7s;
+
+  /* Typography */
+  --f-body: var(--font-vazirmatn), var(--font-inter), system-ui, sans-serif;
+  --f-disp: var(--font-lalezar), var(--font-vazirmatn), sans-serif;
+  --f-mono: var(--font-jetbrains), ui-monospace, monospace;
+
+  /* Engineering grid */
+  --grid: 72px;
+
+  /* Borders — hair / thin / thick */
+  --bw-hair: 1px;
+  --bw-thin: 1.5px;
+  --bw-thick: 2px;
+
+  /* Hard, offset shadows (neo-brutalism signature) — no blur, no glow */
+  --sh-hair: 2px 2px 0 var(--shadow);
+  --sh-sm: 4px 4px 0 var(--shadow);
+  --sh-md: 8px 8px 0 var(--shadow);
+  --sh-lg: 12px 12px 0 var(--shadow);
+  --sh-xl: 20px 20px 0 var(--shadow);
+}
+
+/* ---- Theme: DARK (pure monochrome) ---- */
+html.dark {
+  --bg: #0a0a0a;
+  --bg2: #101010;
+  --bg3: #161616;
+  --card: #111111;
+  --card2: #171717;
+  --fg: #f5f5f5;
+  --fg2: #d7d7d7;
+  --mut: #9a9a9a;
+  --mut2: #6b6b6b;
+  --line: rgba(245, 245, 245, 0.13);
+  --line2: rgba(245, 245, 245, 0.32);
+  --line3: rgba(245, 245, 245, 0.6);
+  --grid-c: rgba(245, 245, 245, 0.045);
+  --shadow: rgba(0, 0, 0, 0.6);
+  --shadow-soft: rgba(0, 0, 0, 0.4);
+  color-scheme: dark;
+}
+
+/* ---- Theme: LIGHT (pure monochrome) ---- */
+html:not(.dark) {
+  --bg: #f5f5f5;
+  --bg2: #ededed;
+  --bg3: #e2e2e2;
+  --card: #ffffff;
+  --card2: #fafafa;
+  --fg: #101010;
+  --fg2: #212121;
+  --mut: #676767;
+  --mut2: #9a9a9a;
+  --line: rgba(16, 16, 16, 0.14);
+  --line2: rgba(16, 16, 16, 0.36);
+  --line3: rgba(16, 16, 16, 0.7);
+  --grid-c: rgba(16, 16, 16, 0.055);
+  --shadow: rgba(16, 16, 16, 0.22);
+  --shadow-soft: rgba(16, 16, 16, 0.12);
+  color-scheme: light;
+}
+
+/* ================================================================
+   shadcn semantic mapping — every token resolves to monochrome.
+   primary IS the foreground: primary buttons invert (bg ↔ fg).
+   ================================================================ */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: var(--bg);
+  --color-foreground: var(--fg);
+  --color-card: var(--card);
+  --color-card-foreground: var(--fg);
+  --color-popover: var(--card);
+  --color-popover-foreground: var(--fg);
+  --color-primary: var(--fg);
+  --color-primary-foreground: var(--bg);
+  --color-secondary: var(--card2);
+  --color-secondary-foreground: var(--fg);
+  --color-muted: var(--bg2);
+  --color-muted-foreground: var(--mut);
+  --color-accent: var(--bg3);
+  --color-accent-foreground: var(--fg);
+  --color-destructive: var(--fg);
+  --color-destructive-foreground: var(--bg);
+  --color-border: var(--line2);
+  --color-input: var(--line2);
+  --color-ring: var(--fg);
+  --color-chart-1: var(--fg);
+  --color-chart-2: var(--mut);
+  --color-chart-3: var(--fg2);
+  --color-chart-4: var(--mut2);
+  --color-chart-5: var(--line3);
+  --color-sidebar: var(--card);
+  --color-sidebar-foreground: var(--fg);
+  --color-sidebar-primary: var(--fg);
+  --color-sidebar-primary-foreground: var(--bg);
+  --color-sidebar-accent: var(--bg3);
+  --color-sidebar-accent-foreground: var(--fg);
+  --color-sidebar-border: var(--line);
+  --color-sidebar-ring: var(--fg);
+  --color-success: var(--fg);
   --font-sans: var(--font-vazirmatn), var(--font-inter), system-ui, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, monospace;
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
-  --color-card: var(--card);
-  --color-success: var(--success);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --font-display: var(--font-lalezar), var(--font-vazirmatn), sans-serif;
+  /* Sharp corners — neo-brutalism. Pill only for chips/toggles. */
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
 }
 
-:root {
-  --radius: 0.75rem;
-  --background: oklch(0.984 0.003 247.86);
-  --foreground: oklch(0.208 0.042 265.75);
-  --card: oklch(1 0 0 / 65%);
-  --card-foreground: oklch(0.208 0.042 265.75);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.208 0.042 265.75);
-  --primary: oklch(0.585 0.233 277.12);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.922 0.01 265.75);
-  --secondary-foreground: oklch(0.30 0.05 265.75);
-  --muted: oklch(0.955 0.006 265.75);
-  --muted-foreground: oklch(0.5 0.02 265.75);
-  --accent: oklch(0.696 0.17 162.48);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.577 0.245 27.32);
-  --success: oklch(0.696 0.17 162.48);
-  --border: oklch(0.5 0.02 265.75 / 15%);
-  --input: oklch(0.5 0.02 265.75 / 18%);
-  --ring: oklch(0.585 0.233 277.12 / 60%);
-  --chart-1: oklch(0.585 0.233 277.12);
-  --chart-2: oklch(0.606 0.25 292.72);
-  --chart-3: oklch(0.696 0.17 162.48);
-  --chart-4: oklch(0.828 0.189 84.43);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.208 0.042 265.75);
-  --sidebar-primary: oklch(0.585 0.233 277.12);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.955 0.006 265.75);
-  --sidebar-accent-foreground: oklch(0.30 0.05 265.75);
-  --sidebar-border: oklch(0.5 0.02 265.75 / 15%);
-  --sidebar-ring: oklch(0.585 0.233 277.12);
-}
-
-.dark {
-  --background: oklch(0.208 0.042 265.75);
-  --foreground: oklch(0.95 0.008 265.75);
-  --card: oklch(0.26 0.045 265.75 / 55%);
-  --card-foreground: oklch(0.95 0.008 265.75);
-  --popover: oklch(0.24 0.04 265.75);
-  --popover-foreground: oklch(0.95 0.008 265.75);
-  --primary: oklch(0.62 0.22 277.12);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.3 0.05 265.75);
-  --secondary-foreground: oklch(0.95 0.008 265.75);
-  --muted: oklch(0.27 0.045 265.75);
-  --muted-foreground: oklch(0.68 0.02 265.75);
-  --accent: oklch(0.7 0.17 162.48);
-  --accent-foreground: oklch(0.16 0.03 162.48);
-  --destructive: oklch(0.704 0.191 22.22);
-  --success: oklch(0.7 0.17 162.48);
-  --border: oklch(0.7 0.02 265.75 / 15%);
-  --input: oklch(0.7 0.02 265.75 / 18%);
-  --ring: oklch(0.62 0.22 277.12 / 70%);
-  --chart-1: oklch(0.62 0.22 277.12);
-  --chart-2: oklch(0.65 0.25 292.72);
-  --chart-3: oklch(0.7 0.17 162.48);
-  --chart-4: oklch(0.828 0.189 84.43);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.24 0.04 265.75);
-  --sidebar-foreground: oklch(0.95 0.008 265.75);
-  --sidebar-primary: oklch(0.62 0.22 277.12);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.27 0.045 265.75);
-  --sidebar-accent-foreground: oklch(0.95 0.008 265.75);
-  --sidebar-border: oklch(0.7 0.02 265.75 / 15%);
-  --sidebar-ring: oklch(0.62 0.22 277.12);
-}
-
+/* ================================================================
+   Base
+   ================================================================ */
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   html {
-    font-family: var(--font-vazirmatn), var(--font-inter), system-ui, sans-serif;
+    font-family: var(--f-body);
     scroll-behavior: smooth;
   }
   html.lang-en {
@@ -129,101 +144,350 @@
   body {
     @apply bg-background text-foreground;
     min-height: 100vh;
+    font-weight: 500;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
+  /* Inverted selection — pure mono */
   ::selection {
-    background: oklch(0.585 0.233 277.12 / 30%);
+    background: var(--fg);
+    color: var(--bg);
+  }
+  :focus-visible {
+    outline: 2px solid var(--fg);
+    outline-offset: 3px;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: 800;
+    line-height: 1.2;
   }
 }
 
+/* ================================================================
+   Background layers — engineering grid + film grain
+   ================================================================ */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--grid-c) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-c) 1px, transparent 1px);
+  background-size: var(--grid) var(--grid);
+  -webkit-mask-image: radial-gradient(ellipse 85% 80% at 50% 50%, #000 30%, transparent 100%);
+  mask-image: radial-gradient(ellipse 85% 80% at 50% 50%, #000 30%, transparent 100%);
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ================================================================
+   shadcn [data-slot] overrides — neo-brutalist interaction model
+   Hover = INVERT (fg↔bg) + hard shadow + shift (-2px,-2px)
+   ================================================================ */
+
+/* Buttons */
+[data-slot="button"] {
+  font-weight: 700;
+  border-radius: 0;
+  transition:
+    background var(--dur-mid) ease,
+    color var(--dur-mid) ease,
+    transform var(--dur-mid) var(--ease),
+    box-shadow var(--dur-mid) var(--ease),
+    border-color var(--dur-mid) var(--ease);
+}
+[data-slot="button"]:active:not(:disabled) {
+  transform: translate(0, 0);
+  box-shadow: none;
+}
+
+/* Solid (default / secondary): filled → hollow on hover */
+button[data-slot="button"].bg-primary,
+[data-slot="button"][class*="bg-primary"] {
+  border: var(--bw-thin) solid var(--fg);
+}
+[data-slot="button"][class*="bg-primary"]:hover:not(:disabled) {
+  background: transparent;
+  color: var(--fg);
+  transform: translate(-2px, -2px);
+  box-shadow: var(--sh-sm);
+}
+
+/* Outline: hollow → inverted on hover */
+[data-slot="button"][class*="border"]:hover:not(:disabled) {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--sh-sm);
+}
+
+/* Inputs — mono, technical */
+[data-slot="input"],
+input[type="text"],
+input[type="search"] {
+  font-family: var(--f-mono);
+  border-radius: 0;
+}
+[data-slot="input"]:focus,
+input:focus {
+  outline: none;
+  border-color: var(--fg);
+}
+
+/* Tabs — blueprint underline, active = inverted */
+[data-slot="tabs-list"] {
+  border: var(--bw-thin) solid var(--line2);
+  background: var(--card);
+  border-radius: 0;
+}
+[data-slot="tabs-trigger"] {
+  border-radius: 0;
+  font-weight: 700;
+  color: var(--mut);
+  transition: all var(--dur-fast) var(--ease);
+}
+[data-slot="tabs-trigger"]:hover {
+  color: var(--fg);
+}
+[data-slot="tabs-trigger"][data-state="active"] {
+  background: var(--fg);
+  color: var(--bg);
+  box-shadow: var(--sh-hair);
+}
+
+/* Dialog — hard shadow, sharp */
+[data-slot="dialog-content"] {
+  border-radius: 0;
+  border: var(--bw-thin) solid var(--line2);
+  box-shadow: var(--sh-xl);
+  background: var(--card);
+}
+[data-slot="dialog-overlay"] {
+  backdrop-filter: none;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+/* Accordion — plus/x toggle feel, mono borders */
+[data-slot="accordion-item"] {
+  border-color: var(--line);
+}
+[data-slot="accordion-trigger"]:hover {
+  text-decoration: none;
+  color: var(--fg);
+}
+[data-slot="accordion-trigger"] svg {
+  color: var(--mut);
+}
+
+/* Popover / dropdown / select */
+[data-slot="popover-content"],
+[data-slot="dropdown-menu-content"] {
+  border-radius: 0;
+  border: var(--bw-thin) solid var(--line2);
+  box-shadow: var(--sh-md);
+}
+
+/* Toast — inverted slab */
+[data-slot="toast"] {
+  background: var(--fg);
+  color: var(--bg);
+  border: var(--bw-thin) solid var(--fg);
+  border-radius: 0;
+  box-shadow: var(--sh-md);
+  font-weight: 700;
+}
+
+/* ================================================================
+   Design-system utility classes
+   ================================================================ */
 @layer utilities {
+  /* Kicker — mono eyebrow with 9px square */
+  .kicker {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--f-mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--mut);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .kicker::before {
+    content: "";
+    width: 9px;
+    height: 9px;
+    background: var(--fg);
+    flex-shrink: 0;
+  }
+  .kicker code {
+    color: var(--mut);
+    opacity: 0.75;
+  }
+
+  /* Display headlines — Lalezar */
+  .display {
+    font-family: var(--f-disp);
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+
+  .mono {
+    font-family: var(--f-mono);
+  }
+  .muted {
+    color: var(--mut);
+  }
+
+  /* Tags — mono technical labels. Status via pattern, not color:
+     filled = OK · hatched = ALERT · dashed = WARN */
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--f-mono);
+    font-size: 10.5px;
+    font-weight: 700;
+    border: var(--bw-hair) solid var(--line2);
+    padding: 3px 10px;
+    color: var(--mut);
+    border-radius: 0;
+  }
+  .tag--ok {
+    background: var(--fg);
+    color: var(--bg);
+    border-color: var(--fg);
+  }
+  .tag--bad {
+    border: var(--bw-thick) solid var(--fg);
+    color: var(--fg);
+    background-image: repeating-linear-gradient(
+      -45deg,
+      color-mix(in srgb, var(--fg) 14%, transparent) 0 6px,
+      transparent 6px 12px
+    );
+    padding: 2px 9px;
+  }
+  .tag--warn {
+    border: var(--bw-thin) solid var(--fg);
+    color: var(--fg);
+    background-image: repeating-linear-gradient(
+      -45deg,
+      color-mix(in srgb, var(--fg) 6%, transparent) 0 4px,
+      transparent 4px 8px
+    );
+  }
+
+  /* Hard shadow utilities */
+  .nb-shadow-sm {
+    box-shadow: var(--sh-sm);
+  }
+  .nb-shadow-md {
+    box-shadow: var(--sh-md);
+  }
+
+  /* Hatched fill — alert state expressed as pattern, not color */
+  .hatch-fill {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      var(--fg) 0 6px,
+      transparent 6px 12px
+    );
+    background-color: var(--fg);
+  }
+
+  /* Blueprint hairline box */
+  .hairbox {
+    border: var(--bw-hair) dashed var(--line2);
+    padding: 3px 10px;
+    font-family: var(--f-mono);
+    font-size: 11px;
+    color: var(--mut);
+  }
+
   /* Entrance animation */
   .fade-in {
-    animation: fade-in-up 0.5s ease-out both;
+    animation: fade-in-up 0.5s var(--ease) both;
   }
   @keyframes fade-in-up {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
-  .fade-in-1 { animation-delay: 0.05s; }
-  .fade-in-2 { animation-delay: 0.12s; }
-  .fade-in-3 { animation-delay: 0.2s; }
-  .fade-in-4 { animation-delay: 0.28s; }
-  .fade-in-5 { animation-delay: 0.36s; }
+  .fade-in-1 {
+    animation-delay: 0.05s;
+  }
+  .fade-in-2 {
+    animation-delay: 0.12s;
+  }
+  .fade-in-3 {
+    animation-delay: 0.2s;
+  }
+  .fade-in-4 {
+    animation-delay: 0.28s;
+  }
+  .fade-in-5 {
+    animation-delay: 0.36s;
+  }
 
   /* Shake on error */
   .animate-shake {
     animation: shake 0.4s ease-in-out;
   }
   @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(4px); }
-    75% { transform: translateX(-4px); }
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    25% {
+      transform: translateX(4px);
+    }
+    75% {
+      transform: translateX(-4px);
+    }
   }
 
-  /* Glass-morphism card */
+  /* Legacy class names kept working — now mono */
   .glass {
-    background: oklch(1 0 0 / 60%);
-    border: 1px solid oklch(0.5 0.02 265.75 / 15%);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    box-shadow: 0 8px 32px oklch(0.5 0.02 265.75 / 8%);
+    background: var(--card);
+    border: var(--bw-thin) solid var(--line2);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: none;
   }
   .dark .glass {
-    background: oklch(0.26 0.045 265.75 / 50%);
-    border: 1px solid oklch(0.7 0.02 265.75 / 14%);
-    box-shadow: 0 8px 32px oklch(0 0 0 / 25%);
+    background: var(--card);
+    border: var(--bw-thin) solid var(--line2);
   }
-
   .gradient-text {
-    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #10b981 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    background: none;
+    -webkit-background-clip: initial;
+    background-clip: initial;
+    color: var(--fg);
   }
 
   .ip-mono {
-    font-family: var(--font-jetbrains), ui-monospace, monospace;
+    font-family: var(--f-mono);
     letter-spacing: 0.02em;
-  }
-
-  /* Aurora glow behind hero */
-  .aurora {
-    position: relative;
-    overflow: hidden;
-  }
-  .aurora::before {
-    content: "";
-    position: absolute;
-    inset: -40%;
-    background:
-      radial-gradient(35% 40% at 30% 30%, oklch(0.585 0.233 277.12 / 22%) 0%, transparent 70%),
-      radial-gradient(30% 35% at 70% 20%, oklch(0.606 0.25 292.72 / 18%) 0%, transparent 70%),
-      radial-gradient(28% 32% at 55% 75%, oklch(0.696 0.17 162.48 / 14%) 0%, transparent 70%);
-    animation: aurora-drift 14s ease-in-out infinite alternate;
-    pointer-events: none;
-  }
-  @keyframes aurora-drift {
-    0% { transform: translate(0, 0) rotate(0deg) scale(1); }
-    50% { transform: translate(2%, -2%) rotate(2deg) scale(1.05); }
-    100% { transform: translate(-2%, 2%) rotate(-2deg) scale(1.02); }
-  }
-
-  /* Custom scrollbar */
-  .custom-scroll::-webkit-scrollbar,
-  [data-radix-scroll-area-viewport]::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-  .custom-scroll::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  .custom-scroll::-webkit-scrollbar-thumb,
-  [data-radix-scroll-area-viewport]::-webkit-scrollbar-thumb {
-    background: oklch(0.585 0.233 277.12 / 40%);
-    border-radius: 999px;
-  }
-  .custom-scroll::-webkit-scrollbar-thumb:hover {
-    background: oklch(0.585 0.233 277.12 / 65%);
   }
 
   /* Numeric value that respects LTR inside RTL text */
@@ -232,20 +496,75 @@
     unicode-bidi: embed;
     display: inline-block;
   }
+
+  /* Live pulse — mono */
+  .live-dot {
+    position: relative;
+    width: 8px;
+    height: 8px;
+    background: var(--fg);
+    flex-shrink: 0;
+  }
+  .live-dot::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--fg);
+    animation: live-pulse 2s ease-out infinite;
+  }
+  @keyframes live-pulse {
+    from {
+      transform: scale(1);
+      opacity: 0.9;
+    }
+    to {
+      transform: scale(3);
+      opacity: 0;
+    }
+  }
+
+  /* Custom scrollbar — mono squares */
+  .custom-scroll::-webkit-scrollbar,
+  [data-radix-scroll-area-viewport]::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .custom-scroll::-webkit-scrollbar-track,
+  [data-radix-scroll-area-viewport]::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scroll::-webkit-scrollbar-thumb,
+  [data-radix-scroll-area-viewport]::-webkit-scrollbar-thumb {
+    background: var(--line3);
+    border-radius: 0;
+  }
+  .custom-scroll::-webkit-scrollbar-thumb:hover {
+    background: var(--fg);
+  }
 }
 
-/* Leaflet fixes: dark-mode friendly popups + rounded corners */
-.leaflet-container {
+/* ================================================================
+   Leaflet — monochrome map (grayscale tiles, sharp, no glow).
+   Doubled-class specificity to beat leaflet.css load order.
+   ================================================================ */
+.leaflet-container.leaflet-container {
   font: inherit !important;
-  background: oklch(0.9 0.01 265.75);
-  border-radius: var(--radius-lg);
+  background: var(--bg2);
+  border-radius: 0;
 }
-.dark .leaflet-container {
-  background: oklch(0.23 0.03 265.75);
+.leaflet-pane .leaflet-tile {
+  filter: grayscale(1) contrast(1.08);
 }
 .leaflet-popup-content-wrapper {
-  border-radius: 0.75rem !important;
-  box-shadow: 0 8px 30px oklch(0 0 0 / 20%) !important;
+  border-radius: 0 !important;
+  background: var(--card);
+  color: var(--fg);
+  border: var(--bw-thin) solid var(--line2);
+  box-shadow: var(--sh-md) !important;
+}
+.leaflet-popup-tip {
+  background: var(--card);
+  border: var(--bw-thin) solid var(--line2);
 }
 .leaflet-popup-content {
   margin: 10px 14px !important;
@@ -253,25 +572,38 @@
 }
 .leaflet-control-attribution {
   font-size: 10px !important;
-  opacity: 0.7;
+  color: var(--mut) !important;
+  background: color-mix(in srgb, var(--bg) 70%, transparent) !important;
 }
-.dark .leaflet-tile {
-  filter: brightness(0.75) saturate(0.85) hue-rotate(-8deg);
+.leaflet-control-attribution a {
+  color: var(--mut) !important;
+}
+/* Hide Leaflet's colored solidarity flag — keeps UI strictly mono */
+.leaflet-attribution-flag {
+  display: none !important;
+}
+.leaflet-bar a {
+  background: var(--card);
+  color: var(--fg);
+  border: var(--bw-hair) solid var(--line2) !important;
+  border-radius: 0 !important;
+}
+.leaflet-bar a:hover {
+  background: var(--fg);
+  color: var(--bg);
 }
 .leaflet-marker-icon {
   transition: transform 0.2s ease;
 }
-.marker-pulse {
-  animation: marker-pulse 2s ease-out infinite;
-}
-@keyframes marker-pulse {
-  0% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.25); opacity: 0.75; }
-  100% { transform: scale(1); opacity: 1; }
-}
 
-/* Print styles for PDF export */
+/* ================================================================
+   Print — pure black on white
+   ================================================================ */
 @media print {
+  body::before,
+  body::after {
+    display: none !important;
+  }
   .no-print {
     display: none !important;
   }
@@ -279,10 +611,21 @@
     background: white !important;
     border: 1px solid #ddd !important;
     box-shadow: none !important;
-    backdrop-filter: none !important;
   }
   body {
     background: white !important;
     color: black !important;
+  }
+}
+
+/* ================================================================
+   Reduced motion
+   ================================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
 }

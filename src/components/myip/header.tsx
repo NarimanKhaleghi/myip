@@ -1,13 +1,15 @@
 "use client";
 
 import { useState, useSyncExternalStore, type FormEvent } from "react";
-import { Globe, Moon, Sun, Search, Languages, Home } from "lucide-react";
+import { Github, Moon, Sun, Search, Languages, Home } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useI18n } from "./i18n-provider";
 import { isIP } from "@/lib/ip-utils";
 import { cn } from "@/lib/utils";
+
+const GITHUB_URL = "https://github.com/NarimanKhaleghi/myip";
 
 /** Hydration-safe mounted flag (server + hydration render: false). */
 function useMounted(): boolean {
@@ -51,19 +53,19 @@ export function Header({
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl no-print">
+    <header className="sticky top-0 z-40 w-full border-b-[1.5px] border-border bg-background/90 no-print">
       <div className="mx-auto max-w-6xl px-4 h-16 flex items-center gap-3">
-        {/* Brand */}
+        {/* Brand — mono mark, inverts on hover */}
         <button
           onClick={onReset}
           className="flex items-center gap-2.5 shrink-0 group"
           aria-label="myip.thepm.ir"
         >
-          <span className="relative grid place-items-center size-9 rounded-xl bg-gradient-to-br from-[#6366F1] via-[#8B5CF6] to-[#10B981] text-white shadow-lg shadow-primary/25 group-hover:scale-105 transition-transform">
-            <Globe className="size-5" />
+          <span className="grid place-items-center size-9 border-[1.5px] border-foreground display text-lg leading-none transition-all duration-200 group-hover:bg-foreground group-hover:text-background group-hover:-rotate-6">
+            M
           </span>
           <span className="hidden sm:flex flex-col items-start leading-none">
-            <span className="ip-mono text-sm font-bold tracking-tight">myip<span className="text-primary">.thepm.ir</span></span>
+            <span className="ip-mono text-sm font-bold tracking-tight">myip<span className="text-muted-foreground">.thepm.ir</span></span>
             <span className="text-[10px] text-muted-foreground mt-0.5">{t("siteTagline")}</span>
           </span>
         </button>
@@ -84,24 +86,34 @@ export function Header({
               onChange={(e) => setValue(e.target.value)}
               placeholder={error ? t("searchInvalid") : t("searchPlaceholder")}
               className={cn(
-                "ps-9 h-10 ip-mono text-sm bg-muted/40 border-border/60",
-                error && "border-destructive/70 text-destructive"
+                "ps-9 h-10 ip-mono text-sm bg-card border-border",
+                error && "border-[2.5px]"
               )}
               inputMode="text"
               dir="ltr"
               aria-label={t("search")}
             />
           </div>
-          <Button type="submit" variant="default" className="h-10 px-4 shrink-0 bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] hover:opacity-90">
+          <Button type="submit" variant="default" className="h-10 px-4 shrink-0">
             {t("search")}
           </Button>
         </form>
 
         {/* Actions */}
         <div className="flex items-center gap-1.5 shrink-0">
+          <a
+            href={GITHUB_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            title={t("viewOnGitHub")}
+            aria-label="GitHub — NarimanKhaleghi/myip"
+            className="grid place-items-center size-10 border border-border text-foreground transition-all duration-200 hover:border-foreground hover:bg-foreground hover:text-background hover:-translate-y-0.5"
+          >
+            <Github className="size-4.5" />
+          </a>
           {!isOwnIp && (
             <Button
-              variant="ghost"
+              variant="outline"
               size="icon"
               onClick={onReset}
               title={t("lookupOwn")}
@@ -111,7 +123,7 @@ export function Header({
             </Button>
           )}
           <Button
-            variant="ghost"
+            variant="outline"
             size="icon"
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             title={themeTitle}
@@ -120,7 +132,7 @@ export function Header({
             {isDark ? <Sun className="size-4.5" /> : <Moon className="size-4.5" />}
           </Button>
           <Button
-            variant="ghost"
+            variant="outline"
             size="icon"
             onClick={toggleLang}
             title={t("langName")}

@@ -36,12 +36,12 @@ export function InfoTabs({
 
   return (
     <Tabs value={activeTab} onValueChange={onTabChange} className="w-full">
-      <TabsList className="h-auto p-1.5 bg-muted/50 border border-border/50 backdrop-blur flex-wrap justify-center h-auto">
+      <TabsList className="h-auto p-1.5 bg-card border border-border flex-wrap justify-center h-auto">
         {tabs.map((tab) => (
           <TabsTrigger
             key={tab.value}
             value={tab.value}
-            className="text-xs sm:text-sm px-3 sm:px-5 py-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#6366F1] data-[state=active]:to-[#8B5CF6] data-[state=active]:text-white data-[state=active]:shadow-md data-[state=active]:shadow-primary/25"
+            className="text-xs sm:text-sm px-3 sm:px-5 py-2"
           >
             {tab.label}
           </TabsTrigger>

@@ -6,7 +6,15 @@ import { cn } from "@/lib/utils";
 import { useI18n } from "./i18n-provider";
 import { toast } from "@/hooks/use-toast";
 
-/** Glass card section with title. */
+/**
+ * Monochrome design system — shared primitives.
+ * Status is expressed with PATTERN, never color:
+ *   filled   = positive / clean
+ *   hatched  = alert / detected
+ *   dashed   = warning / medium
+ */
+
+/** Card section — thin border, solid surface, hard shadow on hover. */
 export function SectionCard({
   title,
   icon,
@@ -23,14 +31,16 @@ export function SectionCard({
   return (
     <section
       className={cn(
-        "glass rounded-2xl p-4 sm:p-6 fade-in",
+        "border-[1.5px] border-border bg-card p-4 sm:p-6 fade-in",
+        "transition-[transform,border-color,box-shadow] duration-300",
+        "hover:border-foreground hover:shadow-[8px_8px_0_var(--shadow)] hover:-translate-y-1",
         className
       )}
     >
       {title && (
-        <header className="flex items-center justify-between gap-2 mb-4">
-          <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground/90">
-            {icon && <span className="text-primary">{icon}</span>}
+        <header className="flex items-center justify-between gap-2 mb-4 pb-3 border-b border-dashed border-border">
+          <h3 className="flex items-center gap-2 text-sm font-bold">
+            {icon && <span className="text-foreground">{icon}</span>}
             {title}
           </h3>
           {action}
@@ -78,11 +88,12 @@ export function CopyChip({
       onClick={copy}
       title={t("copy")}
       className={cn(
-        "group inline-flex items-center gap-2 rounded-lg border border-border/60 bg-muted/40 px-3 py-1.5 text-start transition-all hover:border-primary/50 hover:bg-primary/5 active:scale-[0.98]",
+        "group inline-flex items-center gap-2 border border-border bg-muted/50 px-3 py-1.5 text-start transition-all",
+        "hover:border-foreground hover:bg-foreground hover:text-background",
         className
       )}
     >
-      {label && <span className="text-xs text-muted-foreground shrink-0">{label}</span>}
+      {label && <span className="text-xs text-muted-foreground shrink-0 group-hover:text-background/70">{label}</span>}
       <span
         className={cn(
           "text-sm truncate",
@@ -92,9 +103,9 @@ export function CopyChip({
         {value}
       </span>
       {copied ? (
-        <Check className="size-3.5 shrink-0 text-emerald-500" />
+        <Check className="size-3.5 shrink-0" />
       ) : (
-        <Copy className="size-3.5 shrink-0 text-muted-foreground group-hover:text-primary transition-colors" />
+        <Copy className="size-3.5 shrink-0 text-muted-foreground group-hover:text-background transition-colors" />
       )}
     </button>
   );
@@ -114,14 +125,14 @@ export function InfoRow({
 }) {
   if (copyable && typeof value === "string" && value) {
     return (
-      <div className="flex items-center justify-between gap-3 py-2 border-b border-border/40 last:border-0">
+      <div className="flex items-center justify-between gap-3 py-2 border-b border-border/60 last:border-0">
         <span className="text-xs text-muted-foreground shrink-0">{label}</span>
-        <CopyChip value={value} className="max-w-[60%] border-0 bg-transparent p-0 hover:bg-transparent" />
+        <CopyChip value={value} className="max-w-[60%] border-0 bg-transparent p-0 hover:bg-transparent hover:text-foreground" />
       </div>
     );
   }
   return (
-    <div className="flex items-center justify-between gap-3 py-2 border-b border-border/40 last:border-0">
+    <div className="flex items-center justify-between gap-3 py-2 border-b border-border/60 last:border-0">
       <span className="text-xs text-muted-foreground shrink-0">{label}</span>
       <span className={cn("text-sm text-end font-medium", mono && "ip-mono num")}>
         {value === undefined || value === null || value === "" ? "—" : value}
@@ -130,7 +141,10 @@ export function InfoRow({
   );
 }
 
-/** Colored status pill. */
+/**
+ * Status tag — PURE monochrome semantics.
+ * OK → filled inverted slab. BAD → hatched box with thick border.
+ */
 export function StatusPill({
   ok,
   textOk,
@@ -143,24 +157,28 @@ export function StatusPill({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold",
-        ok
-          ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25"
-          : "bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/25"
+        "inline-flex items-center gap-1.5 px-3 py-1 text-xs font-bold",
+        ok ? "tag--ok" : "tag--bad"
       )}
     >
-      <span className={cn("size-1.5 rounded-full", ok ? "bg-emerald-500" : "bg-red-500")} />
+      <span
+        aria-hidden="true"
+        className={cn(
+          "inline-block size-1.5 bg-current",
+          ok ? "rotate-45" : "rounded-none"
+        )}
+      />
       {ok ? textOk : textBad}
     </span>
   );
 }
 
-/** Neutral pill. */
+/** Neutral technical tag (mono). */
 export function Pill({ children, className }: { children: ReactNode; className?: string }) {
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-muted/40 px-3 py-1 text-xs font-medium text-foreground/80",
+        "tag px-3 py-1 text-xs",
         className
       )}
     >
@@ -176,12 +194,12 @@ export function DirChevron({ open }: { open: boolean }) {
   return isRTL ? <ChevronLeft className={cls} /> : <ChevronRight className={cls} />;
 }
 
-/** Skeleton shimmer block. */
+/** Skeleton shimmer block — mono. */
 export function Shimmer({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "animate-pulse rounded-lg bg-muted",
+        "animate-pulse bg-muted border border-border",
         className
       )}
     />

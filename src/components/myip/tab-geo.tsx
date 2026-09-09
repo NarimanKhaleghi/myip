@@ -9,7 +9,7 @@ import type { IPInfo } from "./types";
 
 const MapView = dynamic(() => import("./map-view"), {
   ssr: false,
-  loading: () => <Shimmer className="h-72 sm:h-96 w-full rounded-2xl" />,
+  loading: () => <Shimmer className="h-72 sm:h-96 w-full" />,
 });
 
 export function TabGeo({
@@ -40,7 +40,13 @@ export function TabGeo({
         <div className="space-y-0.5">
           <InfoRow
             label={t("country")}
-            value={`${info.flagEmoji ?? ""} ${countryName(info.country, info.countryCode)}${info.countryCode ? ` (${info.countryCode})` : ""}`.trim()}
+            value={
+              <span className="flex items-center gap-1.5">
+                <span className="grayscale contrast-125">{info.flagEmoji}</span>
+                {countryName(info.country, info.countryCode)}
+                {info.countryCode && <span className="ip-mono text-muted-foreground">({info.countryCode})</span>}
+              </span>
+            }
           />
           <InfoRow label={t("continent")} value={info.continent ?? "—"} />
           <InfoRow label={t("region")} value={info.region ?? "—"} />
@@ -68,19 +74,19 @@ export function TabGeo({
         <div className="flex flex-wrap gap-2 mt-4">
           {info.currencyCode && (
             <Pill>
-              <Coins className="size-3.5 text-primary" />
+              <Coins className="size-3.5" />
               <span className="ip-mono">{info.currencyCode}</span>
             </Pill>
           )}
           {info.callingCode && (
             <Pill>
-              <Phone className="size-3.5 text-primary" />
+              <Phone className="size-3.5" />
               <span className="ip-mono num">+{info.callingCode}</span>
             </Pill>
           )}
           {info.capital && (
             <Pill>
-              <MapPin className="size-3.5 text-primary" />
+              <MapPin className="size-3.5" />
               {info.capital}
             </Pill>
           )}

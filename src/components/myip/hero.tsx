@@ -9,8 +9,11 @@ import {
   MapPin,
   Building2,
   ShieldCheck,
+  ShieldAlert,
   Check,
   Clock,
+  Github,
+  Star,
 } from "lucide-react";
 import {
   Dialog,
@@ -23,9 +26,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { useI18n } from "./i18n-provider";
 import { useDualStack, useLocalTime } from "./hooks";
-import { Shimmer, Pill } from "./ui-bits";
+import { Shimmer } from "./ui-bits";
 import type { IPInfo } from "./types";
 import { toast } from "@/hooks/use-toast";
+
+const GITHUB_URL = "https://github.com/NarimanKhaleghi/myip";
 
 export function Hero({ info, isLoading, isOwn }: { info?: IPInfo; isLoading: boolean; isOwn: boolean }) {
   const { t, lang, countryName } = useI18n();
@@ -64,112 +69,113 @@ export function Hero({ info, isLoading, isOwn }: { info?: IPInfo; isLoading: boo
   };
 
   return (
-    <section className="aurora relative -mt-px pt-14 pb-10 sm:pt-20 sm:pb-14">
+    <section className="relative pt-12 pb-10 sm:pt-16 sm:pb-12">
       <div className="relative mx-auto max-w-4xl px-4 text-center">
-        {/* Label */}
-        <p className="flex items-center justify-center gap-2 text-sm text-muted-foreground mb-4 fade-in">
-          <span className="relative flex size-2">
-            <span className="animate-ping absolute inline-flex size-2 rounded-full bg-emerald-500 opacity-60" />
-            <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
-          </span>
-          {isOwn ? t("yourIp") : <span className="ip-mono">{info?.ip}</span>}
-          {info?.version && <Pill className="py-0.5">{info.version}</Pill>}
+        {/* Kicker — mono eyebrow with live dot */}
+        <p className="kicker justify-center mb-5 fade-in">
+          <span className="live-dot" aria-hidden="true" />
+          <span>{isOwn ? (lang === "fa" ? "آدرس IP شما" : "YOUR IP ADDRESS") : "IP LOOKUP"}</span>
+          {isOwn && info?.version && <code>{info.version}</code>}
+          {!isOwn && info?.ip && <code>{info.version ?? ""}</code>}
         </p>
 
-        {/* The big IP */}
+        {/* The big IP — technical mono slab */}
         <div className="fade-in fade-in-1">
           {isLoading || (!ipv4 && isOwn && dual.loading) ? (
-            <Shimmer className="h-16 sm:h-24 w-3/4 mx-auto" />
+            <Shimmer className="h-20 sm:h-28 w-3/4 mx-auto" />
           ) : ipv4 ? (
             <button
               onClick={copyIP}
-              className="group ip-mono num mx-auto block text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight gradient-text hover:scale-[1.02] active:scale-[0.99] transition-transform cursor-pointer"
+              className="group ip-mono num mx-auto block text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-foreground border-[2px] border-foreground bg-card px-6 sm:px-10 py-4 sm:py-6 shadow-[10px_10px_0_var(--shadow)] hover:shadow-[4px_4px_0_var(--shadow)] hover:translate-x-[6px] hover:translate-y-[6px] active:shadow-none active:translate-x-[10px] active:translate-y-[10px] transition-all duration-300 cursor-pointer"
               title={t("copy")}
             >
               {ipv4}
             </button>
           ) : (
-            <p className="text-2xl text-destructive">{t("ipNotFound")}</p>
+            <p className="text-2xl font-bold">{t("ipNotFound")}</p>
           )}
         </div>
 
         {/* IPv6 line */}
         {isOwn && (
-          <p className="mt-3 text-xs sm:text-sm text-muted-foreground fade-in fade-in-2">
+          <p className="mt-5 text-xs sm:text-sm text-muted-foreground fade-in fade-in-2">
             {dual.loading
               ? t("detecting")
               : ipv6
-              ? bothSame
-                ? `${t("yourIPv6")}: `
-                : `${t("yourIPv6")}: `
+              ? `${t("yourIPv6")}: `
               : t("ipv6NotDetected")}
-            {ipv6 && !bothSame && (
-              <span className="ip-mono num text-foreground/80">{ipv6}</span>
-            )}
-            {ipv6 && bothSame && (
-              <span className="ip-mono num text-foreground/80">({ipv6})</span>
+            {ipv6 && (
+              <span className="ip-mono num text-foreground/85">{bothSame ? `(${ipv6})` : ipv6}</span>
             )}
           </p>
         )}
 
-        {/* Badges */}
+        {/* Tags — mono technical chips */}
         {info && (
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-2 fade-in fade-in-3">
-            <Pill>
-              <span className="text-base leading-none">{info.flagEmoji ?? "🌍"}</span>
+          <div className="mt-7 flex flex-wrap items-center justify-center gap-2 fade-in fade-in-3">
+            <span className="tag px-3 py-1.5 text-xs">
+              <span className="grayscale contrast-125 text-sm leading-none" aria-hidden="true">
+                {info.flagEmoji ?? "🌐"}
+              </span>
               {countryName(info.country, info.countryCode)}
-            </Pill>
+            </span>
             {info.city && (
-              <Pill>
-                <MapPin className="size-3.5 text-primary" />
+              <span className="tag px-3 py-1.5 text-xs">
+                <MapPin className="size-3.5" />
                 {info.city}
-              </Pill>
+              </span>
             )}
             {info.isp && (
-              <Pill>
-                <Building2 className="size-3.5 text-primary" />
+              <span className="tag px-3 py-1.5 text-xs max-w-full">
+                <Building2 className="size-3.5 shrink-0" />
                 <span className="max-w-48 truncate">{info.isp}</span>
-              </Pill>
+              </span>
             )}
             {info.isProxy !== undefined && (
-              <Pill
-                className={
-                  info.isProxy
-                    ? "border-red-500/30 bg-red-500/10 text-red-600 dark:text-red-400"
-                    : "border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-                }
-              >
-                <ShieldCheck className="size-3.5" />
+              <span className={`px-3 py-1.5 text-xs ${info.isProxy ? "tag--bad" : "tag--ok"}`}>
+                {info.isProxy ? <ShieldAlert className="size-3.5" /> : <ShieldCheck className="size-3.5" />}
                 {info.isProxy ? t("proxyDetected") : t("proxyNotDetected")}
-              </Pill>
+              </span>
             )}
             {info.timezone && (
-              <Pill>
-                <Clock className="size-3.5 text-primary" />
-                <span className="ip-mono num text-xs">{localTime ?? info.timezoneAbbr ?? info.timezone}</span>
-              </Pill>
+              <span className="tag px-3 py-1.5 text-xs">
+                <Clock className="size-3.5" />
+                <span className="ip-mono num text-[11px]">{localTime ?? info.timezoneAbbr ?? info.timezone}</span>
+              </span>
             )}
           </div>
         )}
 
         {/* Actions */}
         <div className="mt-8 flex items-center justify-center gap-2 sm:gap-3 fade-in fade-in-4 no-print">
-          <Button
-            onClick={copyIP}
-            disabled={!ipv4}
-            size="lg"
-            className="gap-2 bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] hover:opacity-90 shadow-lg shadow-primary/30"
-          >
+          <Button onClick={copyIP} disabled={!ipv4} size="lg" className="gap-2">
             <Copy className="size-4" />
             {t("copy")}
           </Button>
 
           <QrDialog ip={ipv4 ?? ""} />
 
-          <Button onClick={share} size="lg" variant="outline" className="gap-2 border-border/60">
+          <Button onClick={share} size="lg" variant="outline" className="gap-2">
             <Share2 className="size-4" />
             {t("share")}
           </Button>
+        </div>
+
+        {/* Open-source line */}
+        <div className="mt-6 fade-in fade-in-5 no-print">
+          <a
+            href={GITHUB_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2.5 text-xs font-bold text-muted-foreground hover:text-foreground transition-colors group"
+          >
+            <Github className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            <span>{t("openSourceHeading")}</span>
+            <span className="hidden sm:inline ip-mono text-[10.5px] text-muted-foreground/80 border border-dashed border-border px-2 py-0.5">
+              {t("githubRepo")}
+            </span>
+            <Star className="size-3.5" />
+          </a>
         </div>
       </div>
     </section>
@@ -191,7 +197,7 @@ function QrDialog({ ip }: { ip: string }) {
     const url = await QRCode.toDataURL(qrValue, {
       width: 280,
       margin: 2,
-      color: { dark: "#0F172A", light: "#FFFFFF" },
+      color: { dark: "#0a0a0a", light: "#ffffff" },
       errorCorrectionLevel: "M",
     });
     setDataUrl(url);
@@ -230,7 +236,7 @@ function QrDialog({ ip }: { ip: string }) {
   return (
     <Dialog onOpenChange={generate}>
       <DialogTrigger asChild>
-        <Button size="lg" variant="outline" className="gap-2 border-border/60" disabled={!ip}>
+        <Button size="lg" variant="outline" className="gap-2" disabled={!ip}>
           <QrCode className="size-4" />
           {t("qrCode")}
         </Button>
@@ -238,7 +244,7 @@ function QrDialog({ ip }: { ip: string }) {
       <DialogContent className="sm:max-w-sm">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <QrCode className="size-5 text-primary" />
+            <QrCode className="size-5" />
             {t("qrCode")} — <span className="ip-mono num">{ip}</span>
           </DialogTitle>
           <DialogDescription className="sr-only">QR code for IP {ip}</DialogDescription>
@@ -250,7 +256,7 @@ function QrDialog({ ip }: { ip: string }) {
               alt={`QR code for ${ip}`}
               width={280}
               height={280}
-              className="rounded-xl border border-border/60 shadow-lg"
+              className="border-[1.5px] border-foreground shadow-[8px_8px_0_var(--shadow)]"
             />
           ) : (
             <Shimmer className="size-[280px]" />
@@ -260,7 +266,7 @@ function QrDialog({ ip }: { ip: string }) {
               <QrCode className="size-4" /> PNG
             </Button>
             <Button onClick={shareQr} variant="outline" className="flex-1 gap-2">
-              {copied ? <Check className="size-4 text-emerald-500" /> : <Share2 className="size-4" />}
+              {copied ? <Check className="size-4" /> : <Share2 className="size-4" />}
               {t("share")}
             </Button>
           </div>

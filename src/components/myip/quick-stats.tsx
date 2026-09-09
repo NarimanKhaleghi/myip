@@ -27,7 +27,7 @@ export function QuickStats({ info, isLoading }: { info?: IPInfo; isLoading: bool
       label: t("country"),
       value: (
         <span className="flex items-center gap-1.5 justify-center">
-          <span className="text-lg leading-none">{info.flagEmoji ?? "🌍"}</span>
+          <span className="grayscale contrast-125 text-lg leading-none">{info.flagEmoji ?? "🌐"}</span>
           <span className="truncate">{countryName(info.country, info.countryCode)}</span>
         </span>
       ),
@@ -74,9 +74,9 @@ export function QuickStats({ info, isLoading }: { info?: IPInfo; isLoading: bool
       {items.map((item, i) => (
         <SectionCard key={i} className={`fade-in fade-in-${Math.min(i + 1, 5)} !p-4`}>
           <div className="flex flex-col items-center text-center gap-1.5">
-            <span className="text-primary/80">{item.icon}</span>
-            <span className="text-[11px] uppercase tracking-wide text-muted-foreground">{item.label}</span>
-            <span className="text-sm font-semibold flex items-center gap-1 min-w-0 max-w-full">
+            <span className="text-foreground">{item.icon}</span>
+            <span className="text-[10.5px] uppercase tracking-wide text-muted-foreground ip-mono">{item.label}</span>
+            <span className="text-sm font-bold flex items-center gap-1 min-w-0 max-w-full">
               {item.value}
             </span>
           </div>
@@ -91,12 +91,12 @@ export function SourcesBar({ sources }: { sources: string[] }) {
   if (!sources.length) return null;
   return (
     <div className="mx-auto max-w-6xl px-4 mt-4 flex items-center justify-center gap-2 flex-wrap text-xs text-muted-foreground">
-      <Network className="size-3.5 text-emerald-500" />
+      <Network className="size-3.5" />
       <span>{t("dataFrom", { n: String(sources.length) })}</span>
       {sources.map((s) => (
         <span
           key={s}
-          className="rounded-full border border-border/50 bg-muted/30 px-2 py-0.5 ip-mono text-[10px]"
+          className="tag px-2 py-0.5 text-[10px]"
         >
           {s}
         </span>

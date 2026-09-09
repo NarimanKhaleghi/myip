@@ -102,10 +102,15 @@ function CompareTool() {
       {done && !loadingA && !loadingB && (
         <div className="grid grid-cols-2 gap-3">
           {[infoA, infoB].map((inf, idx) => (
-            <div key={idx} className="rounded-xl border border-border/50 bg-muted/20 p-3">
-              <p className="ip-mono num text-sm font-bold text-primary mb-1">{inf.ip}</p>
+            <div key={idx} className="border border-border bg-muted/40 p-3">
+              <p className="ip-mono num text-sm font-bold text-foreground mb-1">{inf.ip}</p>
               <div className="space-y-0.5 text-xs">
-                <InfoRow label={t("country")} value={`${inf.flagEmoji ?? "🌍"} ${countryName(inf.country, inf.countryCode)}`} />
+                <InfoRow label={t("country")} value={
+                  <span className="flex items-center gap-1.5">
+                    <span className="grayscale contrast-125">{inf.flagEmoji}</span>
+                    {countryName(inf.country, inf.countryCode)}
+                  </span>
+                } />
                 <InfoRow label={t("city")} value={inf.city ?? "—"} />
                 <InfoRow label={t("isp")} value={<span className="truncate">{inf.isp ?? inf.org ?? "—"}</span>} />
                 <InfoRow label="ASN" value={inf.asn ?? "—"} mono />
@@ -117,10 +122,10 @@ function CompareTool() {
             <Pill>{infoA.countryCode === infoB.countryCode ? t("sameCountry") : t("diffCountry")}</Pill>
             <Pill>{infoA.isp === infoB.isp ? t("sameIsp") : t("diffIsp")}</Pill>
             {distance !== null && (
-              <Pill className="border-primary/30 bg-primary/10">
+              <span className="tag--ok">
                 <Zap className="size-3" />
                 {t("distanceBetween")}: <span className="ip-mono num">{distance.toLocaleString("en-US")} km</span>
-              </Pill>
+              </span>
             )}
           </div>
         </div>
@@ -277,23 +282,23 @@ function SpeedTest() {
         {state === "running" ? t("testing") : t("startTest")}
       </Button>
       <div className="grid grid-cols-2 gap-3">
-        <div className="rounded-xl border border-border/50 bg-muted/20 p-3 text-center">
+        <div className="border border-border bg-muted/40 p-3 text-center">
           <p className="text-[11px] text-muted-foreground mb-1">{t("latency")}</p>
           {state === "running" && ping === null ? (
             <Shimmer className="h-8 w-16 mx-auto" />
           ) : (
-            <p className="ip-mono num text-xl font-bold text-primary">
+            <p className="ip-mono num text-xl font-bold">
               {ping !== null ? `${ping}` : "—"}
               <span className="text-xs text-muted-foreground">{ping !== null ? " ms" : ""}</span>
             </p>
           )}
         </div>
-        <div className="rounded-xl border border-border/50 bg-muted/20 p-3 text-center">
+        <div className="border border-border bg-muted/40 p-3 text-center">
           <p className="text-[11px] text-muted-foreground mb-1">{t("download")}</p>
           {state === "running" && speed === null ? (
             <Shimmer className="h-8 w-16 mx-auto" />
           ) : (
-            <p className="ip-mono num text-xl font-bold text-emerald-500">
+            <p className="ip-mono num text-xl font-bold">
               {speed !== null ? `${speed}` : "—"}
               <span className="text-xs text-muted-foreground">{speed !== null ? " Mbps" : ""}</span>
             </p>
@@ -368,11 +373,11 @@ function ExportTool({ info, userCoords }: { info?: IPInfo; userCoords?: { lat: n
     <SectionCard title={t("toolExport")} icon={<Download className="size-4" />} className="fade-in fade-in-3">
       <div className="grid grid-cols-3 gap-2">
         <Button onClick={downloadJson} variant="outline" size="sm" className="gap-2 flex-col h-auto py-3">
-          <FileJson className="size-5 text-primary" />
+          <FileJson className="size-5" />
           <span className="text-xs">JSON</span>
         </Button>
         <Button onClick={downloadCsv} variant="outline" size="sm" className="gap-2 flex-col h-auto py-3">
-          <FileSpreadsheet className="size-5 text-emerald-500" />
+          <FileSpreadsheet className="size-5" />
           <span className="text-xs">CSV</span>
         </Button>
         <Button
@@ -381,7 +386,7 @@ function ExportTool({ info, userCoords }: { info?: IPInfo; userCoords?: { lat: n
           size="sm"
           className="gap-2 flex-col h-auto py-3"
         >
-          <Printer className="size-5 text-violet-500" />
+          <Printer className="size-5" />
           <span className="text-xs">{t("exportPdf")}</span>
         </Button>
       </div>
@@ -423,16 +428,16 @@ function ApiDocs({ info }: { info?: IPInfo }) {
   return (
     <SectionCard title={t("apiTitle")} icon={<Braces className="size-4" />} className="fade-in fade-in-4 md:col-span-2">
       <p className="text-xs text-muted-foreground mb-3">
-        {t("apiDesc")} <Pill className="border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">{t("apiNoKey")}</Pill>
+        {t("apiDesc")} <span className="tag--ok">{t("apiNoKey")}</span>
       </p>
       <div className="grid gap-3 md:grid-cols-2">
         <div className="space-y-2">
           {endpoints.map((e) => (
             <div
               key={e.path}
-              className="flex items-center gap-2 rounded-lg border border-border/50 bg-muted/30 px-3 py-2"
+              className="flex items-center gap-2 border border-border bg-muted/40 px-3 py-2"
             >
-              <span className="rounded bg-emerald-500/15 px-1.5 py-0.5 ip-mono text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
+              <span className="bg-foreground text-background px-1.5 py-0.5 ip-mono text-[10px] font-bold">
                 {e.method}
               </span>
               <code className="ip-mono text-xs truncate flex-1" dir="ltr">
@@ -441,7 +446,7 @@ function ApiDocs({ info }: { info?: IPInfo }) {
             </div>
           ))}
         </div>
-        <div className="rounded-lg border border-border/50 bg-muted/20 p-3 max-h-56 overflow-auto custom-scroll">
+        <div className="border border-border bg-muted/40 p-3 max-h-56 overflow-auto custom-scroll">
           <p className="text-[10px] uppercase text-muted-foreground mb-2">{t("apiExample")}</p>
           <pre className="ip-mono text-[11px] leading-relaxed whitespace-pre" dir="ltr">
             {sample}

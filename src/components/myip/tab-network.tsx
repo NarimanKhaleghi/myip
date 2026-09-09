@@ -1,7 +1,7 @@
 "use client";
 
 import { Building2, ExternalLink, Hash, Network, Server } from "lucide-react";
-import { SectionCard, InfoRow, Pill, Shimmer } from "./ui-bits";
+import { SectionCard, InfoRow, Shimmer } from "./ui-bits";
 import { useI18n } from "./i18n-provider";
 import { detectRIR } from "@/lib/i18n";
 import type { IPInfo } from "./types";
@@ -40,10 +40,10 @@ export function TabNetwork({ info, isLoading }: { info?: IPInfo; isLoading: bool
             label={t("connectionType")}
             value={
               <span className="flex items-center gap-2 flex-wrap justify-end">
-                {info.isMobile && <Pill className="text-[10px] py-0.5">📱 {t("connMobile")}</Pill>}
-                {info.isHosting && <Pill className="text-[10px] py-0.5">🏢 {t("connHosting")}</Pill>}
+                {info.isMobile && <span className="tag text-[10px] py-0.5">{t("connMobile")}</span>}
+                {info.isHosting && <span className="tag text-[10px] py-0.5">{t("connHosting")}</span>}
                 {!info.isMobile && !info.isHosting && info.isProxy === false && (
-                  <Pill className="text-[10px] py-0.5">🏠 {t("connBroadband")}</Pill>
+                  <span className="tag text-[10px] py-0.5">{t("connBroadband")}</span>
                 )}
               </span>
             }
@@ -60,49 +60,49 @@ export function TabNetwork({ info, isLoading }: { info?: IPInfo; isLoading: bool
               href={`https://ipinfo.io/${info.ip}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between gap-2 rounded-lg border border-border/50 bg-muted/30 px-3 py-2.5 text-sm hover:border-primary/50 hover:bg-primary/5 transition-all"
+              className="flex items-center justify-between gap-2 border border-border bg-muted/40 px-3 py-2.5 text-sm font-medium transition-all hover:bg-foreground hover:text-background hover:border-foreground"
             >
               <span className="flex items-center gap-2">
-                <Hash className="size-4 text-primary" />
+                <Hash className="size-4" />
                 ipinfo.io
               </span>
-              <ExternalLink className="size-3.5 text-muted-foreground" />
+              <ExternalLink className="size-3.5" />
             </a>
             <a
               href={whoisUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between gap-2 rounded-lg border border-border/50 bg-muted/30 px-3 py-2.5 text-sm hover:border-primary/50 hover:bg-primary/5 transition-all"
+              className="flex items-center justify-between gap-2 border border-border bg-muted/40 px-3 py-2.5 text-sm font-medium transition-all hover:bg-foreground hover:text-background hover:border-foreground"
             >
               <span className="flex items-center gap-2">
-                <Network className="size-4 text-primary" />
+                <Network className="size-4" />
                 ARIN WHOIS
               </span>
-              <ExternalLink className="size-3.5 text-muted-foreground" />
+              <ExternalLink className="size-3.5" />
             </a>
             <a
               href={ripeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between gap-2 rounded-lg border border-border/50 bg-muted/30 px-3 py-2.5 text-sm hover:border-primary/50 hover:bg-primary/5 transition-all"
+              className="flex items-center justify-between gap-2 border border-border bg-muted/40 px-3 py-2.5 text-sm font-medium transition-all hover:bg-foreground hover:text-background hover:border-foreground"
             >
               <span className="flex items-center gap-2">
-                <Server className="size-4 text-primary" />
+                <Server className="size-4" />
                 RIPEstat
               </span>
-              <ExternalLink className="size-3.5 text-muted-foreground" />
+              <ExternalLink className="size-3.5" />
             </a>
             <a
               href={asnUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between gap-2 rounded-lg border border-border/50 bg-muted/30 px-3 py-2.5 text-sm hover:border-primary/50 hover:bg-primary/5 transition-all"
+              className="flex items-center justify-between gap-2 border border-border bg-muted/40 px-3 py-2.5 text-sm font-medium transition-all hover:bg-foreground hover:text-background hover:border-foreground"
             >
               <span className="flex items-center gap-2">
-                <Building2 className="size-4 text-primary" />
+                <Building2 className="size-4" />
                 {t("bgpView")}
               </span>
-              <ExternalLink className="size-3.5 text-muted-foreground" />
+              <ExternalLink className="size-3.5" />
             </a>
           </div>
           <p className="mt-3 text-[11px] text-muted-foreground">
@@ -113,16 +113,16 @@ export function TabNetwork({ info, isLoading }: { info?: IPInfo; isLoading: bool
         <SectionCard title={t("sourcesUsed")} icon={<Network className="size-4" />} className="fade-in fade-in-2">
           <div className="flex flex-wrap gap-2">
             {info.sourcesUsed.map((s) => (
-              <Pill key={s} className="ip-mono text-[11px] border-emerald-500/30 bg-emerald-500/5">
-                <span className="size-1.5 rounded-full bg-emerald-500" />
+              <span key={s} className="tag--ok ip-mono text-[10.5px]">
+                <span className="inline-block size-1.5 bg-current rotate-45" />
                 {s}
-              </Pill>
+              </span>
             ))}
             {info.sourcesFailed.map((s) => (
-              <Pill key={s} className="ip-mono text-[11px] border-border/30 opacity-50">
-                <span className="size-1.5 rounded-full bg-muted-foreground" />
+              <span key={s} className="tag ip-mono text-[10.5px] opacity-50">
+                <span className="inline-block size-1.5 bg-current" />
                 {s}
-              </Pill>
+              </span>
             ))}
           </div>
         </SectionCard>

@@ -2,7 +2,7 @@
 
 import { useMemo, useSyncExternalStore } from "react";
 import { Braces, Info, Binary, MonitorSmartphone } from "lucide-react";
-import { SectionCard, InfoRow, CopyChip, Pill, Shimmer } from "./ui-bits";
+import { SectionCard, InfoRow, CopyChip, Shimmer } from "./ui-bits";
 import { useI18n } from "./i18n-provider";
 import { useIPHeaders } from "./hooks";
 import type { IPInfo, HeadersInfo } from "./types";
@@ -128,10 +128,10 @@ export function TabInfo({ info, isLoading }: { info?: IPInfo; isLoading: boolean
             label={t("connection")}
             value={
               <span className="flex items-center gap-2 flex-wrap justify-end">
-                {info.isMobile && <Pill className="text-[10px] py-0.5">📱 {t("connMobile")}</Pill>}
-                {info.isHosting && <Pill className="text-[10px] py-0.5">🏢 {t("connHosting")}</Pill>}
+                {info.isMobile && <span className="tag text-[10px] py-0.5">{t("connMobile")}</span>}
+                {info.isHosting && <span className="tag text-[10px] py-0.5">{t("connHosting")}</span>}
                 {!info.isMobile && !info.isHosting && info.isProxy === false && (
-                  <Pill className="text-[10px] py-0.5">🏠 {t("connBroadband")}</Pill>
+                  <span className="tag text-[10px] py-0.5">{t("connBroadband")}</span>
                 )}
               </span>
             }
@@ -221,7 +221,7 @@ function HeadersCard({ data, loading }: { data?: HeadersInfo; loading: boolean }
         <div className="max-h-64 overflow-y-auto custom-scroll space-y-1.5 pe-1">
           {entries.map(([k, v]) => (
             <div key={k} className="text-xs border-b border-border/30 pb-1.5">
-              <span className="text-primary font-semibold ip-mono">{k}</span>
+              <span className="font-bold ip-mono text-foreground">{k}</span>
               <span className="text-muted-foreground">: </span>
               <span className="text-foreground/80 break-all ip-mono">{v}</span>
             </div>

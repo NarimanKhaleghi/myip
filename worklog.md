@@ -38,3 +38,29 @@ Stage Summary:
 - Data aggregated from 5 free sources + DoH (PTR/DNSBL) + ipify (dual-stack) + Cloudflare speed.
 - Zero logging policy: no DB, no request logs; history only in browser localStorage.
 - lint: clean; tsc: clean; dev server: no errors; verified interactive in browser.
+
+---
+Task ID: 2
+Agent: Super Z (main)
+Task: Deep visual redesign of myip.thepm.ir to a PURE black & white monochrome design system (user-uploaded "design system.html" — Neo-brutalism Monochrome × Swiss Typography × Blueprint), plus GitHub open-source integration and maker credit.
+
+Work Log:
+- Parsed uploaded design system (upload/design system.html): tokens, mono dark/light palettes, hard offset shadows, 0 border-radius (pill only for chips), invert-on-hover interactions, Lalezar/Vazirmatn/JetBrains Mono typography, 72px engineering grid, grain, custom cursor (mix-blend difference), kicker pattern, agent prompt rules (SEC.35).
+- globals.css: complete rewrite — pure grayscale tokens (dark: #0a0a0a/#f5f5f5 fg; light: #f5f5f5/#101010), shadcn semantic remap (primary=fg → inverted buttons), --radius=0, [data-slot] overrides for button/input/tabs/dialog/toast (hover = invert + shift -2px,-2px + hard shadow), .kicker/.display/.tag/.tag--ok/.tag--bad/.tag--warn/.hatch-fill utilities, body::before 72px grid + body::after 4% grain, inverted ::selection, mono scrollbars, print/reduced-motion, Leaflet mono overrides. Status semantics = PATTERN not color (filled=ok, hatched=alert, dashed=warn).
+- layout.tsx: added Lalezar display font; themeColor #0a0a0a/#f5f5f5; author/creator = Nariman Khaleghi; JSON-LD: author + MIT license + isAccessibleForFree.
+- i18n.ts: new keys — openSourceHeading/openSourceFull/viewOnGitHub/githubRepo/mitLicense/contactEmail(pdm@thepm.ir → pm@thepm.ir)/madeByNariman (FA "ساخته شده با ❤️ توسط نریمان" / EN "Made with ❤️ by Nariman", heart split out for grayscale filter).
+- New cursor-fx.tsx: design-system custom cursor (dot+ring, mix-blend-mode: difference, pointer:fine only, reduced-motion safe).
+- Restyled all components: header (bordered mono brand mark, GitHub icon link), hero (kicker + live-dot + giant mono IP slab with hard shadow press interaction, mono tags, open-source line with GitHub logo + repo), ui-bits (SectionCard = thin border + hover shadow; StatusPill = tag--ok/tag--bad; CopyChip hover-invert), quick-stats, tabs (active tab = inverted), tab-security (mono risk bar with hatch, DNSBL pattern states, WebRTC mono results), tab-network/geo/info/tools (removed ALL emerald/red/amber/violet/gradient/glass), seo-content (kickers + Lalezar display titles + numbered mono article rows), map-view (grayscale OSM tiles, blueprint black-square marker, inline style block beats leaflet.css), page.tsx (mono error card + CursorFx), toast.tsx (de-colored destructive).
+- Footer fully redesigned: mono marquee ticker (MIT/OPEN SOURCE/NO LOGS/…), open-source card (GitHub logo, MIT tag, solid View-on-GitHub button, repo link), links with pm@thepm.ir email, bottom bar maker credit (heart grayscale-filtered).
+- Fixed during verification:
+  1. Stale Turbopack CSS chunks (globals.css edits not propagating) → restarted dev server; also inlined critical Leaflet mono rules in map-view.tsx <style> so they always beat leaflet.css.
+  2. Leaflet attribution showed colored solidarity flag → .leaflet-attribution-flag display:none (also in inline block).
+  3. Colored emojis (📱🏢🏠 in tab-info, ❤️ in credit, 🌍/flags) → removed or grayscale-filtered (flags keep country info, rendered gray).
+  4. MultiEdit partial-apply mishap in tab-security (riskColor removed but block not) → repaired by re-applying remaining edits.
+- Verification: lint clean, tsc clean (src), dev server fresh; agent-browser E2E: 8.8.8.8 lookup (5 sources), geo tab grayscale map + marker, security tab patterns, FA↔EN toggle ("Made with ❤️ by Nariman" confirmed), dark↔light, mobile 390px no overflow.
+- Pixel-level color audit (PIL): full-page dark + light screenshots → 0/1,242,000 saturated pixels each = PURE MONOCHROME. (VLM "red heart" reports disproven by pixel data — semantic hallucination.)
+
+Stage Summary:
+- myip.thepm.ir is now strictly black & white per the uploaded design system: sharp corners, hard shadows, invert-on-hover, engineering grid + grain, Lalezar display type, mono tags with pattern-based status.
+- GitHub integration: github.com/NarimanKhaleghi/myip with GitHub logo in header, hero, footer (+ open-source MIT statement); contact email pm@thepm.ir; footer credit "ساخته شده با ❤️ توسط نریمان" / "Made with ❤️ by Nariman" (grayscale heart).
+- All functionality preserved: 5 API sources, DNSBL, WebRTC test, speed test, compare, history, export, QR, bilingual RTL/LTR, dark/light.

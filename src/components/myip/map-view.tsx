@@ -26,11 +26,12 @@ export default function MapView({
     const lon = info.longitude ?? 51.4;
     const hasCoords = info.latitude !== undefined && info.longitude !== undefined;
 
-    // Custom gradient marker icon
+    // Monochrome blueprint marker — black square, white core, hard ring
     const icon = L.divIcon({
       className: "",
       html: `<div style="position:relative;width:22px;height:22px">
-        <div class="marker-pulse" style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle, #6366F1, #8B5CF6);box-shadow:0 0 0 4px rgba(99,102,241,.25), 0 0 18px rgba(99,102,241,.5)"></div>
+        <div style="position:absolute;inset:0;background:var(--fg,#111);border:2px solid var(--bg,#fff);box-shadow:4px 4px 0 rgba(0,0,0,.35)"></div>
+        <div style="position:absolute;top:6px;left:6px;width:6px;height:6px;background:var(--bg,#fff)"></div>
       </div>`,
       iconSize: [22, 22],
       iconAnchor: [11, 11],
@@ -88,16 +89,25 @@ export default function MapView({
 
   return (
     <div className="space-y-2">
+      {/* Enforce the monochrome map rules from the design system.
+          Inlined here so they always beat leaflet.css regardless of
+          stylesheet chunk ordering. */}
+      <style>{`
+        .leaflet-pane .leaflet-tile { filter: grayscale(1) contrast(1.08); }
+        .leaflet-container.leaflet-container { background: var(--bg2); border-radius: 0; font: inherit !important; }
+        .leaflet-control-attribution a { color: var(--mut) !important; }
+        .leaflet-attribution-flag { display: none !important; }
+      `}</style>
       <div
         ref={containerRef}
-        className="h-72 sm:h-96 w-full rounded-2xl overflow-hidden border border-border/50 z-0"
+        className="h-72 sm:h-96 w-full overflow-hidden border border-border z-0"
         role="img"
         aria-label={`${t("yourLocation")} — ${countryName(info.country, info.countryCode)}`}
       />
       <div className="flex items-center justify-between gap-3 flex-wrap text-xs text-muted-foreground">
         <span>{t("mapHint")}</span>
         {distanceKm !== null && distanceKm !== undefined && (
-          <span className="ip-mono num text-primary font-semibold">
+          <span className="ip-mono num font-bold text-foreground">
             ~{distanceKm.toLocaleString("en-US")} km
           </span>
         )}
@@ -105,7 +115,7 @@ export default function MapView({
           href={osmUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="underline underline-offset-2 hover:text-primary transition-colors no-print"
+          className="underline underline-offset-2 hover:text-foreground transition-colors no-print"
         >
           {t("openOsm")}
         </a>

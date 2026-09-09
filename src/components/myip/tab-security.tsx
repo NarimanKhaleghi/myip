@@ -12,7 +12,7 @@ import {
   Radio,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { SectionCard, InfoRow, StatusPill, Pill, Shimmer, CopyChip } from "./ui-bits";
+import { SectionCard, InfoRow, StatusPill, Shimmer, CopyChip } from "./ui-bits";
 import { useI18n } from "./i18n-provider";
 import { useIPExtra } from "./hooks";
 import type { IPInfo } from "./types";
@@ -33,12 +33,6 @@ export function TabSecurity({ info, isLoading }: { info?: IPInfo; isLoading: boo
 
   const risk = info.riskScore ?? 0;
   const riskLevel = risk < 20 ? "low" : risk < 50 ? "medium" : "high";
-  const riskColor =
-    riskLevel === "low"
-      ? "text-emerald-500"
-      : riskLevel === "medium"
-      ? "text-amber-500"
-      : "text-red-500";
 
   return (
     <div className="grid gap-4 md:grid-cols-2">
@@ -70,9 +64,9 @@ export function TabSecurity({ info, isLoading }: { info?: IPInfo; isLoading: boo
           {info.bogonLabels.length > 0 && (
             <div className="flex items-center justify-between gap-2">
               <span className="text-sm text-muted-foreground">Bogon</span>
-              <Pill className="border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400">
+              <span className="tag--warn px-3 py-1 text-xs">
                 {info.bogonLabels.join(" · ")}
-              </Pill>
+              </span>
             </div>
           )}
         </div>
@@ -84,33 +78,29 @@ export function TabSecurity({ info, isLoading }: { info?: IPInfo; isLoading: boo
               <Gauge className="size-4" />
               {t("riskScore")}
             </span>
-            <span className={`ip-mono num text-2xl font-bold ${riskColor}`}>{risk}<span className="text-sm text-muted-foreground">/100</span></span>
+            <span className="ip-mono num text-2xl font-bold">{risk}<span className="text-sm text-muted-foreground font-normal">/100</span></span>
           </div>
-          <div className="h-2.5 rounded-full bg-muted overflow-hidden">
+          <div className="h-3 bg-muted border border-border overflow-hidden">
             <div
-              className={`h-full rounded-full transition-all duration-700 ${
-                riskLevel === "low"
-                  ? "bg-gradient-to-r from-emerald-400 to-emerald-500"
+              className={`h-full transition-all duration-700 ${
+                riskLevel === "high"
+                  ? "bg-foreground hatch-fill"
                   : riskLevel === "medium"
-                  ? "bg-gradient-to-r from-amber-400 to-orange-500"
-                  : "bg-gradient-to-r from-orange-500 to-red-500"
+                  ? "bg-foreground/70"
+                  : "bg-foreground/45"
               }`}
               style={{ width: `${Math.max(risk, 4)}%` }}
             />
           </div>
           <p className="mt-2 text-[11px] text-muted-foreground">{t("riskHint")}</p>
           <div className="mt-1">
-            <Pill
-              className={
-                riskLevel === "low"
-                  ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-                  : riskLevel === "medium"
-                  ? "border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400"
-                  : "border-red-500/30 bg-red-500/10 text-red-600 dark:text-red-400"
-              }
+            <span
+              className={`px-3 py-1 text-xs ${
+                riskLevel === "low" ? "tag--ok" : riskLevel === "medium" ? "tag--warn" : "tag--bad"
+              }`}
             >
               {riskLevel === "low" ? t("riskLow") : riskLevel === "medium" ? t("riskMedium") : t("riskHigh")}
-            </Pill>
+            </span>
           </div>
         </div>
       </SectionCard>
@@ -123,21 +113,21 @@ export function TabSecurity({ info, isLoading }: { info?: IPInfo; isLoading: boo
           <div className="space-y-2">
             <CopyChip value={extra.ptr} label="PTR" className="w-full justify-between" />
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <ShieldCheck className="size-3.5 text-emerald-500" />
+              <ShieldCheck className="size-3.5" />
               {info.ip} → <span className="ip-mono">{extra.ptr}</span>
             </div>
           </div>
         ) : (
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <ShieldAlert className="size-4 text-amber-500" />
+            <ShieldAlert className="size-4" />
             {t("noPtr")}
           </div>
         )}
 
         {/* WebRTC leak test */}
         <div className="mt-6 border-t border-border/40 pt-4">
-          <h4 className="flex items-center gap-1.5 text-sm font-semibold mb-3">
-            <Radio className="size-4 text-primary" />
+          <h4 className="flex items-center gap-1.5 text-sm font-bold mb-3">
+            <Radio className="size-4" />
             {t("webrtcLeak")}
           </h4>
           <WebRTCTest publicIP={info.ip} />
@@ -162,20 +152,18 @@ export function TabSecurity({ info, isLoading }: { info?: IPInfo; isLoading: boo
               {extra?.dnsbl.map((d) => (
                 <div
                   key={d.blacklist}
-                  className={`flex items-center justify-between gap-2 rounded-lg border px-3 py-2 text-xs ${
-                    d.listed
-                      ? "border-red-500/30 bg-red-500/10"
-                      : "border-border/50 bg-muted/30"
+                  className={`flex items-center justify-between gap-2 border px-3 py-2 text-xs ${
+                    d.listed ? "tag--bad" : "border-border bg-muted/50"
                   }`}
                 >
                   <span className="ip-mono font-medium truncate">{d.blacklist}</span>
                   {d.listed ? (
-                    <span className="flex items-center gap-1 text-red-600 dark:text-red-400 font-semibold shrink-0">
+                    <span className="flex items-center gap-1 font-bold shrink-0">
                       <Server className="size-3.5" />
                       {t("blacklisted")}
                     </span>
                   ) : (
-                    <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 shrink-0">
+                    <span className="flex items-center gap-1 shrink-0">
                       <ShieldCheck className="size-3.5" />
                       {t("notBlacklisted")}
                     </span>
@@ -256,16 +244,14 @@ function WebRTCTest({ publicIP }: { publicIP: string }) {
         variant="outline"
         className="gap-2"
       >
-        <Radio className={`size-4 ${state === "running" ? "animate-pulse text-primary" : ""}`} />
+        <Radio className={`size-4 ${state === "running" ? "animate-pulse" : ""}`} />
         {state === "running" ? t("webrtcRunning") : state === "idle" ? t("webrtcStart") : t("webrtcStart")}
       </Button>
 
       {state === "done" && leaked !== null && (
         <div
-          className={`rounded-lg border p-3 text-xs space-y-1 ${
-            leaked.length
-              ? "border-red-500/30 bg-red-500/10 text-red-600 dark:text-red-400"
-              : "border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+          className={`border p-3 text-xs space-y-1 ${
+            leaked.length ? "tag--bad" : "tag--ok"
           }`}
         >
           {leaked.length === 0 && (

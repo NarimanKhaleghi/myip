@@ -193,6 +193,15 @@ export const UI = {
     github: "GitHub",
     contact: "تماس",
     madeWith: "ساخته‌شده با ❤️ برای اینترنت آزاد",
+
+    // Open source / credits
+    openSourceHeading: "کاملاً متن‌باز",
+    openSourceFull: "این پروژه به‌صورت کامل متن‌باز است؛ تمام کد آن به‌صورت عمومی و با مجوز MIT در دسترس است. اگر این ابزار برایتان مفید بود، یک Star روی ریپو یادتون نره.",
+    viewOnGitHub: "مشاهده در گیت‌هاب",
+    githubRepo: "NarimanKhaleghi/myip",
+    mitLicense: "مجوز MIT",
+    contactEmail: "pm@thepm.ir",
+    madeByNariman: "ساخته شده با {heart} توسط نریمان",
     errorGeneric: "خطایی رخ داد. دوباره تلاش کنید",
     retry: "تلاش مجدد",
     loading: "در حال بارگذاری…",
@@ -372,6 +381,15 @@ export const UI = {
     github: "GitHub",
     contact: "Contact",
     madeWith: "Made with ❤️ for a free internet",
+
+    // Open source / credits
+    openSourceHeading: "Fully open source",
+    openSourceFull: "This project is fully open source — the complete code is publicly available under the MIT license. If you find it useful, consider leaving a star on the repo.",
+    viewOnGitHub: "View on GitHub",
+    githubRepo: "NarimanKhaleghi/myip",
+    mitLicense: "MIT License",
+    contactEmail: "pm@thepm.ir",
+    madeByNariman: "Made with {heart} by Nariman",
     errorGeneric: "Something went wrong. Please try again",
     retry: "Retry",
     loading: "Loading…",
