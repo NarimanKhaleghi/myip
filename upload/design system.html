@@ -1,0 +1,2313 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Design System — نئوبروتالیسم مونوکروم / سوئیسی / بلوپرینت</title>
+<meta name="description" content="دیزاین سیستم کامل برای Agent هوش مصنوعی — توکن‌ها، کامپوننت‌ها، الگوها و همهٔ حالات.">
+
+<script>
+(function(){var t=localStorage.getItem('ds-theme');if(!t){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';}document.documentElement.dataset.theme=t;})();
+</script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/vazirmatn@5/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/vazirmatn@5/500.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/vazirmatn@5/700.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/vazirmatn@5/800.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/vazirmatn@5/900.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/lalezar@5/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5/600.css">
+
+<style>
+/* ================================================================
+   ۱. توکن‌های پایه (Base Tokens)
+   ================================================================ */
+:root{
+  /* حرکت و ترنزیشن */
+  --ease:cubic-bezier(.22,.7,.16,1);
+  --ease-spring:cubic-bezier(.34,1.56,.64,1);
+  --dur-fast:.18s;
+  --dur-mid:.35s;
+  --dur-slow:.7s;
+
+  /* تایپوگرافی */
+  --f-body:'Vazirmatn',system-ui,-apple-system,sans-serif;
+  --f-disp:'Lalezar','Vazirmatn',sans-serif;
+  --f-mono:'JetBrains Mono',ui-monospace,monospace;
+
+  /* اندازه‌های متن */
+  --fs-xs:11px;   --lh-xs:1.5;
+  --fs-sm:12.5px; --lh-sm:1.7;
+  --fs-md:15px;   --lh-md:1.85;
+  --fs-lg:17px;   --lh-lg:1.6;
+  --fs-xl:22px;   --lh-xl:1.3;
+  --fs-2xl:32px;  --lh-2xl:1.2;
+  --fs-3xl:48px;  --lh-3xl:1.1;
+  --fs-4xl:72px;  --lh-4xl:1.05;
+  --fs-5xl:110px; --lh-5xl:1;
+
+  /* فاصله‌گذاری (Scale هندسی) */
+  --s-0:0;
+  --s-1:4px;
+  --s-2:8px;
+  --s-3:12px;
+  --s-4:16px;
+  --s-5:22px;
+  --s-6:32px;
+  --s-7:48px;
+  --s-8:72px;
+  --s-9:104px;
+
+  /* گرید مهندسی */
+  --grid:72px;
+
+  /* بوردر */
+  --bw-hair:1px;
+  --bw-thin:1.5px;
+  --bw-thick:2px;
+  --r-0:0;           --r-0:0px;
+  --r-sm:2px;
+  --r-md:6px;
+  --r-pill:999px;
+  --r-full:9999px;
+
+  /* سایه (سخت، بدون بلور — امضای نئوبروتالیسم) */
+  --sh-hair:2px 2px 0 var(--shadow);
+  --sh-sm:4px 4px 0 var(--shadow);
+  --sh-md:8px 8px 0 var(--shadow);
+  --sh-lg:12px 12px 0 var(--shadow);
+  --sh-xl:20px 20px 0 var(--shadow);
+
+  /* زی-ایندکس */
+  --z-bg:-1;
+  --z-base:1;
+  --z-sticky:40;
+  --z-nav:50;
+  --z-overlay:70;
+  --z-modal:80;
+  --z-toast:90;
+  --z-cursor:100;
+}
+
+/* تم تاریک */
+html[data-theme="dark"]{
+  --bg:#0a0a0b; --bg2:#101013; --bg3:#16161a;
+  --card:#121215; --card2:#18181d;
+  --fg:#f2f1ec; --fg2:#d4d3cc;
+  --mut:#96938a; --mut2:#6c6960;
+  --line:rgba(242,241,236,.13);
+  --line2:rgba(242,241,236,.32);
+  --line3:rgba(242,241,236,.6);
+  --grid-c:rgba(242,241,236,.05);
+  --shadow:rgba(0,0,0,.55);
+  --invert:#f2f1ec; --invert-bg:#0a0a0b;
+  --accent:var(--fg);
+  --success:#7ad178; --warn:#e8c468; --err:#f07272;
+  color-scheme:dark;
+}
+
+/* تم روشن */
+html[data-theme="light"]{
+  --bg:#f4f3ee; --bg2:#ebeae3; --bg3:#e0dfd5;
+  --card:#ffffff; --card2:#faf9f4;
+  --fg:#101013; --fg2:#1f1f24;
+  --mut:#6c6960; --mut2:#96938a;
+  --line:rgba(16,16,19,.14);
+  --line2:rgba(16,16,19,.36);
+  --line3:rgba(16,16,19,.7);
+  --grid-c:rgba(16,16,19,.06);
+  --shadow:rgba(16,16,19,.2);
+  --invert:#101013; --invert-bg:#f4f3ee;
+  --accent:var(--fg);
+  --success:#2e8f3b; --warn:#a8811a; --err:#c54040;
+  color-scheme:light;
+}
+
+/* ================================================================
+   ۲. ریست و پایه (Reset & Base)
+   ================================================================ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html,body{min-height:100%}
+body{
+  background:var(--bg); color:var(--fg);
+  font-family:var(--f-body); font-size:var(--fs-md); line-height:var(--lh-md);
+  font-weight:500;
+  transition:background var(--dur-mid) ease,color var(--dur-mid) ease;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+::selection{background:var(--fg);color:var(--bg)}
+:focus-visible{outline:2px solid var(--fg);outline-offset:3px}
+a{color:inherit;text-decoration:none}
+ul,ol{list-style:none}
+img{display:block;max-width:100%;height:auto}
+button,input,select,textarea{font:inherit;color:inherit}
+button{background:none;border:none;cursor:pointer}
+code,kbd,pre{font-family:var(--f-mono)}
+h1,h2,h3,h4,h5,h6{font-weight:800;line-height:1.2}
+
+/* کلاس‌های کمکی */
+.container{width:min(1280px,100% - clamp(1.5rem,6vw,5rem));margin-inline:auto}
+.display{font-family:var(--f-disp);font-weight:400;line-height:1.15;letter-spacing:-.01em}
+.mono{font-family:var(--f-mono)}
+.muted{color:var(--mut)}
+.hair{border:var(--bw-hair) solid var(--line)}
+.thin{border:var(--bw-thin) solid var(--line2)}
+.thick{border:var(--bw-thick) solid var(--line3)}
+
+/* ================================================================
+   ۳. لایه‌های پس‌زمینهٔ استتیک
+   ================================================================ */
+body::before{
+  content:""; position:fixed; inset:0; z-index:var(--z-bg);
+  pointer-events:none;
+  background-image:
+    linear-gradient(var(--grid-c) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid-c) 1px,transparent 1px);
+  background-size:var(--grid) var(--grid);
+  mask-image:radial-gradient(ellipse 85% 80% at 50% 50%,#000 30%,transparent 100%);
+}
+.grain{
+  position:fixed;inset:-100%;z-index:var(--z-overlay);pointer-events:none;
+  opacity:.05;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grain 9s steps(10) infinite;
+}
+@keyframes grain{0%,100%{transform:translate(0,0)}20%{transform:translate(-3%,4%)}40%{transform:translate(4%,-3%)}60%{transform:translate(-4%,-2%)}80%{transform:translate(3%,3%)}}
+
+/* کرسر سفارشی (اختیاری) */
+.cursor-dot,.cursor-ring{
+  position:fixed;top:0;left:0;z-index:var(--z-cursor);
+  pointer-events:none;border-radius:50%;opacity:0;
+  mix-blend-mode:difference;
+}
+.cursor-dot{width:7px;height:7px;margin:-3.5px;background:#fff}
+.cursor-ring{width:36px;height:36px;margin:-18px;border:1.5px solid #fff;transition:width .3s var(--ease),height .3s var(--ease),margin .3s var(--ease)}
+.cursor-ring.is-hover{width:58px;height:58px;margin:-29px}
+body.has-cursor .cursor-dot,body.has-cursor .cursor-ring{opacity:1}
+body.has-cursor,body.has-cursor a,body.has-cursor button{cursor:none}
+
+/* ================================================================
+   ۴. هدر داکیومنت (Sticky)
+   ================================================================ */
+.ds-hdr{
+  position:sticky;top:0;z-index:var(--z-sticky);
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  height:60px; padding-inline:clamp(14px,3vw,32px);
+  background:color-mix(in srgb,var(--bg) 82%,transparent);
+  backdrop-filter:blur(10px);
+  border-bottom:var(--bw-hair) solid var(--line);
+}
+.ds-hdr__brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:14px}
+.ds-hdr__mono{
+  display:grid;place-items:center;width:32px;height:32px;
+  border:var(--bw-thin) solid var(--fg);
+  font-family:var(--f-disp);font-size:17px;
+  transition:all var(--dur-fast) var(--ease);
+}
+.ds-hdr__brand:hover .ds-hdr__mono{background:var(--fg);color:var(--bg);transform:rotate(-6deg)}
+.ds-hdr__brand code{font-size:10.5px;color:var(--mut);font-weight:400}
+.ds-hdr__tools{display:flex;align-items:center;gap:10px}
+.ds-search{
+  background:var(--card);border:var(--bw-hair) solid var(--line2);
+  padding:7px 12px;font-size:12px;width:220px;
+  font-family:var(--f-mono);
+}
+.ds-search:focus{outline:none;border-color:var(--fg)}
+
+/* ================================================================
+   ۵. سایدبار (نویگیشن داکیومنت)
+   ================================================================ */
+.ds-layout{display:grid;grid-template-columns:280px 1fr;gap:0}
+.ds-sidebar{
+  position:sticky;top:60px;align-self:start;
+  height:calc(100vh - 60px); overflow-y:auto;
+  padding:22px 18px 32px 22px;
+  border-inline-end:var(--bw-hair) solid var(--line);
+  font-size:12.5px;
+}
+.ds-sidebar::-webkit-scrollbar{width:6px}
+.ds-sidebar::-webkit-scrollbar-thumb{background:var(--line2)}
+.ds-sidebar h4{
+  font-family:var(--f-mono);font-size:10.5px;
+  color:var(--mut);letter-spacing:.05em;text-transform:uppercase;
+  margin-top:22px;margin-bottom:8px;
+}
+.ds-sidebar h4:first-child{margin-top:0}
+.ds-sidebar a{
+  display:flex;align-items:center;gap:8px;
+  padding:6px 10px;font-weight:500;color:var(--mut2);
+  border-inline-start:1.5px solid transparent;
+  transition:all var(--dur-fast) var(--ease);
+}
+.ds-sidebar a:hover{color:var(--fg);border-inline-start-color:var(--line2)}
+.ds-sidebar a.is-on{
+  color:var(--fg);background:var(--card);
+  border-inline-start-color:var(--fg);
+  font-weight:700;
+}
+.ds-sidebar a code{font-size:10px;color:var(--mut);margin-inline-start:auto}
+
+/* ================================================================
+   ۶. محتوای اصلی
+   ================================================================ */
+.ds-main{padding:32px clamp(18px,3vw,40px) 120px}
+.ds-section{margin-bottom:90px;scroll-margin-top:80px}
+.ds-section__head{
+  display:flex;align-items:flex-end;gap:20px;flex-wrap:wrap;
+  padding-bottom:18px;margin-bottom:26px;
+  border-bottom:var(--bw-thin) solid var(--line2);
+}
+.ds-section__idx{
+  font-family:var(--f-mono);font-size:11px;color:var(--mut);
+  border:var(--bw-hair) dashed var(--line2);padding:3px 10px;
+}
+.ds-section__title{font-size:clamp(30px,4vw,48px);font-family:var(--f-disp);line-height:1.1}
+.ds-section__sub{color:var(--mut);max-width:62ch;font-size:14px;margin-bottom:4px}
+.ds-principle{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;
+  margin-bottom:32px;
+}
+.ds-principle__item{
+  padding:18px 20px;border:var(--bw-hair) solid var(--line);
+  background:var(--card);
+}
+.ds-principle__item b{display:block;font-size:14px;margin-bottom:6px}
+.ds-principle__item p{font-size:12.5px;color:var(--mut);line-height:1.7}
+
+/* ================================================================
+   ۷. نمایشگر کامپوننت (Preview + Code)
+   ================================================================ */
+.ds-demo{
+  margin-bottom:28px;
+  border:var(--bw-thin) solid var(--line2);
+  background:var(--card);
+}
+.ds-demo__head{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:10px 16px;border-bottom:var(--bw-hair) solid var(--line);
+}
+.ds-demo__title{font-family:var(--f-mono);font-size:12px;font-weight:600}
+.ds-demo__title code{color:var(--mut);font-weight:400;margin-inline-start:8px;font-size:10.5px}
+.ds-demo__actions{display:flex;gap:6px}
+.ds-demo__btn{
+  font-family:var(--f-mono);font-size:10.5px;
+  padding:4px 10px;border:var(--bw-hair) solid var(--line2);
+  transition:all var(--dur-fast) var(--ease);
+}
+.ds-demo__btn:hover{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.ds-demo__stage{
+  padding:36px 28px;min-height:120px;
+  display:flex;align-items:center;flex-wrap:wrap;gap:16px;
+}
+.ds-demo__stage--col{flex-direction:column;align-items:stretch}
+.ds-demo__stage--grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:18px;align-items:start;
+}
+.ds-demo__stage--row{justify-content:flex-start}
+.ds-demo__stage--dark{background:#0a0a0b;color:#f2f1ec}
+.ds-demo__stage--light{background:#f4f3ee;color:#101013}
+.ds-demo__code{
+  display:none;position:relative;
+  padding:18px 22px;background:var(--bg2);
+  border-top:var(--bw-hair) dashed var(--line2);
+  max-height:400px;overflow:auto;
+}
+.ds-demo__code.is-open{display:block}
+.ds-demo__code pre{
+  font-family:var(--f-mono);font-size:11.5px;line-height:1.7;
+  white-space:pre-wrap;word-break:break-word;color:var(--fg);
+}
+.ds-demo__code::-webkit-scrollbar{width:6px;height:6px}
+.ds-demo__code::-webkit-scrollbar-thumb{background:var(--line2)}
+
+/* جدول توکن */
+.ds-token-table{width:100%;border-collapse:collapse;font-size:12.5px;margin-bottom:22px}
+.ds-token-table th,.ds-token-table td{
+  text-align:start;padding:10px 12px;border-bottom:var(--bw-hair) solid var(--line);
+  vertical-align:middle;
+}
+.ds-token-table th{
+  font-family:var(--f-mono);font-size:10.5px;color:var(--mut);
+  text-transform:uppercase;letter-spacing:.05em;
+}
+.ds-token-table code{font-size:11px;color:var(--fg);font-weight:600}
+.ds-token-table .color-swatch{
+  display:inline-block;width:34px;height:34px;
+  border:var(--bw-hair) solid var(--line2);
+  vertical-align:middle;margin-inline-end:8px;
+}
+.ds-token-table .type-sample{font-family:var(--f-disp);font-size:20px;line-height:1.3}
+.ds-token-table .mono-sample{font-family:var(--f-mono);font-size:13px}
+
+/* ================================================================
+   ۸. کامپوننت‌ها (Atoms → Organisms)
+   ================================================================ */
+
+/* ---- دکمه‌ها ---- */
+.btn{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:13px 26px;
+  border:var(--bw-thin) solid var(--fg);
+  background:transparent;color:var(--fg);
+  font-weight:700;font-size:14.5px;
+  transition:background var(--dur-mid) ease,color var(--dur-mid) ease,transform var(--dur-mid) var(--ease);
+}
+.btn .arr{transition:transform var(--dur-mid) var(--ease)}
+.btn:hover{background:var(--fg);color:var(--bg);transform:translate(-2px,-2px);box-shadow:var(--sh-sm)}
+.btn:hover .arr{transform:translateY(3px) translateX(-3px)}
+.btn:active{transform:translate(0,0);box-shadow:none}
+.btn--solid{background:var(--fg);color:var(--bg)}
+.btn--solid:hover{background:transparent;color:var(--fg)}
+.btn--ghost{border-color:var(--line2);color:var(--mut)}
+.btn--ghost:hover{border-color:var(--fg);color:var(--fg);background:transparent;box-shadow:none;transform:none}
+.btn--sm{padding:8px 16px;font-size:12.5px}
+.btn--lg{padding:16px 32px;font-size:16px}
+.btn--icon{padding:0;width:42px;height:42px;justify-content:center}
+.btn--icon.btn--sm{width:32px;height:32px}
+.btn[disabled]{opacity:.4;pointer-events:none}
+
+/* ---- چیپ‌ها و تگ‌ها ---- */
+.chip{
+  display:inline-flex;align-items:center;gap:6px;
+  border:var(--bw-hair) solid var(--line2);border-radius:var(--r-pill);
+  padding:6px 16px;font-size:12px;font-weight:700;color:var(--mut);
+  transition:all var(--dur-mid) var(--ease);cursor:pointer;
+}
+.chip:hover{color:var(--fg);border-color:var(--fg)}
+.chip.is-on{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.tag{
+  display:inline-flex;align-items:center;gap:4px;
+  font-family:var(--f-mono);font-size:10.5px;font-weight:600;
+  border:var(--bw-hair) solid var(--line);padding:2px 10px;color:var(--mut);
+}
+.tag--solid{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.tag--warn{border-color:var(--warn);color:var(--warn)}
+.tag--err{border-color:var(--err);color:var(--err)}
+.tag--ok{border-color:var(--success);color:var(--success)}
+
+/* ---- کیکر (Kicker / Eyebrow) ---- */
+.kicker{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--f-mono);font-size:11px;font-weight:700;
+  color:var(--mut);letter-spacing:.04em;text-transform:uppercase;
+  margin-bottom:14px;
+}
+.kicker::before{content:"";width:9px;height:9px;background:var(--fg)}
+.kicker code{color:var(--mut);opacity:.75}
+
+/* ---- لینک ---- */
+.link{
+  color:var(--fg);text-decoration:none;
+  position:relative;padding:2px 0;
+  border-bottom:var(--bw-hair) solid transparent;
+  transition:border-color var(--dur-fast) var(--ease);
+}
+.link::after{
+  content:"";position:absolute;bottom:-1px;inset-inline-end:0;
+  width:0;height:1px;background:var(--fg);
+  transition:width var(--dur-mid) var(--ease);
+}
+.link:hover::after{width:100%}
+.link--mono{font-family:var(--f-mono);font-size:12px;color:var(--mut);border-bottom:var(--bw-hair) dashed var(--line2)}
+.link--mono:hover{color:var(--fg)}
+
+/* ---- ورودی‌ها ---- */
+.input{
+  width:100%;padding:12px 14px;
+  background:var(--card);color:var(--fg);
+  border:var(--bw-thin) solid var(--line2);
+  font-family:var(--f-mono);font-size:13px;
+  transition:border-color var(--dur-fast) var(--ease);
+}
+.input:focus{outline:none;border-color:var(--fg)}
+.input::placeholder{color:var(--mut)}
+.input--err{border-color:var(--err)}
+.input--ok{border-color:var(--success)}
+.textarea{resize:vertical;min-height:100px;font-family:var(--f-body)}
+.field{display:flex;flex-direction:column;gap:6px;width:100%;max-width:360px}
+.field label{font-size:11px;font-weight:700;color:var(--mut);font-family:var(--f-mono);text-transform:uppercase;letter-spacing:.04em}
+.field small{font-size:11px;color:var(--mut)}
+.field small.err{color:var(--err)}
+
+/* ---- چک‌باکس / رادیو / سوئیچ ---- */
+.check{
+  display:inline-flex;align-items:center;gap:10px;cursor:pointer;
+  font-size:13px;color:var(--fg);
+}
+.check input{position:absolute;opacity:0}
+.check__box{
+  width:18px;height:18px;
+  border:var(--bw-thin) solid var(--line3);
+  display:grid;place-items:center;
+  transition:all var(--dur-fast) var(--ease);
+  flex-shrink:0;
+}
+.check input:checked+.check__box{background:var(--fg);border-color:var(--fg)}
+.check input:checked+.check__box::after{content:"";width:8px;height:4px;border-bottom:2px solid var(--bg);border-inline-start:2px solid var(--bg);transform:translateY(-1px) rotate(-45deg)}
+.check input:focus-visible+.check__box{outline:2px solid var(--fg);outline-offset:2px}
+.check--radio .check__box{border-radius:50%}
+.check--radio input:checked+.check__box::after{border:none;width:8px;height:8px;background:var(--bg);border-radius:50%;transform:none}
+
+.toggle{
+  display:inline-flex;align-items:center;gap:10px;cursor:pointer;font-size:13px;
+}
+.toggle input{position:absolute;opacity:0}
+.toggle__track{
+  position:relative;width:38px;height:20px;
+  background:var(--line2);border:var(--bw-hair) solid var(--line3);
+  border-radius:var(--r-pill);
+  transition:background var(--dur-fast) var(--ease);
+}
+.toggle__track::after{
+  content:"";position:absolute;top:2px;inset-inline-start:2px;
+  width:14px;height:14px;background:var(--fg);border-radius:50%;
+  transition:transform var(--dur-fast) var(--ease);
+}
+.toggle input:checked+.toggle__track{background:var(--fg)}
+.toggle input:checked+.toggle__track::after{background:var(--bg);transform:translateX(calc(-100% + 20px));inset-inline-start:auto;inset-inline-end:2px}
+[dir="rtl"] .toggle input:checked+.toggle__track::after{transform:translateX(0)}
+
+/* ---- Badge / Status ---- */
+.badge{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:var(--f-mono);font-size:10.5px;font-weight:700;
+  padding:3px 10px;border:var(--bw-hair) solid var(--line2);color:var(--mut);
+}
+.badge--live{color:var(--fg);border-color:var(--fg)}
+.badge--live::before{
+  content:"";width:6px;height:6px;background:var(--fg);border-radius:50%;
+  box-shadow:0 0 0 0 var(--fg);
+  animation:pulse 2s ease-out infinite;
+}
+@keyframes pulse{from{box-shadow:0 0 0 0 var(--fg)}to{box-shadow:0 0 0 8px transparent}}
+.badge--dot::before{content:"";width:6px;height:6px;background:var(--mut);border-radius:50%}
+
+/* ---- کارت‌ها ---- */
+.card{
+  border:var(--bw-thin) solid var(--line2);
+  background:var(--card);
+  display:flex;flex-direction:column;
+  transition:transform var(--dur-mid) var(--ease),border-color var(--dur-mid) var(--ease),box-shadow var(--dur-mid) var(--ease);
+}
+.card:hover{transform:translateY(-6px) translateX(-2px);border-color:var(--fg);box-shadow:var(--sh-md)}
+.card__media{aspect-ratio:16/9;border-bottom:var(--bw-thin) solid var(--line2);overflow:hidden;position:relative}
+.card__media img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.05);transition:transform var(--dur-slow) var(--ease)}
+.card:hover .card__media img{transform:scale(1.05)}
+.card__body{padding:18px 20px 22px;display:flex;flex-direction:column;gap:8px;flex:1}
+.card__body h3{font-family:var(--f-disp);font-size:22px;line-height:1.25}
+.card__body p{font-size:12.5px;color:var(--mut);line-height:1.8}
+.card__top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.card__top code{font-size:10.5px;color:var(--mut)}
+.card__foot{
+  display:flex;align-items:center;gap:8px;margin-top:auto;padding-top:12px;
+  border-top:var(--bw-hair) dashed var(--line);
+}
+
+/* کارت Spec (استتیک اسپک‌شیت) */
+.spec{
+  width:288px;
+  border:var(--bw-thin) solid var(--line2);
+  background:var(--card);
+  padding:20px 20px 16px;
+  box-shadow:var(--sh-md);
+}
+.spec__head{
+  display:flex;justify-content:space-between;align-items:center;
+  font-family:var(--f-mono);font-size:10.5px;color:var(--mut);
+  border-bottom:var(--bw-hair) dashed var(--line2);
+  padding-bottom:10px;margin-bottom:12px;
+}
+.spec h3{font-family:var(--f-disp);font-size:18px;margin-bottom:10px}
+.spec ul li{
+  display:flex;gap:8px;font-size:12px;padding-block:5px;
+  border-top:var(--bw-hair) solid var(--line);
+}
+.spec ul li span{flex:0 0 56px;color:var(--mut);font-weight:700;font-family:var(--f-mono);font-size:10.5px}
+
+/* ---- ردیف لیست با اینورت ---- */
+.row{
+  display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;
+  gap:clamp(14px,3vw,36px);
+  padding:clamp(14px,2.5vh,24px) clamp(8px,1vw,16px);
+  border-top:var(--bw-thin) solid var(--line2);border-bottom:var(--bw-thin) solid var(--line2);
+  transition:background var(--dur-mid) var(--ease),color var(--dur-mid) var(--ease),padding var(--dur-mid) var(--ease);
+}
+.row:hover{background:var(--fg);color:var(--bg);padding-inline:clamp(16px,2vw,28px)}
+.row__idx{font-family:var(--f-mono);font-size:11.5px;color:var(--mut);transition:color var(--dur-mid) var(--ease)}
+.row:hover .row__idx{color:var(--bg)}
+.row__main h3{font-family:var(--f-disp);font-size:clamp(20px,2.5vw,28px);line-height:1.3}
+.row__main p{font-size:12px;color:var(--mut);transition:color var(--dur-mid) var(--ease);line-height:1.7}
+.row:hover .row__main p{color:var(--bg)}
+.row__url{
+  font-family:var(--f-mono);font-size:11px;
+  border:var(--bw-hair) solid var(--line2);padding:5px 12px;
+  transition:border-color var(--dur-mid) var(--ease);white-space:nowrap;
+}
+.row:hover .row__url{border-color:var(--bg)}
+.row__go{width:40px;height:40px;display:grid;place-items:center;border:var(--bw-hair) solid var(--line2);transition:all var(--dur-mid) var(--ease)}
+.row__go svg{width:16px;height:16px;transition:transform var(--dur-mid) var(--ease)}
+.row:hover .row__go{background:var(--bg);color:var(--fg);border-color:var(--bg)}
+.row:hover .row__go svg{transform:translate(-4px,-4px)}
+
+/* ---- آکاردئون ---- */
+.accordion{border:var(--bw-thin) solid var(--line2)}
+.accordion__item{border-bottom:var(--bw-hair) solid var(--line)}
+.accordion__item:last-child{border-bottom:none}
+.accordion__head{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  width:100%;padding:16px 20px;text-align:start;
+  font-weight:700;font-size:14px;
+  transition:background var(--dur-fast) var(--ease);
+}
+.accordion__head:hover{background:var(--bg2)}
+.accordion__plus{
+  width:20px;height:20px;position:relative;
+  border:var(--bw-hair) solid var(--line2);
+  flex-shrink:0;transition:transform var(--dur-mid) var(--ease);
+}
+.accordion__plus::before,.accordion__plus::after{
+  content:"";position:absolute;top:50%;inset-inline-start:50%;
+  background:var(--fg);
+}
+.accordion__plus::before{width:10px;height:1.5px;transform:translate(-50%,-50%)}
+.accordion__plus::after{width:1.5px;height:10px;transform:translate(-50%,-50%)}
+.accordion__item.is-open .accordion__plus{transform:rotate(45deg)}
+.accordion__body{
+  padding:0 20px;max-height:0;overflow:hidden;
+  transition:max-height var(--dur-slow) var(--ease),padding var(--dur-mid) var(--ease);
+  font-size:13px;color:var(--mut);line-height:1.8;
+}
+.accordion__item.is-open .accordion__body{padding:0 20px 18px;max-height:500px}
+
+/* ---- تب‌ها ---- */
+.tabs{display:flex;flex-direction:column;gap:0;border:var(--bw-thin) solid var(--line2)}
+.tabs__list{display:flex;border-bottom:var(--bw-thin) solid var(--line2);overflow-x:auto}
+.tabs__btn{
+  padding:14px 20px;font-size:13px;font-weight:700;color:var(--mut);
+  border-bottom:2px solid transparent;margin-bottom:-1.5px;
+  white-space:nowrap;transition:all var(--dur-fast) var(--ease);
+}
+.tabs__btn:hover{color:var(--fg)}
+.tabs__btn.is-on{color:var(--fg);border-bottom-color:var(--fg)}
+.tabs__panel{padding:22px;display:none;font-size:13px;color:var(--mut);line-height:1.85}
+.tabs__panel.is-on{display:block}
+
+/* ---- Modal ---- */
+.modal-backdrop{
+  position:fixed;inset:0;z-index:var(--z-modal);
+  background:rgba(0,0,0,.6);backdrop-filter:blur(4px);
+  display:none;align-items:center;justify-content:center;
+  padding:20px;
+}
+.modal-backdrop.is-open{display:flex}
+.modal{
+  max-width:520px;width:100%;
+  background:var(--card);border:var(--bw-thin) solid var(--line2);
+  box-shadow:var(--sh-xl);
+  animation:modalIn var(--dur-mid) var(--ease) both;
+}
+@keyframes modalIn{from{opacity:0;transform:translateY(20px) scale(.96)}to{opacity:1;transform:none}}
+.modal__head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 22px;border-bottom:var(--bw-thin) solid var(--line2);
+}
+.modal__head h3{font-family:var(--f-disp);font-size:22px}
+.modal__close{
+  width:32px;height:32px;display:grid;place-items:center;
+  border:var(--bw-hair) solid var(--line2);
+  transition:all var(--dur-fast) var(--ease);
+}
+.modal__close:hover{background:var(--fg);color:var(--bg);border-color:var(--fg);transform:rotate(90deg)}
+.modal__body{padding:22px;font-size:13.5px;color:var(--mut);line-height:1.8}
+.modal__foot{
+  display:flex;justify-content:flex-end;gap:10px;
+  padding:16px 22px;border-top:var(--bw-hair) dashed var(--line);
+}
+
+/* ---- Toast ---- */
+.toast{
+  position:fixed;bottom:26px;inset-inline-start:50%;
+  transform:translate(-50%,180%);
+  z-index:var(--z-toast);
+  background:var(--fg);color:var(--bg);
+  font-weight:800;font-size:13px;
+  padding:12px 26px;
+  display:flex;align-items:center;gap:10px;
+  box-shadow:var(--sh-md);
+  transition:transform var(--dur-mid) var(--ease);
+}
+.toast.is-show{transform:translate(-50%,0)}
+
+/* ---- Marquee / Ticker ---- */
+.ticker{
+  border-top:var(--bw-thin) solid var(--line2);
+  border-bottom:var(--bw-thin) solid var(--line2);
+  overflow:hidden;padding-block:11px;background:var(--bg);
+}
+.ticker__track{display:flex;width:max-content;animation:marquee 26s linear infinite}
+.ticker:hover .ticker__track{animation-play-state:paused}
+.ticker__track>span{
+  display:flex;gap:34px;padding-inline-end:34px;
+  font-family:var(--f-disp);font-size:17px;white-space:nowrap;color:var(--mut);
+}
+.ticker__track>span i{font-style:normal;color:var(--fg)}
+@keyframes marquee{to{transform:translateX(50%)}}
+
+/* ---- Progress / Bar ---- */
+.bar{display:grid;grid-template-columns:1fr auto;gap:4px 12px;font-size:12.5px;font-weight:700}
+.bar__num{color:var(--mut);font-family:var(--f-mono);font-size:10.5px;align-self:center}
+.bar i{grid-column:1/-1;height:3px;background:var(--line);position:relative;display:block}
+.bar i::after{
+  content:"";position:absolute;inset-block:0;inset-inline-start:0;
+  width:0;background:var(--fg);
+  transition:width var(--dur-slow) var(--ease);
+}
+.bar.is-ready i::after{width:var(--w,0)}
+
+/* ---- Dropdown ---- */
+.dropdown{position:relative;display:inline-block}
+.dropdown__menu{
+  position:absolute;top:calc(100% + 6px);inset-inline-end:0;z-index:var(--z-nav);
+  min-width:220px;background:var(--card);
+  border:var(--bw-thin) solid var(--line2);
+  box-shadow:var(--sh-md);
+  display:none;
+  animation:dropIn var(--dur-fast) var(--ease);
+}
+.dropdown.is-open .dropdown__menu{display:block}
+@keyframes dropIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.dropdown__item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 14px;font-size:13px;
+  border-bottom:var(--bw-hair) solid var(--line);
+  transition:background var(--dur-fast) var(--ease);
+}
+.dropdown__item:last-child{border-bottom:none}
+.dropdown__item:hover{background:var(--bg2)}
+
+/* ---- Tooltip ---- */
+[data-tip]{position:relative}
+[data-tip]::before{
+  content:attr(data-tip);
+  position:absolute;bottom:calc(100% + 8px);inset-inline-start:50%;
+  transform:translateX(-50%) translateY(-2px);
+  background:var(--fg);color:var(--bg);
+  font-family:var(--f-mono);font-size:10.5px;font-weight:600;
+  padding:4px 10px;white-space:nowrap;
+  opacity:0;pointer-events:none;
+  transition:all var(--dur-fast) var(--ease);
+}
+[data-tip]:hover::before{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ---- Table ---- */
+.ds-table{
+  width:100%;border-collapse:collapse;
+  border-top:var(--bw-thin) solid var(--line2);
+  font-size:13px;
+}
+.ds-table th,.ds-table td{
+  text-align:start;padding:12px 14px;
+  border-bottom:var(--bw-hair) solid var(--line);
+}
+.ds-table th{
+  font-family:var(--f-mono);font-size:10.5px;font-weight:700;
+  color:var(--mut);text-transform:uppercase;letter-spacing:.04em;
+  background:var(--bg2);
+}
+.ds-table tr:hover td{background:var(--bg2)}
+
+/* ---- Avatar ---- */
+.avatar{
+  display:inline-grid;place-items:center;
+  width:40px;height:40px;
+  border:var(--bw-thin) solid var(--line2);
+  background:var(--card);
+  font-family:var(--f-disp);font-size:17px;font-weight:400;
+}
+.avatar--sm{width:28px;height:28px;font-size:13px}
+.avatar--lg{width:64px;height:64px;font-size:26px}
+.avatar img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.1)}
+
+/* ---- Loop Widget ---- */
+.loop{border:var(--bw-thin) solid var(--line2);background:var(--card);padding:22px;box-shadow:var(--sh-md)}
+.loop__stage{min-height:140px;border-bottom:var(--bw-hair) dashed var(--line2);padding-bottom:16px;margin-bottom:16px}
+.loop__num{font-family:var(--f-mono);font-size:11px;color:var(--mut)}
+.loop__stage h3{font-family:var(--f-disp);font-size:clamp(26px,3vw,38px);line-height:1.2;margin:6px 0 8px}
+.loop__stage p{font-size:13px;color:var(--mut);max-width:50ch;line-height:1.75}
+.loop__steps{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.lstep{text-align:start}
+.lstep b{font-family:var(--f-mono);font-size:10px;color:var(--mut);font-weight:600;display:block}
+.lstep span{font-size:13px;font-weight:800;color:var(--mut);transition:color var(--dur-fast) var(--ease)}
+.lstep.is-on span{color:var(--fg)}
+.lstep .track{display:block;height:2px;background:var(--line);margin-top:6px;overflow:hidden}
+.lstep .track i{display:block;height:100%;width:0;background:var(--fg)}
+
+/* ---- Orbit text ---- */
+.orbit{width:118px;height:118px;animation:spin 22s linear infinite}
+.orbit text{font-family:var(--f-mono);font-size:11.5px;fill:var(--mut);letter-spacing:.14em}
+.orbit .orbit__core{fill:var(--fg)}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ---- Scroll Hint ---- */
+.scroll-hint{
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  font-family:var(--f-mono);font-size:10.5px;color:var(--mut);font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;
+}
+.scroll-hint__line{width:1.5px;height:44px;background:var(--line2);position:relative;overflow:hidden}
+.scroll-hint__line::after{
+  content:"";position:absolute;top:-40%;inset-inline-end:0;
+  width:100%;height:40%;background:var(--fg);
+  animation:drip 1.8s var(--ease) infinite;
+}
+@keyframes drip{to{top:110%}}
+
+/* ---- Divider ---- */
+.divider{border:none;border-top:var(--bw-thin) solid var(--line2);margin:24px 0}
+.divider--hair{border-top-width:var(--bw-hair);border-top-style:dashed}
+
+/* ================================================================
+   ۹. ریسپانسیو
+   ================================================================ */
+@media (max-width:960px){
+  .ds-layout{grid-template-columns:1fr}
+  .ds-sidebar{position:static;height:auto;border-inline-end:none;border-bottom:var(--bw-hair) solid var(--line)}
+}
+@media (max-width:640px){
+  .ds-demo__stage{padding:24px 18px}
+  .ds-section{margin-bottom:60px}
+  .row{grid-template-columns:auto 1fr auto}
+  .row__url{display:none}
+  .loop__steps{grid-template-columns:repeat(2,1fr)}
+}
+
+/* ================================================================
+   ۱۰. حرکت کاهش‌یافته
+   ================================================================ */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important}
+  .ticker__track{animation:none}
+  .grain{animation:none}
+}
+
+/* ================================================================
+   ۱۱. ابزار چاپ
+   ================================================================ */
+@media print{
+  body::before,.grain,.ds-hdr,.ds-sidebar{display:none}
+  body{background:#fff;color:#000}
+  .ds-demo{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+<div class="cursor-dot" aria-hidden="true"></div>
+<div class="cursor-ring" aria-hidden="true"></div>
+
+<!-- ═══════ هدر ═══════ -->
+<header class="ds-hdr">
+  <a class="ds-hdr__brand" href="#intro">
+    <span class="ds-hdr__mono">س</span>
+    <span>دیزاین سیستم <code dir="ltr">v1.0 — Agent Edition</code></span>
+  </a>
+  <div class="ds-hdr__tools">
+    <input class="ds-search" id="search" type="search" placeholder="/ جستجو در کامپوننت‌ها..." aria-label="جستجو">
+    <button class="btn btn--sm" id="themeBtn" aria-label="تغییر تم">
+      <span class="ic-moon">🌙</span>
+      <span class="ic-sun">☀</span>
+      تم
+    </button>
+  </div>
+</header>
+
+<div class="ds-layout">
+
+<!-- ═══════ سایدبار ═══════ -->
+<aside class="ds-sidebar" id="sidebar">
+  <h4>مبانی</h4>
+  <a href="#intro" data-nav>معرفی <code>۰۰</code></a>
+  <a href="#principles" data-nav>اصول طراحی <code>۰۱</code></a>
+  <a href="#tokens-colors" data-nav>توکن‌های رنگ <code>۰۲</code></a>
+  <a href="#tokens-typo" data-nav>تایپوگرافی <code>۰۳</code></a>
+  <a href="#tokens-space" data-nav>فاصله‌گذاری <code>۰۴</code></a>
+  <a href="#tokens-grid" data-nav>گرید و بوردر <code>۰۵</code></a>
+  <a href="#tokens-shadow" data-nav>سایه‌ها <code>۰۶</code></a>
+  <a href="#tokens-motion" data-nav>حرکت <code>۰۷</code></a>
+
+  <h4>پایه‌ها</h4>
+  <a href="#found-grid" data-nav>گرید مهندسی <code>۰۸</code></a>
+  <a href="#found-grain" data-nav>نویز/گرین <code>۰۹</code></a>
+  <a href="#found-cursor" data-nav>کرسر سفارشی <code>۱۰</code></a>
+
+  <h4>اتم‌ها</h4>
+  <a href="#at-btn" data-nav>دکمه <code>۱۱</code></a>
+  <a href="#at-chip" data-nav>چیپ و تگ <code>۱۲</code></a>
+  <a href="#at-kicker" data-nav>کیکر <code>۱۳</code></a>
+  <a href="#at-link" data-nav>لینک <code>۱۴</code></a>
+  <a href="#at-input" data-nav>ورودی <code>۱۵</code></a>
+  <a href="#at-check" data-nav>چک / رادیو <code>۱۶</code></a>
+  <a href="#at-toggle" data-nav>سوئیچ <code>۱۷</code></a>
+  <a href="#at-badge" data-nav>بدج و وضعیت <code>۱۸</code></a>
+  <a href="#at-avatar" data-nav>آواتار <code>۱۹</code></a>
+
+  <h4>مولکول‌ها</h4>
+  <a href="#mo-card" data-nav>کارت <code>۲۰</code></a>
+  <a href="#mo-spec" data-nav>کارت اسپک <code>۲۱</code></a>
+  <a href="#mo-row" data-nav>ردیف لیست <code>۲۲</code></a>
+  <a href="#mo-accordion" data-nav>آکاردئون <code>۲۳</code></a>
+  <a href="#mo-tabs" data-nav>تب‌ها <code>۲۴</code></a>
+  <a href="#mo-dropdown" data-nav>دراپ‌داون <code>۲۵</code></a>
+  <a href="#mo-table" data-nav>جدول <code>۲۶</code></a>
+  <a href="#mo-bar" data-nav>نوار پیشرفت <code>۲۷</code></a>
+  <a href="#mo-loop" data-nav>چرخه تعاملی <code>۲۸</code></a>
+  <a href="#mo-modal" data-nav>مدال <code>۲۹</code></a>
+  <a href="#mo-toast" data-nav>توست <code>۳۰</code></a>
+
+  <h4>الگوها</h4>
+  <a href="#pt-ticker" data-nav>مارکی/تیکر <code>۳۱</code></a>
+  <a href="#pt-orbit" data-nav>متن مداری <code>۳۲</code></a>
+  <a href="#pt-hint" data-nav>راهنمای اسکرول <code>۳۳</code></a>
+  <a href="#pt-divider" data-nav>جداکننده <code>۳۴</code></a>
+
+  <h4>پرامپت Agent</h4>
+  <a href="#agent-prompt" data-nav>پرامپت مرجع <code>۳۵</code></a>
+  <a href="#agent-template" data-nav>قالب کد <code>۳۶</code></a>
+</aside>
+
+<!-- ═══════ محتوای اصلی ═══════ -->
+<main class="ds-main">
+
+<!-- ═══ معرفی ═══ -->
+<section class="ds-section" id="intro">
+  <header class="ds-section__head">
+    <span class="ds-section__idx">SEC.00 — INTRO</span>
+    <div style="flex:1">
+      <h2 class="ds-section__title display">معرفی سیستم</h2>
+      <p class="ds-section__sub">یک دیزاین سیستم خود-کافی برای Agent هوش مصنوعی — بر اساس سه زبان طراحی: نئوبروتالیسم مونوکروم، تایپوگرافی سوئیسی، و استتیک بلوپرینت.</p>
+    </div>
+  </header>
+
+  <div class="ds-principle">
+    <div class="ds-principle__item">
+      <b>خام، نه ساده</b>
+      <p>هر جزء باید «نیمه‌تمام» و کاربردی به نظر برسد — بدون پرداختِ بیش‌ازحد، بدون glassmorphism، بدون gradient.</p>
+    </div>
+    <div class="ds-principle__item">
+      <b>سخت، نه نرم</b>
+      <p>سایه‌ها همگی آفست و بدون blur هستند. بوردرها نازک (1–1.5px). شعاع تقریباً صفر. تعامل‌ها snap.</p>
+    </div>
+    <div class="ds-principle__item">
+      <b>تک‌رنگ، نه سرد</b>
+      <p>پالت مونوکروم با یک رنگ تاکیدی پنهان (همان foreground). هیچ رنگ آبی/قرمز/سبزی در خودِ UI نیست.</p>
+    </div>
+    <div class="ds-principle__item">
+      <b>تایپوگرافی قهرمان</b>
+      <p>تیترها با فونت نمایشی غول‌پیکره (Lalezar) تا 150px+. بدنهٔ متن Vazirmatn. برچسب‌های فنی JetBrains Mono.</p>
+    </div>
+  </div>
+
+  <div class="ds-demo">
+    <div class="ds-demo__head">
+      <span class="ds-demo__title">پالت نمونه <code>dark + light</code></span>
+      <div class="ds-demo__actions"><button class="ds-demo__btn" data-copy>کپی متغیرها</button></div>
+    </div>
+    <div class="ds-demo__stage" style="gap:10px">
+      <div style="width:90px;height:90px;background:#0a0a0b;border:1px solid rgba(255,255,255,.1)"></div>
+      <div style="width:90px;height:90px;background:#101013;border:1px solid rgba(255,255,255,.1)"></div>
+      <div style="width:90px;height:90px;background:#f2f1ec;border:1px solid rgba(0,0,0,.1)"></div>
+      <div style="width:90px;height:90px;background:#96938a;border:1px solid rgba(0,0,0,.1)"></div>
+      <div style="width:90px;height:90px;background:#f4f3ee;border:1px solid rgba(0,0,0,.1)"></div>
+      <div style="width:90px;height:90px;background:#101013;border:1px solid rgba(0,0,0,.1)"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ اصول طراحی ═══ -->
+<section class="ds-section" id="principles">
+  <header class="ds-section__head">
+    <span class="ds-section__idx">SEC.01 — PRINCIPLES</span>
+    <div style="flex:1">
+      <h2 class="ds-section__title display">اصول طراحی</h2>
+      <p class="ds-section__sub">قواعدی که Agent باید در هر خروجی رعایت کند — حتی اگر جزئیات جزئی فراموش شود.</p>
+    </div>
+  </header>
+
+  <table class="ds-token-table">
+    <thead><tr><th>اصل</th><th>توضیح</th><th>مثال نقض</th></tr></thead>
+    <tbody>
+      <tr><td><b>بدون blur</b></td><td>سایه‌ها box-shadow صلب، backdrop-filter فقط برای ناوبری چسبان</td><td class="muted">card { box-shadow: 0 20px 40px -10px rgba(0,0,0,.2) }</td></tr>
+      <tr><td><b>بدون radius</b></td><td>همه اجزا 0px، مگر چیپ‌ها که pill</td><td class="muted">border-radius: 12px</td></tr>
+      <tr><td><b>بوردر نازک</b></td><td>1px برای hair، 1.5px برای معمول، 2px برای تأکید</td><td class="muted">border: 3px solid</td></tr>
+      <tr><td><b>هاور اینورت</b></td><td>در هاور، fg و bg عوض می‌شوند + سایهٔ سخت + شیفت -2px</td><td class="muted">فقط تغییر opacity</td></tr>
+      <tr><td><b>گرید 72px</b></td><td>پس‌زمینهٔ ثابت با grid-line شفاف 5%</td><td class="muted">پس‌زمینه صاف و بدون بافت</td></tr>
+      <tr><td><b>RTL native</b></td><td>همه inset-inline، text-align start، اعداد فارسی</td><td class="muted">left/right، اعداد 0-9 انگلیسی</td></tr>
+      <tr><td><b>prefers-reduced-motion</b></td><td>همه انیمیشن‌ها باید با @media کاهش‌یافته غیرفعال شوند</td><td class="muted">بدون بررسی</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ═══ توکن‌های رنگ ═══ -->
+<section class="ds-section" id="tokens-colors">
+  <header class="ds-section__head">
+    <span class="ds-section__idx">SEC.02 — COLORS</span>
+    <div style="flex:1">
+      <h2 class="ds-section__title display">توکن‌های رنگ</h2>
+      <p class="ds-section__sub">پالت مونوکروم با semantic layer. هر رنگ فقط از طریق متغیر استفاده می‌شود — هرگز مقدار hex خام در کد UI.</p>
+    </div>
+  </header>
+
+  <table class="ds-token-table">
+    <thead><tr><th>متغیر</th><th>تیره</th><th>روشن</th><th>کاربرد</th></tr></thead>
+    <tbody>
+      <tr><td><code>--bg</code></td><td><span class="color-swatch" style="background:#0a0a0b"></span>#0a0a0b</td><td><span class="color-swatch" style="background:#f4f3ee"></span>#f4f3ee</td><td class="muted">پس‌زمینهٔ اصلی صفحه</td></tr>
+      <tr><td><code>--bg2</code></td><td><span class="color-swatch" style="background:#101013"></span>#101013</td><td><span class="color-swatch" style="background:#ebeae3"></span>#ebeae3</td><td class="muted">پس‌زمینهٔ لایهٔ دوم</td></tr>
+      <tr><td><code>--bg3</code></td><td><span class="color-swatch" style="background:#16161a"></span>#16161a</td><td><span class="color-swatch" style="background:#e0dfd5"></span>#e0dfd5</td><td class="muted">hover سطحی</td></tr>
+      <tr><td><code>--card</code></td><td><span class="color-swatch" style="background:#121215"></span>#121215</td><td><span class="color-swatch" style="background:#ffffff"></span>#ffffff</td><td class="muted">پس‌زمینهٔ کارت/مودال</td></tr>
+      <tr><td><code>--card2</code></td><td><span class="color-swatch" style="background:#18181d"></span>#18181d</td><td><span class="color-swatch" style="background:#faf9f4"></span>#faf9f4</td><td class="muted">کارت جایگزین</td></tr>
+      <tr><td><code>--fg</code></td><td><span class="color-swatch" style="background:#f2f1ec"></span>#f2f1ec</td><td><span class="color-swatch" style="background:#101013"></span>#101013</td><td class="muted">متن/آیکون اصلی</td></tr>
+      <tr><td><code>--fg2</code></td><td><span class="color-swatch" style="background:#d4d3cc"></span>#d4d3cc</td><td><span class="color-swatch" style="background:#1f1f24"></span>#1f1f24</td><td class="muted">متن دوم</td></tr>
+      <tr><td><code>--mut</code></td><td><span class="color-swatch" style="background:#96938a"></span>#96938a</td><td><span class="color-swatch" style="background:#6c6960"></span>#6c6960</td><td class="muted">متن کمکی (muted)</td></tr>
+      <tr><td><code>--mut2</code></td><td><span class="color-swatch" style="background:#6c6960"></span>#6c6960</td><td><span class="color-swatch" style="background:#96938a"></span>#96938a</td><td class="muted">متن کمکی دوم</td></tr>
+      <tr><td><code>--line</code></td><td><span class="color-swatch" style="background:rgba(242,241,236,.13)"></span>rgba(…, .13)</td><td><span class="color-swatch" style="background:rgba(16,16,19,.14)"></span>rgba(…, .14)</td><td class="muted">بوردر hair</td></tr>
+      <tr><td><code>--line2</code></td><td><span class="color-swatch" style="background:rgba(242,241,236,.32)"></span>rgba(…, .32)</td><td><span class="color-swatch" style="background:rgba(16,16,19,.36)"></span>rgba(…, .36)</td><td class="muted">بوردر معمولی</td></tr>
+      <tr><td><code>--line3</code></td><td><span class="color-swatch" style="background:rgba(242,241,236,.6)"></span>rgba(…, .6)</td><td><span class="color-swatch" style="background:rgba(16,16,19,.7)"></span>rgba(…, .7)</td><td class="muted">بوردر تأکیدی</td></tr>
+      <tr><td><code>--grid-c</code></td><td><span class="color-swatch" style="background:rgba(242,241,236,.05)"></span>rgba(…, .05)</td><td><span class="color-swatch" style="background:rgba(16,16,19,.06)"></span>rgba(…, .06)</td><td class="muted">خط گرید مهندسی</td></tr>
+      <tr><td><code>--shadow</code></td><td><span class="color-swatch" style="background:rgba(0,0,0,.55)"></span>rgba(0,0,0,.55)</td><td><span class="color-swatch" style="background:rgba(16,16,19,.2)"></span>rgba(16,16,19,.2)</td><td class="muted">رنگ پایهٔ سایه</td></tr>
+      <tr><td><code>--success</code></td><td>#7ad178</td><td>#2e8f3b</td><td class="muted">وضعیت موفق</td></tr>
+      <tr><td><code>--warn</code></td><td>#e8c468</td><td>#a8811a</td><td class="muted">هشدار</td></tr>
+      <tr><td><code>--err</code></td><td>#f07272</td><td>#c54040</td><td class="muted">خطا</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ═══ تایپوگرافی ═══ -->
+<section class="ds-section" id="tokens-typo">
+  <header class="ds-section__head">
+    <span class="ds-section__idx">SEC.03 — TYPOGRAPHY</span>
+    <div style="flex:1">
+      <h2 class="ds-section__title display">تایپوگرافی</h2>
+      <p class="ds-section__sub">سه خانواده فونت با نقش مجزا: نمایشی (Lalezar)، بدنه (Vazirmatn)، فنی (JetBrains Mono).</p>
+    </div>
+  </header>
+
+  <table class="ds-token-table">
+    <thead><tr><th>نقش</th><th>فونت</th><th>متغیر</th><th>نمونه</th></tr></thead>
+    <tbody>
+      <tr><td>نمایشی / تیترهای قهرمان</td><td>Lalezar 400</td><td><code>--f-disp</code></td><td class="type-sample">نریمان خالقی</td></tr>
+      <tr><td>بدنه</td><td>Vazirmatn 400–900</td><td><code>--f-body</code></td><td>این یک نمونه متن فارسی در وزن معمولی است.</td></tr>
+      <tr><td>فنی / کد / برچسب</td><td>JetBrains Mono 400/600</td><td><code>--f-mono</code></td><td class="mono-sample">SEC.04 · PRD-001</td></tr>
+    </tbody>
+  </table>
+
+  <table class="ds-token-table">
+    <thead><tr><th>Scale</th><th>اندازه</th><th>ارتفاع خط</th><th>کاربرد</th></tr></thead>
+    <tbody>
+      <tr><td><code>--fs-xs</code></td><td>11px</td><td>1.5</td><td class="muted">badges, counters, code labels</td></tr>
+      <tr><td><code>--fs-sm</code></td><td>12.5px</td><td>1.7</td><td class="muted">captions, meta, chips</td></tr>
+      <tr><td><code>--fs-md</code></td><td>15px</td><td>1.85</td><td class="muted">body text (پایه)</td></tr>
+      <tr><td><code>--fs-lg</code></td><td>17px</td><td>1.6</td><td class="muted">lead paragraphs</td></tr>
+      <tr><td><code>--fs-xl</code></td><td>22px</td><td>1.3</td><td class="muted">card titles</td></tr>
+      <tr><td><code>--fs-2xl</code></td><td>32px</td><td>1.2</td><td class="muted">section subheads</td></tr>
+      <tr><td><code>--fs-3xl</code></td><td>48px</td><td>1.1</td><td class="muted">section headings</td></tr>
+      <tr><td><code>--fs-4xl</code></td><td>72px</td><td>1.05</td><td class="muted">hero small</td></tr>
+      <tr><td><code>--fs-5xl</code></td><td>110px</td><td>1</td><td class="muted">hero large (clamp 58–158px)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="ds-demo">
+    <div class="ds-demo__head">
+      <span class="ds-demo__title">نمونهٔ Scale <code>--fs-* + --f-disp</code></span>
+    </div>
+    <div class="ds-demo__stage ds-demo__stage--col" style="gap:12px">
+      <div style="font-family:var(--f-disp);font-size:110px;line-height:1">تیتر قهرمان</div>
+      <div style="font-family:var(--f-disp);font-size:48px;line-height:1.1">عنوان بخش</div>
+      <div style="font-family:var(--f-disp);font-size:22px">تیتر کارت</div>
+      <div style="font-size:15px">متن بدنه با ارتفاع خط ۱.۸۵ برای خوانایی فارسی.</div>
+      <div style="font-family:var(--f-mono);font-size:12px;color:var(--mut)">SEC.04 · LAB · VERSION 2.0</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ فاصله‌گذاری ═══ -->
+<section class="ds-section" id="tokens-space">
+  <header class="ds-section__head">
+    <span class="ds-section__idx">SEC.04 — SPACING</span>
+    <div style="flex:1">
+      <h2 class="ds-section__title display">فاصله‌گذاری هندسی</h2>
+      <p class="ds-section__sub">Scale شبه-فیبوناچی: هر گام حدود ×1.4 گام قبلی.</p>
+    </div>
+  </header>
+
+  <table class="ds-token-table">
+    <thead><tr><th>متغیر</th><th>مقدار</th><th>کاربرد</th></tr></thead>
+    <tbody>
+      <tr><td><code>--s-1</code></td><td>4px</td><td class="muted">spacing داخلی icon-btn</td></tr>
+      <tr><td><code>--s-2</code></td><td>8px</td><td class="muted">gap بین chip ها</td></tr>
+      <tr><td><code>--s-3</code></td><td>12px</td><td class="muted">padding chips, badges</td></tr>
+      <tr><td><code>--s-4</code></td><td>16px</td><td class="muted">padding کارت</td></tr>
+      <tr><td><code>--s-5</code></td><td>22px</td><td class="muted">padding دکمه معمولی</td></tr>
+      <tr><td><code>--s-6</code></td><td>32px</td><td class="muted">gap بین سکشن‌ها</td></tr>
+      <tr><td><code>--s-7</code></td><td>48px</td><td class="muted">padding صفحه</td></tr>
+      <tr><td><code>--s-8</code></td><td>72px</td><td class="muted">grid مهندسی، margin بزرگ</td></tr>
+      <tr><td><code>--s-9</code></td><td>104px</td><td class="muted">gap سکشن‌های کامل</td></tr>
+    </tbody>
+  </table>
+
+  <div class="ds-demo">
+    <div class="ds-demo__head"><span class="ds-demo__title">Scale بصری</span></div>
+    <div class="ds-demo__stage" style="flex-direction:column;align-items:flex-start;gap:6px">
+      <div style="width:4px;height:12px;background:var(--fg)"></div>
+      <div style="width:8px;height:12px;background:var(--fg)"></div>
+      <div style="width:12px;height:12px;background:var(--fg)"></div>
+      <div style="width:16px;height:12px;background:var(--fg)"></div>
+      <div style="width:22px;height:12px;background:var(--fg)"></div>
+      <div style="width:32px;height:12px;background:var(--fg)"></div>
+      <div style="width:48px;height:12px;background:var(--fg)"></div>
+      <div style="width:72px;height:12px;background:var(--fg)"></div>
+      <div style="width:104px;height:12px;background:var(--fg)"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ گرید و بوردر ═══ -->
+<section class="ds-section" id="tokens-grid">
+  <header class="ds-section__head">
+    <span class="ds-section__idx">SEC.05 — GRID & BORDERS</span>
+    <div style="flex:1">
+      <h2 class="ds-section__title display">گرید و بوردر</h2>
+      <p class="ds-section__sub">گرید 72px به‌عنوان پس‌زمینهٔ ثابت. بوردرهای 1/1.5/2px با رنگ‌های --line.</p>
+    </div>
+  </header>
+
+  <table class="ds-token-table">
+    <thead><tr><th>متغیر</th><th>مقدار</th><th>کاربرد</th></tr></thead>
+    <tbody>
+      <tr><td><code>--grid</code></td><td>72px</td><td class="muted">اندازهٔ شبکهٔ پس‌زمینه</td></tr>
+      <tr><td><code>--bw-hair</code></td><td>1px</td><td class="muted">بوردر نازک / جداکننده</td></tr>
+      <tr><td><code>--bw-thin</code></td><td>1.5px</td><td class="muted">بوردر کارت‌ها و اجزای اصلی</td></tr>
+      <tr><td><code>--bw-thick</code></td><td>2px</td><td class="muted">بوردر تأکیدی</td></tr>
+      <tr><td><code>--r-0</code></td><td>0</td><td class="muted">همه اجزا به‌صورت پیش‌فرض</td></tr>
+      <tr><td><code>--r-pill</code></td><td>999px</td><td class="muted">چیپ‌ها، toggle</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ═══ سایه ═══ -->
+<section class="ds-section" id="tokens-shadow">
+  <header class="ds-section__head">
+    <span class="ds-section__idx">SEC.06 — SHADOWS</span>
+    <div style="flex:1">
+      <h2 class="ds-section__title display">سایه‌های سخت</h2>
+      <p class="ds-section__sub">همه سایه‌ها <code>box-shadow: X Y 0 color</code> — بدون blur، بدون spread. امضای نئوبروتالیسم.</p>
+    </div>
+  </header>
+
+  <div class="ds-demo">
+    <div class="ds-demo__head"><span class="ds-demo__title">Scale سایه‌ها</span></div>
+    <div class="ds-demo__stage ds-demo__stage--grid">
+      <div style="padding:20px;border:1.5px solid var(--line2);background:var(--card);box-shadow:var(--sh-hair)">sh-hair<br><code class="muted">2 2 0</code></div>
+      <div style="padding:20px;border:1.5px solid var(--line2);background:var(--card);box-shadow:var(--sh-sm)">sh-sm<br><code class="muted">4 4 0</code></div>
+      <div style="padding:20px;border:1.5px solid var(--line2);background:var(--card);box-shadow:var(--sh-md)">sh-md<br><code class="muted">8 8 0</code></div>
+      <div style="padding:20px;border:1.5px solid var(--line2);background:var(--card);box-shadow:var(--sh-lg)">sh-lg<br><code class="muted">12 12 0</code></div>
+      <div style="padding:20px;border:1.5px solid var(--line2);background:var(--card);box-shadow:var(--sh-xl)">sh-xl<br><code class="muted">20 20 0</code></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ حرکت ═══ -->
+<section class="ds-section" id="tokens-motion">
+  <header class="ds-section__head">
+    <span class="ds-section__idx">SEC.07 — MOTION</span>
+    <div style="flex:1">
+      <h2 class="ds-section__title display">حرکت و easing</h2>
+      <p class="ds-section__sub">دو easing اصلی: نرم برای ترنزیشن‌ها، spring برای افکت‌های پاپ‌آپ.</p>
+    </div>
+  </header>
+
+  <table class="ds-token-table">
+    <thead><tr><th>متغیر</th><th>مقدار</th><th>کاربرد</th></tr></thead>
+    <tbody>
+      <tr><td><code>--ease</code></td><td>cubic-bezier(.22,.7,.16,1)</td><td class="muted">ترنزیشن‌های عمومی (هاور، تب)</td></tr>
+      <tr><td><code>--ease-spring</code></td><td>cubic-bezier(.34,1.56,.64,1)</td><td class="muted">انیمیشن‌های bounce/popup</td></tr>
+      <tr><td><code>--dur-fast</code></td><td>.18s</td><td class="muted">ریسپانس سریع</td></tr>
+      <tr><td><code>--dur-mid</code></td><td>.35s</td><td class="muted">ترنزیشن‌های معمولی</td></tr>
+      <tr><td><code>--dur-slow</code></td><td>.7s</td><td class="muted">mask-reveal، ورود سکشن</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ═══ پایه: گرید مهندسی ═══ -->
+<section class="ds-section" id="found-grid">
+  <header class="ds-section__head">
+    <span class="ds-section__idx">SEC.08 — ENGINEERING GRID</span>
+    <div style="flex:1">
+      <h2 class="ds-section__title display">گرید مهندسی</h2>
+      <p class="ds-section__sub">یک شبکهٔ نقشه‌کشی 72px به‌صورت <code>::before</code> در body — همیشه در پس‌زمینهٔ ثابت.</p>
+    </div>
+  </header>
+
+  <div class="ds-demo">
+    <div class="ds-demo__head">
+      <span class="ds-demo__title">body::before <code>background-image grid</code></span>
+      <div class="ds-demo__actions"><button class="ds-demo__btn" data-copy>کپی CSS</button></div>
+    </div>
+    <div class="ds-demo__code is-open">
+<pre>body::before{
+  content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background-image:
+    linear-gradient(var(--grid-c) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-c) 1px, transparent 1px);
+  background-size: var(--grid) var(--grid);   /* 72px */
+  mask-image: radial-gradient(ellipse 85% 80% at 50% 50%, #000 30%, transparent 100%);
+}</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ پایه: نویز ═══ -->
+<section class="ds-section" id="found-grain">
+  <header class="ds-section__head">
+    <span class="ds-section__idx">SEC.09 — GRAIN</span>
+    <div style="flex:1">
+      <h2 class="ds-section__title display">نویز / گرین</h2>
+      <p class="ds-section__sub">یک div ثابت با SVG turbulence filter inline — با انیمیشن steps(10) حرکت می‌کند.</p>
+    </div>
+  </header>
+
+  <div class="ds-demo">
+    <div class="ds-demo__head">
+      <span class="ds-demo__title">HTML + CSS</span>
+      <div class="ds-demo__actions"><button class="ds-demo__btn" data-copy>کپی</button></div>
+    </div>
+    <div class="ds-demo__code is-open">
+<pre>&lt;div class="grain" aria-hidden="true"&gt;&lt;/div&gt;
+
+.grain{
+  position:fixed; inset:-100%; z-index:70;
+  pointer-events:none; opacity:.05;
+  background: url("data:image/svg+xml,...") repeat;
+  animation: grain 9s steps(10) infinite;
+}
+@keyframes grain {
+  0%,100% { transform: translate(0,0) }
+  20%  { transform: translate(-3%, 4%) }
+  40%  { transform: translate( 4%,-3%) }
+  60%  { transform: translate(-4%,-2%) }
+  80%  { transform: translate( 3%, 3%) }
+}</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ پایه: کرسر ═══ -->
+<section class="ds-section" id="found-cursor">
+  <header class="ds-section__head">
+    <span class="ds-section__idx">SEC.10 — CUSTOM CURSOR</span>
+    <div style="flex:1">
+      <h2 class="ds-section__title display">کرسر سفارشی</h2>
+      <p class="ds-section__sub">نقطهٔ سفید + حلقهٔ دنباله‌رو با mix-blend-mode: difference. فقط در دسکتاپ (<code>pointer:fine</code>).</p>
+    </div>
+  </header>
+
+  <div class="ds-demo">
+    <div class="ds-demo__head">
+      <span class="ds-demo__title">پیاده‌سازی JS + CSS</span>
+      <div class="ds-demo__actions"><button class="ds-demo__btn" data-copy>کپی</button></div>
+    </div>
+    <div class="ds-demo__code is-open">
+<pre>// فعال‌سازی
+if (matchMedia('(pointer:fine)').matches) {
+  document.body.classList.add('has-cursor');
+  let x = innerWidth/2, y = innerHeight/2, rx = x, ry = y;
+  addEventListener('mousemove', e => { x = e.clientX; y = e.clientY });
+  (function loop() {
+    rx += (x - rx) * .16;
+    ry += (y - ry) * .16;
+    dot.style.transform = `translate(${x}px, ${y}px)`;
+    ring.style.transform = `translate(${rx}px, ${ry}px)`;
+    requestAnimationFrame(loop);
+  })();
+}
+
+// CSS
+.cursor-dot, .cursor-ring {
+  position: fixed; border-radius: 50%;
+  pointer-events: none; mix-blend-mode: difference;
+}
+.cursor-dot { width:7px; height:7px; background:#fff }
+.cursor-ring { width:36px; height:36px; border:1.5px solid #fff }</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ اتم: دکمه ═══ -->
+<section class="ds-section" id="at-btn">
+  <header class="ds-section__head">
+    <span class="ds-section__idx">SEC.11 — BUTTON</span>
+    <div style="flex:1">
+      <h2 class="ds-section__title display">دکمه</h2>
+      <p class="ds-section__sub">چهار نوع: solid (اصلی)، outline (پیش‌فرض)، ghost (متنی)، icon-only. دو سایز.</p>
+    </div>
+  </header>
+
+  <div class="ds-demo">
+    <div class="ds-demo__head">
+      <span class="ds-demo__title">انواع <code>btn, btn--solid, btn--ghost, btn--icon</code></span>
+      <div class="ds-demo__actions"><button class="ds-demo__btn" data-copy>کپی HTML</button></div>
+    </div>
+    <div class="ds-demo__stage">
+      <button class="btn btn--solid">اصلی <span class="arr">↖</span></button>
+      <button class="btn">معمولی <span class="arr">↓</span></button>
+      <button class="btn btn--ghost">متنی</button>
+      <button class="btn btn--icon" aria-label="تنظیمات">⚙</button>
+      <button class="btn btn--sm btn--solid">کوچک</button>
+      <button class="btn btn--lg btn--solid">بزرگ</button>
+      <button class="btn" disabled>غیرفعال</button>
+    </div>
+    <div class="ds-demo__code">
+<pre>&lt;button class="btn btn--solid"&gt;اصلی &lt;span class="arr"&gt;↖&lt;/span&gt;&lt;/button&gt;
+&lt;button class="btn"&gt;معمولی&lt;/button&gt;
+&lt;button class="btn btn--ghost"&gt;متنی&lt;/button&gt;
+&lt;button class="btn btn--icon" aria-label="..."&gt;⚙&lt;/button&gt;</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ اتم: چیپ ═══ -->
+<section class="ds-section" id="at-chip">
+  <header class="ds-section__head">
+    <span class="ds-section__idx">SEC.12 — CHIP & TAG</span>
+    <div style="flex:1">
+      <h2 class="ds-section__title display">چیپ و تگ</h2>
+      <p class="ds-section__sub">chip = pill قابل‌کلیک برای فیلتر. tag = برچسب مونو برای متا.</p>
+    </div>
+  </header>
+
+  <div class="ds-demo">
+    <div class="ds-demo__head"><span class="ds-demo__title">chip + tag</span><div class="ds-demo__actions"><button class="ds-demo__btn" data-copy>کپی</button></div></div>
+    <div class="ds-demo__stage">
+      <button class="chip is-on">همه</button>
+      <button class="chip">ابزار</button>
+      <button class="chip">بازی</button>
+      <span class="tag">v2.0</span>
+      <span class="tag tag--solid">NEW</span>
+      <span class="tag tag--ok">active</span>
+      <span class="tag tag--warn">beta</span>
+      <span class="tag tag--err">deprecated</span>
+    </div>
+    <div class="ds-demo__code">
+<pre>&lt;button class="chip is-on"&gt;همه&lt;/button&gt;
+&lt;button class="chip"&gt;ابزار&lt;/button&gt;
+&lt;span class="tag"&gt;v2.0&lt;/span&gt;
+&lt;span class="tag tag--solid"&gt;NEW&lt;/span&gt;</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ اتم: کیکر ═══ -->
+<section class="ds-section" id="at-kicker">
+  <header class="ds-section__head">
+    <span class="ds-section__idx">SEC.13 — KICKER</span>
+    <div style="flex:1">
+      <h2 class="ds-section__title display">کیکر / Eyebrow</h2>
+      <p class="ds-section__sub">یک خط کوچک مونو قبل از هر تیتر بخش — مربع + متن + کد.</p>
+    </div>
+  </header>
+
+  <div class="ds-demo">
+    <div class="ds-demo__head"><span class="ds-demo__title">kicker</span><div class="ds-demo__actions"><button class="ds-demo__btn" data-copy>کپی</button></div></div>
+    <div class="ds-demo__stage ds-demo__stage--col" style="align-items:stretch">
+      <p class="kicker"><code>SEC.04</code> لابراتوار</p>
+      <p class="kicker"><code>SEC.06</code> اتصال</p>
+    </div>
+    <div class="ds-demo__code">
+<pre>&lt;p class="kicker"&gt;&lt;code&gt;SEC.04&lt;/code&gt; لابراتوار&lt;/p&gt;
+
+.kicker{
+  display:flex; align-items:center; gap:10px;
+  font-family:var(--f-mono); font-size:11px; font-weight:700;
+  color:var(--mut); letter-spacing:.04em;
+  text-transform:uppercase; margin-bottom:14px;
+}
+.kicker::before{
+  content:""; width:9px; height:9px; background:var(--fg);
+}</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ اتم: لینک ═══ -->
+<section class="ds-section" id="at-link">
+  <header class="ds-section__head">
+    <span class="ds-section__idx">SEC.14 — LINK</span>
+    <div style="flex:1">
+      <h2 class="ds-section__title display">لینک</h2>
+      <p class="ds-section__sub">بدون underline؛ خط از راست به چپ در هاور. نوع mono برای url ها.</p>
+    </div>
+  </header>
+
+  <div class="ds-demo">
+    <div class="ds-demo__head"><span class="ds-demo__title">link</span><div class="ds-demo__actions"><button class="ds-demo__btn" data-copy>کپی</button></div></div>
+    <div class="ds-demo__stage">
+      <a class="link" href="#">لینک معمولی</a>
+      <a class="link link--mono" href="#">https://example.com</a>
+    </div>
+    <div class="ds-demo__code">
+<pre>&lt;a class="link" href="#"&gt;لینک معمولی&lt;/a&gt;
+&lt;a class="link link--mono" href="#"&gt;https://example.com&lt;/a&gt;</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ اتم: ورودی ═══ -->
+<section class="ds-section" id="at-input">
+  <header class="ds-section__head">
+    <span class="ds-section__idx">SEC.15 — INPUT</span>
+    <div style="flex:1">
+      <h2 class="ds-section__title display">ورودی</h2>
+      <p class="ds-section__sub">text, textarea, select با فونت مونو، focus بوردر تیره.</p>
+    </div>
+  </header>
+
+  <div class="ds-demo">
+    <div class="ds-demo__head"><span class="ds-demo__title">input, textarea, select</span><div class="ds-demo__actions"><button class="ds-demo__btn" data-copy>کپی</button></div></div>
+    <div class="ds-demo__stage ds-demo__stage--col" style="align-items:stretch;max-width:420px">
+      <div class="field"><label>نام</label><input class="input" placeholder="نام خود را وارد کنید"></div>
+      <div class="field"><label>ایمیل</label><input class="input input--err" value="invalid"><small class="err">فرمت نامعتبر</small></div>
+      <div class="field"><label>توضیحات</label><textarea class="input textarea" placeholder="توضیحات..."></textarea></div>
+      <div class="field"><label>دسته</label>
+        <select class="input"><option>انتخاب کنید</option><option>ابزار</option><option>بازی</option></select>
+      </div>
+    </div>
+    <div class="ds-demo__code">
+<pre>&lt;div class="field"&gt;
+  &lt;label&gt;نام&lt;/label&gt;
+  &lt;input class="input" placeholder="..."&gt;
+&lt;/div&gt;
+&lt;div class="field"&gt;
+  &lt;label&gt;ایمیل&lt;/label&gt;
+  &lt;input class="input input--err" value="invalid"&gt;
+  &lt;small class="err"&gt;فرمت نامعتبر&lt;/small&gt;
+&lt;/div&gt;</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ اتم: چک/رادیو ═══ -->
+<section class="ds-section" id="at-check">
+  <header class="ds-section__head">
+    <span class="ds-section__idx">SEC.16 — CHECK / RADIO</span>
+    <div style="flex:1">
+      <h2 class="ds-section__title display">چک‌باکس و رادیو</h2>
+      <p class="ds-section__sub">جعبه‌های مربع بدون radius، تیک با border دو خط.</p>
+    </div>
+  </header>
+
+  <div class="ds-demo">
+    <div class="ds-demo__head"><span class="ds-demo__title">checkbox / radio</span><div class="ds-demo__actions"><button class="ds-demo__btn" data-copy>کپی</button></div></div>
+    <div class="ds-demo__stage ds-demo__stage--col">
+      <label class="check"><input type="checkbox" checked><span class="check__box"></span>گزینهٔ الف</label>
+      <label class="check"><input type="checkbox"><span class="check__box"></span>گزینهٔ ب</label>
+      <label class="check check--radio"><input type="radio" name="r" checked><span class="check__box"></span>انتخاب یک</label>
+      <label class="check check--radio"><input type="radio" name="r"><span class="check__box"></span>انتخاب دو</label>
+    </div>
+    <div class="ds-demo__code">
+<pre>&lt;label class="check"&gt;
+  &lt;input type="checkbox" checked&gt;
+  &lt;span class="check__box"&gt;&lt;/span&gt;
+  گزینهٔ الف
+&lt;/label&gt;
+
+&lt;label class="check check--radio"&gt;
+  &lt;input type="radio" name="r" checked&gt;
+  &lt;span class="check__box"&gt;&lt;/span&gt;
+  انتخاب یک
+&lt;/label&gt;</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ اتم: سوئیچ ═══ -->
+<section class="ds-section" id="at-toggle">
+  <header class="ds-section__head">
+    <span class="ds-section__idx">SEC.17 — TOGGLE</span>
+    <div style="flex:1">
+      <h2 class="ds-section__title display">سوئیچ</h2>
+      <p class="ds-section__sub">track با pill، knob دایره‌ای.</p>
+    </div>
+  </header>
+
+  <div class="ds-demo">
+    <div class="ds-demo__head"><span class="ds-demo__title">toggle</span><div class="ds-demo__actions"><button class="ds-demo__btn" data-copy>کپی</button></div></div>
+    <div class="ds-demo__stage ds-demo__stage--col">
+      <label class="toggle"><input type="checkbox" checked><span class="toggle__track"></span>فعال‌سازی اعلان</label>
+      <label class="toggle"><input type="checkbox"><span class="toggle__track"></span>حالت تاریک</label>
+    </div>
+    <div class="ds-demo__code">
+<pre>&lt;label class="toggle"&gt;
+  &lt;input type="checkbox" checked&gt;
+  &lt;span class="toggle__track"&gt;&lt;/span&gt;
+  فعال‌سازی اعلان
+&lt;/label&gt;</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ اتم: بدج ═══ -->
+<section class="ds-section" id="at-badge">
+  <header class="ds-section__head">
+    <span class="ds-section__idx">SEC.18 — BADGE</span>
+    <div style="flex:1">
+      <h2 class="ds-section__title display">بدج و وضعیت</h2>
+      <p class="ds-section__sub">وضعیت live با نقطهٔ pulse، نقطهٔ ساده برای offline.</p>
+    </div>
+  </header>
+
+  <div class="ds-demo">
+    <div class="ds-demo__head"><span class="ds-demo__title">badge</span><div class="ds-demo__actions"><button class="ds-demo__btn" data-copy>کپی</button></div></div>
+    <div class="ds-demo__stage">
+      <span class="badge">DRAFT</span>
+      <span class="badge badge--live">LIVE</span>
+      <span class="badge badge--dot">offline</span>
+    </div>
+    <div class="ds-demo__code">
+<pre>&lt;span class="badge"&gt;DRAFT&lt;/span&gt;
+&lt;span class="badge badge--live"&gt;LIVE&lt;/span&gt;
+&lt;span class="badge badge--dot"&gt;offline&lt;/span&gt;</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ اتم: آواتار ═══ -->
+<section class="ds-section" id="at-avatar">
+  <header class="ds-section__head">
+    <span class="ds-section__idx">SEC.19 — AVATAR</span>
+    <div style="flex:1">
+      <h2 class="ds-section__title display">آواتار</h2>
+      <p class="ds-section__sub">مربع بدون radius، تصویر با grayscale+contrast، fallback حرف اول با فونت نمایشی.</p>
+    </div>
+  </header>
+
+  <div class="ds-demo">
+    <div class="ds-demo__head"><span class="ds-demo__title">avatar</span><div class="ds-demo__actions"><button class="ds-demo__btn" data-copy>کپی</button></div></div>
+    <div class="ds-demo__stage">
+      <span class="avatar avatar--sm">ن</span>
+      <span class="avatar">ن</span>
+      <span class="avatar avatar--lg">ن</span>
+    </div>
+    <div class="ds-demo__code">
+<pre>&lt;span class="avatar avatar--sm"&gt;ن&lt;/span&gt;
+&lt;span class="avatar"&gt;ن&lt;/span&gt;
+&lt;span class="avatar avatar--lg"&gt;ن&lt;/span&gt;</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ مولکول: کارت ═══ -->
+<section class="ds-section" id="mo-card">
+  <header class="ds-section__head">
+    <span class="ds-section__idx">SEC.20 — CARD</span>
+    <div style="flex:1">
+      <h2 class="ds-section__title display">کارت</h2>
+      <p class="ds-section__sub">ساختار استاندارد: media + body + top (title+code) + foot (tags + CTA).</p>
+    </div>
+  </header>
+
+  <div class="ds-demo">
+    <div class="ds-demo__head"><span class="ds-demo__title">card + card__media + card__body</span><div class="ds-demo__actions"><button class="ds-demo__btn" data-copy>کپی</button></div></div>
+    <div class="ds-demo__stage ds-demo__stage--grid">
+      <a class="card" href="#">
+        <div class="card__media"><div style="aspect-ratio:16/9;background:linear-gradient(135deg,#222,#111)"></div></div>
+        <div class="card__body">
+          <div class="card__top"><h3>تسک‌فلو</h3><code>task.ir</code></div>
+          <p>مدیریت پروژه‌ها با جریان سادهٔ کانبان.</p>
+          <div class="card__foot">
+            <span class="tag">ابزار</span>
+            <span class="tag">متن‌باز</span>
+          </div>
+        </div>
+      </a>
+      <a class="card" href="#">
+        <div class="card__media"><div style="aspect-ratio:16/9;background:linear-gradient(135deg,#333,#111)"></div></div>
+        <div class="card__body">
+          <div class="card__top"><h3>مبدل مارک‌داون</h3><code>md.ir</code></div>
+          <p>خروجی تمیز از متن ساده.</p>
+          <div class="card__foot"><span class="tag">ابزار</span></div>
+        </div>
+      </a>
+    </div>
+    <div class="ds-demo__code">
+<pre>&lt;a class="card" href="#"&gt;
+  &lt;div class="card__media"&gt;&lt;img src="..." alt="..."&gt;&lt;/div&gt;
+  &lt;div class="card__body"&gt;
+    &lt;div class="card__top"&gt;
+      &lt;h3&gt;تسک‌فلو&lt;/h3&gt;
+      &lt;code&gt;task.ir&lt;/code&gt;
+    &lt;/div&gt;
+    &lt;p&gt;توضیحات کوتاه.&lt;/p&gt;
+    &lt;div class="card__foot"&gt;
+      &lt;span class="tag"&gt;ابزار&lt;/span&gt;
+      &lt;span class="tag"&gt;متن‌باز&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/a&gt;</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ مولکول: کارت اسپک ═══ -->
+<section class="ds-section" id="mo-spec">
+  <header class="ds-section__head">
+    <span class="ds-section__idx">SEC.21 — SPEC CARD</span>
+    <div style="flex:1">
+      <h2 class="ds-section__title display">کارت اسپک‌شیت</h2>
+      <p class="ds-section__sub">کارت ثابت (غیرکلیک) با head dashed و سایهٔ سخت — برای اسناد و نیازمندی‌ها.</p>
+    </div>
+  </header>
+
+  <div class="ds-demo">
+    <div class="ds-demo__head"><span class="ds-demo__title">spec card</span><div class="ds-demo__actions"><button class="ds-demo__btn" data-copy>کپی</button></div></div>
+    <div class="ds-demo__stage">
+      <aside class="spec">
+        <div class="spec__head"><code>PRD-001 · PERSONAL HUB</code><span class="badge badge--live" style="padding:0;border:none">●</span></div>
+        <h3>سند نیازمندی</h3>
+        <ul>
+          <li><span>مسئله</span> همه‌چیز یک‌جا نیست</li>
+          <li><span>راه‌حل</span> یک دامنه، بی‌نهایت درگاه</li>
+          <li><span>وضعیت</span> v2.0 live</li>
+          <li><span>مخاطب</span> انسان‌های کنجکاو</li>
+        </ul>
+      </aside>
+    </div>
+    <div class="ds-demo__code">
+<pre>&lt;aside class="spec"&gt;
+  &lt;div class="spec__head"&gt;
+    &lt;code&gt;PRD-001&lt;/code&gt;
+    &lt;span class="badge badge--live"&gt;●&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;h3&gt;سند نیازمندی&lt;/h3&gt;
+  &lt;ul&gt;
+    &lt;li&gt;&lt;span&gt;مسئله&lt;/span&gt; ...&lt;/li&gt;
+    &lt;li&gt;&lt;span&gt;راه‌حل&lt;/span&gt; ...&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/aside&gt;</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ مولکول: ردیف ═══ -->
+<section class="ds-section" id="mo-row">
+  <header class="ds-section__head">
+    <span class="ds-section__idx">SEC.22 — LIST ROW</span>
+    <div style="flex:1">
+      <h2 class="ds-section__title display">ردیف لیست</h2>
+      <p class="ds-section__sub">ردیف‌هایی که در هاور کاملاً اینورت می‌شوند + padding گسترده.</p>
+    </div>
+  </header>
+
+  <div class="ds-demo">
+    <div class="ds-demo__head"><span class="ds-demo__title">row with invert-on-hover</span><div class="ds-demo__actions"><button class="ds-demo__btn" data-copy>کپی</button></div></div>
+    <div class="ds-demo__stage ds-demo__stage--col" style="gap:0;padding:0">
+      <a class="row" href="#">
+        <span class="row__idx">۰۱</span>
+        <div class="row__main"><h3>لینکدین</h3><p>شبکهٔ حرفه‌ای و داستان‌های شغلی</p></div>
+        <code class="row__url">linkedin.com</code>
+        <span class="row__go">↗</span>
+      </a>
+      <a class="row" href="#">
+        <span class="row__idx">۰۲</span>
+        <div class="row__main"><h3>گیت‌هاب</h3><p>کد منبع پروژه‌های شخصی</p></div>
+        <code class="row__url">github.com</code>
+        <span class="row__go">↗</span>
+      </a>
+    </div>
+    <div class="ds-demo__code">
+<pre>&lt;a class="row" href="#"&gt;
+  &lt;span class="row__idx"&gt;۰۱&lt;/span&gt;
+  &lt;div class="row__main"&gt;
+    &lt;h3&gt;لینکدین&lt;/h3&gt;
+    &lt;p&gt;توضیح&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;code class="row__url"&gt;linkedin.com&lt;/code&gt;
+  &lt;span class="row__go"&gt;↗&lt;/span&gt;
+&lt;/a&gt;</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ مولکول: آکاردئون ═══ -->
+<section class="ds-section" id="mo-accordion">
+  <header class="ds-section__head">
+    <span class="ds-section__idx">SEC.23 — ACCORDION</span>
+    <div style="flex:1">
+      <h2 class="ds-section__title display">آکاردئون</h2>
+      <p class="ds-section__sub">با علامت + که به × می‌چرخد.</p>
+    </div>
+  </header>
+
+  <div class="ds-demo">
+    <div class="ds-demo__head"><span class="ds-demo__title">accordion</span><div class="ds-demo__actions"><button class="ds-demo__btn" data-copy>کپی</button></div></div>
+    <div class="ds-demo__stage ds-demo__stage--col" style="align-items:stretch">
+      <div class="accordion">
+        <div class="accordion__item is-open">
+          <button class="accordion__head">سوال اول<span class="accordion__plus"></span></button>
+          <div class="accordion__body">پاسخ اول که می‌تواند چند خط باشد.</div>
+        </div>
+        <div class="accordion__item">
+          <button class="accordion__head">سوال دوم<span class="accordion__plus"></span></button>
+          <div class="accordion__body">پاسخ دوم.</div>
+        </div>
+      </div>
+    </div>
+    <div class="ds-demo__code">
+<pre>&lt;div class="accordion"&gt;
+  &lt;div class="accordion__item is-open"&gt;
+    &lt;button class="accordion__head"&gt;سوال&lt;span class="accordion__plus"&gt;&lt;/span&gt;&lt;/button&gt;
+    &lt;div class="accordion__body"&gt;پاسخ&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+// JS
+document.querySelectorAll('.accordion__head').forEach(b =&gt;
+  b.addEventListener('click', () =&gt;
+    b.parentElement.classList.toggle('is-open')
+  )
+);</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ مولکول: تب ═══ -->
+<section class="ds-section" id="mo-tabs">
+  <header class="ds-section__head">
+    <span class="ds-section__idx">SEC.24 — TABS</span>
+    <div style="flex:1">
+      <h2 class="ds-section__title display">تب‌ها</h2>
+      <p class="ds-section__sub">list افقی با border-bottom تأکیدی.</p>
+    </div>
+  </header>
+
+  <div class="ds-demo">
+    <div class="ds-demo__head"><span class="ds-demo__title">tabs</span><div class="ds-demo__actions"><button class="ds-demo__btn" data-copy>کپی</button></div></div>
+    <div class="ds-demo__stage ds-demo__stage--col" style="align-items:stretch">
+      <div class="tabs">
+        <div class="tabs__list">
+          <button class="tabs__btn is-on" data-tab="1">معرفی</button>
+          <button class="tabs__btn" data-tab="2">ویژگی‌ها</button>
+          <button class="tabs__btn" data-tab="3">قیمت</button>
+        </div>
+        <div class="tabs__panel is-on" data-panel="1">محتوای تب اول.</div>
+        <div class="tabs__panel" data-panel="2">محتوای تب دوم.</div>
+        <div class="tabs__panel" data-panel="3">محتوای تب سوم.</div>
+      </div>
+    </div>
+    <div class="ds-demo__code">
+<pre>&lt;div class="tabs"&gt;
+  &lt;div class="tabs__list"&gt;
+    &lt;button class="tabs__btn is-on" data-tab="1"&gt;تب ۱&lt;/button&gt;
+    &lt;button class="tabs__btn" data-tab="2"&gt;تب ۲&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div class="tabs__panel is-on" data-panel="1"&gt;محتوا&lt;/div&gt;
+  &lt;div class="tabs__panel" data-panel="2"&gt;محتوا&lt;/div&gt;
+&lt;/div&gt;</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ مولکول: دراپ‌داون ═══ -->
+<section class="ds-section" id="mo-dropdown">
+  <header class="ds-section__head">
+    <span class="ds-section__idx">SEC.25 — DROPDOWN</span>
+    <div style="flex:1">
+      <h2 class="ds-section__title display">دراپ‌داون</h2>
+      <p class="ds-section__sub">منوی معلق با سایهٔ سخت.</p>
+    </div>
+  </header>
+
+  <div class="ds-demo">
+    <div class="ds-demo__head"><span class="ds-demo__title">dropdown</span><div class="ds-demo__actions"><button class="ds-demo__btn" data-copy>کپی</button></div></div>
+    <div class="ds-demo__stage">
+      <div class="dropdown is-open">
+        <button class="btn">منو <span class="arr">↓</span></button>
+        <div class="dropdown__menu">
+          <a class="dropdown__item" href="#">ویرایش</a>
+          <a class="dropdown__item" href="#">کپی</a>
+          <a class="dropdown__item" href="#">حذف</a>
+        </div>
+      </div>
+    </div>
+    <div class="ds-demo__code">
+<pre>&lt;div class="dropdown is-open"&gt;
+  &lt;button class="btn"&gt;منو&lt;/button&gt;
+  &lt;div class="dropdown__menu"&gt;
+    &lt;a class="dropdown__item" href="#"&gt;ویرایش&lt;/a&gt;
+    &lt;a class="dropdown__item" href="#"&gt;کپی&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ مولکول: جدول ═══ -->
+<section class="ds-section" id="mo-table">
+  <header class="ds-section__head">
+    <span class="ds-section__idx">SEC.26 — TABLE</span>
+    <div style="flex:1">
+      <h2 class="ds-section__title display">جدول</h2>
+      <p class="ds-section__sub">سرستون با فونت مونو uppercase، ردیف با hover پس‌زمینه.</p>
+    </div>
+  </header>
+
+  <div class="ds-demo">
+    <div class="ds-demo__head"><span class="ds-demo__title">table</span><div class="ds-demo__actions"><button class="ds-demo__btn" data-copy>کپی</button></div></div>
+    <div class="ds-demo__stage ds-demo__stage--col" style="align-items:stretch">
+      <table class="ds-table">
+        <thead><tr><th>نام</th><th>نقش</th><th>وضعیت</th></tr></thead>
+        <tbody>
+          <tr><td>نریمان</td><td>مدیر محصول</td><td><span class="tag tag--ok">فعال</span></td></tr>
+          <tr><td>علی</td><td>توسعه‌دهنده</td><td><span class="tag tag--warn">beta</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="ds-demo__code">
+<pre>&lt;table class="ds-table"&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;&lt;th&gt;نام&lt;/th&gt;&lt;th&gt;نقش&lt;/th&gt;&lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;&lt;td&gt;نریمان&lt;/td&gt;&lt;td&gt;مدیر محصول&lt;/td&gt;&lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ مولکول: نوار پیشرفت ═══ -->
+<section class="ds-section" id="mo-bar">
+  <header class="ds-section__head">
+    <span class="ds-section__idx">SEC.27 — PROGRESS BAR</span>
+    <div style="flex:1">
+      <h2 class="ds-section__title display">نوار پیشرفت</h2>
+      <p class="ds-section__sub">با --w به‌عنوان متغیر CSS.</p>
+    </div>
+  </header>
+
+  <div class="ds-demo">
+    <div class="ds-demo__head"><span class="ds-demo__title">bar</span><div class="ds-demo__actions"><button class="ds-demo__btn" data-copy>کپی</button></div></div>
+    <div class="ds-demo__stage ds-demo__stage--col" style="gap:14px;align-items:stretch;max-width:500px">
+      <div class="bar is-ready" style="--w:92%"><span>استراتژی محصول</span><span class="bar__num">۹۲٪</span><i></i></div>
+      <div class="bar is-ready" style="--w:80%"><span>طراحی UX</span><span class="bar__num">۸۰٪</span><i></i></div>
+      <div class="bar is-ready" style="--w:60%"><span>برنامه‌نویسی</span><span class="bar__num">۶۰٪</span><i></i></div>
+    </div>
+    <div class="ds-demo__code">
+<pre>&lt;div class="bar is-ready" style="--w:92%"&gt;
+  &lt;span&gt;عنوان&lt;/span&gt;
+  &lt;span class="bar__num"&gt;۹۲٪&lt;/span&gt;
+  &lt;i&gt;&lt;/i&gt;
+&lt;/div&gt;</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ مولکول: چرخه ═══ -->
+<section class="ds-section" id="mo-loop">
+  <header class="ds-section__head">
+    <span class="ds-section__idx">SEC.28 — LOOP WIDGET</span>
+    <div style="flex:1">
+      <h2 class="ds-section__title display">چرخه تعاملی</h2>
+      <p class="ds-section__sub">کارت با stage و step های قابل‌کلیک — برای نمایش فرآیندها.</p>
+    </div>
+  </header>
+
+  <div class="ds-demo">
+    <div class="ds-demo__head"><span class="ds-demo__title">loop</span><div class="ds-demo__actions"><button class="ds-demo__btn" data-copy>کپی</button></div></div>
+    <div class="ds-demo__stage" style="max-width:640px">
+      <div class="loop" style="width:100%">
+        <div class="loop__stage">
+          <span class="loop__num">۰۱</span>
+          <h3>کشف</h3>
+          <p>گوش‌دادن به کاربر، خواندن داده و پیدا کردن مسئله‌ای که می‌ارزد.</p>
+        </div>
+        <div class="loop__steps">
+          <button class="lstep is-on"><b>۰۱</b><span>کشف</span><i class="track"><i style="width:100%"></i></i></button>
+          <button class="lstep"><b>۰۲</b><span>تعریف</span><i class="track"><i></i></button>
+          <button class="lstep"><b>۰۳</b><span>ساخت</span><i class="track"><i></i></button>
+          <button class="lstep"><b>۰۴</b><span>اندازه</span><i class="track"><i></i></button>
+        </div>
+      </div>
+    </div>
+    <div class="ds-demo__code">
+<pre>&lt;div class="loop"&gt;
+  &lt;div class="loop__stage"&gt;
+    &lt;span class="loop__num"&gt;۰۱&lt;/span&gt;
+    &lt;h3&gt;کشف&lt;/h3&gt;
+    &lt;p&gt;توضیح&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div class="loop__steps"&gt;
+    &lt;button class="lstep is-on"&gt;&lt;b&gt;۰۱&lt;/b&gt;&lt;span&gt;کشف&lt;/span&gt;&lt;i class="track"&gt;&lt;i&gt;&lt;/i&gt;&lt;/i&gt;&lt;/button&gt;
+    &lt;button class="lstep"&gt;&lt;b&gt;۰۲&lt;/b&gt;&lt;span&gt;تعریف&lt;/span&gt;&lt;i class="track"&gt;&lt;i&gt;&lt;/i&gt;&lt;/i&gt;&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ مولکول: مدال ═══ -->
+<section class="ds-section" id="mo-modal">
+  <header class="ds-section__head">
+    <span class="ds-section__idx">SEC.29 — MODAL</span>
+    <div style="flex:1">
+      <h2 class="ds-section__title display">مدال</h2>
+      <p class="ds-section__sub">Backdrop با blur، کارت با سایهٔ xl.</p>
+    </div>
+  </header>
+
+  <div class="ds-demo">
+    <div class="ds-demo__head"><span class="ds-demo__title">modal</span><div class="ds-demo__actions"><button class="ds-demo__btn" data-open-modal>باز کردن مدال</button><button class="ds-demo__btn" data-copy>کپی کد</button></div></div>
+    <div class="ds-demo__code">
+<pre>&lt;div class="modal-backdrop is-open"&gt;
+  &lt;div class="modal"&gt;
+    &lt;div class="modal__head"&gt;
+      &lt;h3&gt;عنوان&lt;/h3&gt;
+      &lt;button class="modal__close"&gt;✕&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div class="modal__body"&gt;محتوا&lt;/div&gt;
+    &lt;div class="modal__foot"&gt;
+      &lt;button class="btn btn--ghost"&gt;انصراف&lt;/button&gt;
+      &lt;button class="btn btn--solid"&gt;تأیید&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ مولکول: توست ═══ -->
+<section class="ds-section" id="mo-toast">
+  <header class="ds-section__head">
+    <span class="ds-section__idx">SEC.30 — TOAST</span>
+    <div style="flex:1">
+      <h2 class="ds-section__title display">توست</h2>
+      <p class="ds-section__sub">از پایین ظاهر می‌شود، اینورت رنگ با صفحه.</p>
+    </div>
+  </header>
+
+  <div class="ds-demo">
+    <div class="ds-demo__head"><span class="ds-demo__title">toast</span><div class="ds-demo__actions"><button class="ds-demo__btn" data-toast>نمایش توست</button><button class="ds-demo__btn" data-copy>کپی</button></div></div>
+    <div class="ds-demo__code">
+<pre>function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('is-show');
+  setTimeout(() =&gt; t.classList.remove('is-show'), 2200);
+}
+
+&lt;div class="toast" id="toast" role="status"&gt;&lt;/div&gt;</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ الگو: تیکر ═══ -->
+<section class="ds-section" id="pt-ticker">
+  <header class="ds-section__head">
+    <span class="ds-section__idx">SEC.31 — TICKER / MARQUEE</span>
+    <div style="flex:1">
+      <h2 class="ds-section__title display">مارکی / تیکر</h2>
+      <p class="ds-section__sub">نوار افقی متحرک با جداکنندهٔ ستاره.</p>
+    </div>
+  </header>
+
+  <div class="ds-demo">
+    <div class="ds-demo__head"><span class="ds-demo__title">ticker</span><div class="ds-demo__actions"><button class="ds-demo__btn" data-copy>کپی</button></div></div>
+    <div class="ds-demo__stage ds-demo__stage--col" style="gap:0;padding:0">
+      <div class="ticker">
+        <div class="ticker__track">
+          <span>استراتژی <i>✦</i> کشف کاربر <i>✦</i> تحلیل داده <i>✦</i> نقشهٔ راه <i>✦</i> UX <i>✦</i></span>
+          <span>استراتژی <i>✦</i> کشف کاربر <i>✦</i> تحلیل داده <i>✦</i> نقشهٔ راه <i>✦</i> UX <i>✦</i></span>
+        </div>
+      </div>
+    </div>
+    <div class="ds-demo__code">
+<pre>&lt;div class="ticker"&gt;
+  &lt;div class="ticker__track"&gt;
+    &lt;span&gt;کلمه &lt;i&gt;✦&lt;/i&gt; کلمه &lt;i&gt;✦&lt;/i&gt; ...&lt;/span&gt;
+    &lt;span&gt;کلمه &lt;i&gt;✦&lt;/i&gt; کلمه &lt;i&gt;✦&lt;/i&gt; ...&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+/* دو کپی یکسان برای seamless loop */
+@keyframes marquee { to { transform: translateX(50%) } }
+.ticker__track { animation: marquee 26s linear infinite }</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ الگو: orbit ═══ -->
+<section class="ds-section" id="pt-orbit">
+  <header class="ds-section__head">
+    <span class="ds-section__idx">SEC.32 — ORBIT TEXT</span>
+    <div style="flex:1">
+      <h2 class="ds-section__title display">متن مداری</h2>
+      <p class="ds-section__sub">textPath روی SVG دایره، با چرخش بی‌پایان.</p>
+    </div>
+  </header>
+
+  <div class="ds-demo">
+    <div class="ds-demo__head"><span class="ds-demo__title">orbit</span><div class="ds-demo__actions"><button class="ds-demo__btn" data-copy>کپی</button></div></div>
+    <div class="ds-demo__stage">
+      <svg class="orbit" viewBox="0 0 120 120">
+        <defs><path id="circ" d="M60,60 m-47,0 a47,47 0 1,1 94,0 a47,47 0 1,1 -94,0"/></defs>
+        <text><textPath href="#circ">PRODUCT ✦ MANAGER ✦ DESIGN ✦ SYSTEM ✦</textPath></text>
+        <circle class="orbit__core" cx="60" cy="60" r="4"/>
+      </svg>
+    </div>
+    <div class="ds-demo__code">
+<pre>&lt;svg class="orbit" viewBox="0 0 120 120"&gt;
+  &lt;defs&gt;&lt;path id="circ" d="M60,60 m-47,0 a47,47 0 1,1 94,0 a47,47 0 1,1 -94,0"/&gt;&lt;/defs&gt;
+  &lt;text&gt;&lt;textPath href="#circ"&gt;متن مداری ✦&lt;/textPath&gt;&lt;/text&gt;
+  &lt;circle class="orbit__core" cx="60" cy="60" r="4"/&gt;
+&lt;/svg&gt;
+
+@keyframes spin { to { transform: rotate(360deg) } }
+.orbit { animation: spin 22s linear infinite }</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ الگو: scroll hint ═══ -->
+<section class="ds-section" id="pt-hint">
+  <header class="ds-section__head">
+    <span class="ds-section__idx">SEC.33 — SCROLL HINT</span>
+    <div style="flex:1">
+      <h2 class="ds-section__title display">راهنمای اسکرول</h2>
+      <p class="ds-section__sub">خط با نقطهٔ متحرک + متن مونو uppercase.</p>
+    </div>
+  </header>
+
+  <div class="ds-demo">
+    <div class="ds-demo__head"><span class="ds-demo__title">scroll-hint</span><div class="ds-demo__actions"><button class="ds-demo__btn" data-copy>کپی</button></div></div>
+    <div class="ds-demo__stage">
+      <div class="scroll-hint"><span class="scroll-hint__line"></span>SCROLL</div>
+    </div>
+    <div class="ds-demo__code">
+<pre>&lt;div class="scroll-hint"&gt;
+  &lt;span class="scroll-hint__line"&gt;&lt;/span&gt;
+  SCROLL
+&lt;/div&gt;
+
+.scroll-hint__line { width: 1.5px; height: 44px; background: var(--line2) }
+.scroll-hint__line::after {
+  content:""; position:absolute; top:-40%;
+  width:100%; height:40%; background:var(--fg);
+  animation: drip 1.8s var(--ease) infinite;
+}
+@keyframes drip { to { top: 110% } }</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ الگو: جداکننده ═══ -->
+<section class="ds-section" id="pt-divider">
+  <header class="ds-section__head">
+    <span class="ds-section__idx">SEC.34 — DIVIDER</span>
+    <div style="flex:1">
+      <h2 class="ds-section__title display">جداکننده</h2>
+      <p class="ds-section__sub">thin (solid) و hair (dashed).</p>
+    </div>
+  </header>
+
+  <div class="ds-demo">
+    <div class="ds-demo__head"><span class="ds-demo__title">divider</span><div class="ds-demo__actions"><button class="ds-demo__btn" data-copy>کپی</button></div></div>
+    <div class="ds-demo__stage ds-demo__stage--col" style="align-items:stretch">
+      <hr class="divider">
+      <hr class="divider divider--hair">
+    </div>
+    <div class="ds-demo__code">
+<pre>&lt;hr class="divider"&gt;
+&lt;hr class="divider divider--hair"&gt;</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ پرامپت Agent ═══ -->
+<section class="ds-section" id="agent-prompt">
+  <header class="ds-section__head">
+    <span class="ds-section__idx">SEC.35 — AGENT PROMPT</span>
+    <div style="flex:1">
+      <h2 class="ds-section__title display">پرامپت مرجع Agent</h2>
+      <p class="ds-section__sub">این متن را به Agent بدهید تا همان زبان طراحی را دقیقاً بازسازی کند.</p>
+    </div>
+  </header>
+
+  <div class="ds-demo">
+    <div class="ds-demo__head"><span class="ds-demo__title">System Prompt</span><div class="ds-demo__actions"><button class="ds-demo__btn" data-copy>کپی</button></div></div>
+    <div class="ds-demo__code is-open">
+<pre>شما یک طراح/توسعه‌دهندهٔ Front-end هستید که همیشه از این دیزاین سیستم استفاده می‌کند:
+
+نام سبک: «نئوبروتالیسم مونوکروم + تایپوگرافی سوئیسی + استتیک بلوپرینت»
+
+قواعد اجباری:
+1) پالت مونوکروم: فقط از متغیرهای --bg, --fg, --mut, --line استفاده کن.
+   هیچ رنگ آبی/سبز/قرمز خام در UI نباشد.
+2) بدون blur، بدون glassmorphism، بدون gradient (مگر در media placeholder).
+3) سایه‌ها همه سخت و آفست: box-shadow: X Y 0 var(--shadow) — نه drop-shadow.
+4) border-radius: 0 مگر برای chip/toggle که pill.
+5) بوردرها: 1px (hair) / 1.5px (thin) / 2px (thick).
+6) هر تعامل هاور: اینورت fg/bg + سایهٔ سخت + شیفت -2px,-2px.
+7) تایپوگرافی: Lalezar برای تیترهای قهرمان، Vazirmatn برای بدنه، JetBrains Mono برای برچسب‌های فنی.
+8) قبل از هر عنوان سکشن، یک kicker مونو با مربع 9px.
+9) گرید مهندسی 72px به‌عنوان ::before در body با opacity 5%.
+10) لایهٔ grain ثابت با opacity 5%.
+11) کرسر سفارشی با mix-blend-mode: difference در دسکتاپ.
+12) RTL native: از inset-inline و text-align: start استفاده کن.
+13) اعداد فارسی در UI عمومی، انگلیسی در URL/کد.
+14) پشتیبانی prefers-reduced-motion.
+15) تم تاریک/روشن از طریق data-theme روی html.
+
+کامپوننت‌های استاندارد:
+.btn, .btn--solid, .btn--ghost, .btn--icon
+.chip, .tag
+.kicker, .link, .link--mono
+.input, .textarea, .field, .check, .toggle
+.badge, .badge--live, .avatar
+.card, .spec
+.row (با invert-on-hover)
+.accordion, .tabs, .dropdown
+.ds-table, .bar, .loop
+.modal-backdrop, .toast
+.ticker (marquee), .orbit (SVG textPath), .scroll-hint, .divider
+
+قبل از تولید هر HTML، این متغیرها را در :root تعریف کن:
+--bg, --bg2, --bg3, --card, --card2,
+--fg, --fg2, --mut, --mut2,
+--line, --line2, --line3, --grid-c, --shadow,
+--f-body, --f-disp, --f-mono,
+--fs-xs...--fs-5xl, --lh-* ,
+--s-1...--s-9, --grid, --bw-hair, --bw-thin, --bw-thick,
+--sh-hair, --sh-sm, --sh-md, --sh-lg, --sh-xl,
+--ease, --ease-spring, --dur-fast, --dur-mid, --dur-slow.</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ قالب کد ═══ -->
+<section class="ds-section" id="agent-template">
+  <header class="ds-section__head">
+    <span class="ds-section__idx">SEC.36 — CODE TEMPLATE</span>
+    <div style="flex:1">
+      <h2 class="ds-section__title display">قالب پایهٔ HTML</h2>
+      <p class="ds-section__sub">این فایل را به‌عنوان starting point هر پروژه استفاده کنید.</p>
+    </div>
+  </header>
+
+  <div class="ds-demo">
+    <div class="ds-demo__head"><span class="ds-demo__title">starter.html</span><div class="ds-demo__actions"><button class="ds-demo__btn" data-copy>کپی</button></div></div>
+    <div class="ds-demo__code is-open">
+<pre>&lt;!DOCTYPE html&gt;
+&lt;html lang="fa" dir="rtl" data-theme="dark"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width,initial-scale=1"&gt;
+  &lt;title&gt;عنوان پروژه&lt;/title&gt;
+
+  &lt;script&gt;
+    (function(){var t=localStorage.getItem('theme');
+    if(!t)t=matchMedia('(prefers-color-scheme:light)').matches?'light':'dark';
+    document.documentElement.dataset.theme=t;})();
+  &lt;/script&gt;
+
+  &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/vazirmatn@5/400.css"&gt;
+  &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/vazirmatn@5/700.css"&gt;
+  &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/lalezar@5/400.css"&gt;
+  &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5/400.css"&gt;
+
+  &lt;style&gt;
+    /* تمام متغیرهای :root از این دیزاین سیستم را کپی کن */
+    /* سپس استایل‌های بدنه، کامپوننت‌ها، و ریسپانسیو را اضافه کن */
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div class="grain" aria-hidden="true"&gt;&lt;/div&gt;
+
+  &lt;header class="ds-hdr"&gt;
+    &lt;a class="ds-hdr__brand" href="#"&gt;
+      &lt;span class="ds-hdr__mono"&gt;X&lt;/span&gt;
+      &lt;span&gt;نام پروژه&lt;/span&gt;
+    &lt;/a&gt;
+    &lt;button class="btn btn--sm" onclick="toggleTheme()"&gt;تم&lt;/button&gt;
+  &lt;/header&gt;
+
+  &lt;main class="container"&gt;
+    &lt;section&gt;
+      &lt;p class="kicker"&gt;&lt;code&gt;SEC.01&lt;/code&gt; عنوان&lt;/p&gt;
+      &lt;h2 class="display"&gt;تیتر قهرمان&lt;/h2&gt;
+      &lt;p class="muted"&gt;توضیحات.&lt;/p&gt;
+      &lt;button class="btn btn--solid"&gt;اقدام اصلی&lt;/button&gt;
+    &lt;/section&gt;
+  &lt;/main&gt;
+
+  &lt;script&gt;
+    function toggleTheme(){
+      const t = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+      document.documentElement.dataset.theme = t;
+      localStorage.setItem('theme', t);
+    }
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ فوتر ═══ -->
+<footer style="border-top:var(--bw-thin) solid var(--line2);padding:26px 0;margin-top:60px;font-family:var(--f-mono);font-size:11px;color:var(--mut);display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px">
+  <span>© دیزاین سیستم v1.0 — Agent Edition</span>
+  <span>ساخته‌شده با ♥ برای تولیدکنندگان</span>
+  <span dir="ltr">neo-brutalism × swiss × blueprint</span>
+</footer>
+
+</main>
+</div>
+
+<!-- ═══ Modal نمونه ═══ -->
+<div class="modal-backdrop" id="demoModal">
+  <div class="modal">
+    <div class="modal__head">
+      <h3>تأیید اقدام</h3>
+      <button class="modal__close" data-close-modal>✕</button>
+    </div>
+    <div class="modal__body">این یک نمونهٔ مدال با استایل سیستم است. آیا می‌خواهید ادامه دهید؟</div>
+    <div class="modal__foot">
+      <button class="btn btn--ghost" data-close-modal>انصراف</button>
+      <button class="btn btn--solid" data-close-modal>تأیید</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ Toast نمونه ═══ -->
+<div class="toast" id="demoToast" role="status">کپی شد ✓</div>
+
+<script>
+/* ────────── تم ────────── */
+document.getElementById('themeBtn').addEventListener('click', () => {
+  const t = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+  document.documentElement.dataset.theme = t;
+  localStorage.setItem('ds-theme', t);
+});
+
+/* ────────── کپی کد ────────── */
+document.querySelectorAll('[data-copy]').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const code = btn.closest('.ds-demo').querySelector('.ds-demo__code pre')?.textContent || '';
+    try {
+      await navigator.clipboard.writeText(code);
+      showToast('کد کپی شد ✓');
+    } catch {
+      showToast('کپی ناموفق');
+    }
+  });
+});
+
+/* ────────── Toast ────────── */
+const toastEl = document.getElementById('demoToast');
+let toastTimer = null;
+function showToast(msg) {
+  toastEl.textContent = msg;
+  toastEl.classList.add('is-show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toastEl.classList.remove('is-show'), 2200);
+}
+
+/* ────────── Modal ────────── */
+document.querySelectorAll('[data-open-modal]').forEach(b =>
+  b.addEventListener('click', () => document.getElementById('demoModal').classList.add('is-open')));
+document.querySelectorAll('[data-close-modal]').forEach(b =>
+  b.addEventListener('click', () => document.getElementById('demoModal').classList.remove('is-open')));
+document.getElementById('demoModal').addEventListener('click', e => {
+  if (e.target === e.currentTarget) e.currentTarget.classList.remove('is-open');
+});
+
+/* ────────── Toggle toast از نمونه ────────── */
+document.querySelectorAll('[data-toast]').forEach(b =>
+  b.addEventListener('click', () => showToast('این یک توست نمونه است ✓')));
+
+/* ────────── Accordion ────────── */
+document.querySelectorAll('.accordion__head').forEach(b =>
+  b.addEventListener('click', () => b.parentElement.classList.toggle('is-open')));
+
+/* ────────── Tabs ────────── */
+document.querySelectorAll('.tabs__btn').forEach(b => {
+  b.addEventListener('click', () => {
+    const tabs = b.closest('.tabs');
+    tabs.querySelectorAll('.tabs__btn').forEach(x => x.classList.remove('is-on'));
+    tabs.querySelectorAll('.tabs__panel').forEach(x => x.classList.remove('is-on'));
+    b.classList.add('is-on');
+    tabs.querySelector(`.tabs__panel[data-panel="${b.dataset.tab}"]`).classList.add('is-on');
+  });
+});
+
+/* ────────── Sidebar active ────────── */
+const sections = document.querySelectorAll('.ds-section');
+const navLinks = document.querySelectorAll('[data-nav]');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(l => l.classList.toggle('is-on', l.getAttribute('href') === '#' + e.target.id));
+    }
+  });
+}, { rootMargin: '-100px 0px -70% 0px', threshold: 0 });
+sections.forEach(s => io.observe(s));
+
+/* ────────── Smooth scroll ────────── */
+navLinks.forEach(l => l.addEventListener('click', e => {
+  e.preventDefault();
+  const t = document.querySelector(l.getAttribute('href'));
+  if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}));
+
+/* ────────── Search ────────── */
+const search = document.getElementById('search');
+search.addEventListener('input', () => {
+  const q = search.value.trim().toLowerCase();
+  sections.forEach(s => {
+    if (!q) { s.style.display = ''; return; }
+    const text = s.textContent.toLowerCase();
+    s.style.display = text.includes(q) ? '' : 'none';
+  });
+});
+
+/* ────────── Bar animation on view ────────── */
+const barIO = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('is-ready'); });
+}, { threshold: .3 });
+document.querySelectorAll('.bar').forEach(b => { b.classList.remove('is-ready'); barIO.observe(b); });
+
+/* ────────── کرسر سفارشی ────────── */
+if (matchMedia('(pointer:fine)').matches && !matchMedia('(prefers-reduced-motion:reduce)').matches) {
+  document.body.classList.add('has-cursor');
+  const dot = document.querySelector('.cursor-dot');
+  const ring = document.querySelector('.cursor-ring');
+  let x = innerWidth/2, y = innerHeight/2, rx = x, ry = y;
+  addEventListener('mousemove', e => { x = e.clientX; y = e.clientY });
+  (function loop() {
+    rx += (x - rx) * .16; ry += (y - ry) * .16;
+    dot.style.transform = `translate(${x}px, ${y}px)`;
+    ring.style.transform = `translate(${rx}px, ${ry}px)`;
+    requestAnimationFrame(loop);
+  })();
+  document.addEventListener('mouseover', e => {
+    ring.classList.toggle('is-hover', !!e.target.closest('a, button, input, .chip'));
+  });
+}
+
+/* ────────── کد اسکرول hint و orbit را دوباره فعال کن (در صورت نیاز) ────────── */
+</script>
+
+</body>
+</html>
