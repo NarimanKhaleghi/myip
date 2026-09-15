@@ -31,7 +31,7 @@ export function SectionCard({
   return (
     <section
       className={cn(
-        "border-[1.5px] border-border bg-card p-4 sm:p-6 fade-in",
+        "min-w-0 border-[1.5px] border-border bg-card p-4 sm:p-6 fade-in",
         "transition-[transform,border-color,box-shadow] duration-300",
         "hover:border-foreground hover:shadow-[8px_8px_0_var(--shadow)] hover:-translate-y-1",
         className
@@ -88,7 +88,7 @@ export function CopyChip({
       onClick={copy}
       title={t("copy")}
       className={cn(
-        "group inline-flex items-center gap-2 border border-border bg-muted/50 px-3 py-1.5 text-start transition-all",
+        "group inline-flex min-w-0 items-center gap-2 border border-border bg-muted/50 px-3 py-1.5 text-start transition-all",
         "hover:border-foreground hover:bg-foreground hover:text-background",
         className
       )}

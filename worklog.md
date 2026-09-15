@@ -159,3 +159,25 @@ Stage Summary:
 - Report is now a single scrollable page: every section visible at once in importance order, numbered engineering headers, sticky scroll-spy jump-nav, fully printable in one pass.
 - No tabs anywhere (component + unused shadcn tabs removed); all data flows, loading skeletons and features unchanged.
 - Both deploy targets re-validated (Workers + GitHub Pages static); deliverables refreshed at /home/z/my-project/download/myip/ + myip-github-repo.zip (v1.2.0).
+
+---
+Task ID: 7
+Agent: Super Z (main)
+Task: Fix mobile responsive layout — basic-info tables and tools cards overflowing the left edge of the screen on phones (user report), deliver new version.
+
+Work Log:
+- Reproduced at 390px: ALL 4 basic-info cards were 826px wide (grid track blown out), sticking 452px past the left edge (RTL). Isolation testing (hide-one-card loop) pinpointed the User-Agent card; drilling in pinned it to the UA CopyChip: its value span is white-space:nowrap (truncate), and during the grid's intrinsic min-content sizing the span contributes its FULL ~706px text width — overflow:hidden/min-w-0 only zero the USED size in a definite-width flex container, not the intrinsic contribution. Tools section: IPv6 history entries pushed chips past the card border (flex-1 item, min-width:auto content floor).
+- Fixes (src/components/myip):
+  - ui-bits.tsx SectionCard: + min-w-0 (grid items cap min-content → every section grid keeps cards at container width; long content truncates/wraps inside cards).
+  - ui-bits.tsx CopyChip button: + min-w-0 (flex-item chips — history rows, InfoRow values — shrink below content and ellipsize).
+  - tab-tools.tsx compare: results grid-cols-2 → grid-cols-1 sm:grid-cols-2; pills row col-span-2 → sm:col-span-2 (unconditional span-2 forced a phantom 2nd column on mobile, squeezing IP cards to 97/215px); ISP span truncate → block truncate (inline span can't truncate and painted across the border); inputs + result divs min-w-0.
+  - header.tsx: search wrapper + min-w-0; GitHub icon hidden below sm (still in hero/footer) — header no longer pokes out at ≤360px.
+  - tab-tools.tsx useHistory: getServerSnapshot () => [] → module-level EMPTY_HISTORY (killed the "getServerSnapshot should be cached" console errors; 0 console errors now).
+- E2E (agent-browser, dev server): 390px FA/EN — 0 unclipped offenders, scrollW=viewport, info/tools cards exactly 358px; long-IPv6 history chips truncate inside cards; compare of two IPv6s → single stacked column, ISP readable (197px), worst overflow 0-1px; 320px — 0 offenders (input 59px but usable); 1280px desktop — GitHub visible, 2×552px grids, full-width API card, compare 2×245px + spanning pills row. Pixel audit of screenshots: only full-bleed header/nav borders touch screen edges (by design). VLM "IPv6 overflow" claim disproven by DOM metrics (its known hallucination + extension-overlay badge).
+- Housekeeping: mirror myip/ + download/myip/ were STALE (missing report-sections.tsx, static-mode.ts, self-ip.ts, client-lookup.ts, manifest.ts, deploy-pages.yml, bun.lock from Tasks 4-6) — fully resynced: src trees now identical, all root configs/.github/public/docs/lockfile in sync; bun install --frozen-lockfile verified in mirror (lock ↔ package.json 1.2.1 in sync).
+- Validation: root lint clean + tsc clean (only pre-existing tailwind.config.ts workspace artifact); mirror npx opennextjs-cloudflare build SUCCESS; mirror BUILD_TARGET=static build SUCCESS (with api/ removed as the workflow does, restored after).
+- Version 1.2.0 → 1.2.1; CHANGELOG 1.2.1 entry; myip-github-repo.zip regenerated (100 files, 1.8 MB, bun.lock included).
+
+Stage Summary:
+- Mobile layout fully fixed: no card/table/chip overflows the viewport on any phone width (320-844px tested), FA RTL + EN LTR, with worst-case content (39-char IPv6 history + IPv6 compare results). Desktop unchanged.
+- Deliverables refreshed: /home/z/my-project/download/myip/ (complete, incl. bun.lock) + myip-github-repo.zip v1.2.1; both deploy targets (Cloudflare Workers + GitHub Pages) build-validated.

@@ -82,14 +82,14 @@ function CompareTool() {
           value={a}
           onChange={(e) => setA(e.target.value)}
           placeholder={t("ipOne")}
-          className="ip-mono text-sm"
+          className="ip-mono text-sm min-w-0"
           dir="ltr"
         />
         <Input
           value={b}
           onChange={(e) => setB(e.target.value)}
           placeholder={t("ipTwo")}
-          className="ip-mono text-sm"
+          className="ip-mono text-sm min-w-0"
           dir="ltr"
         />
         <Button type="submit" size="sm" className="px-4">
@@ -101,9 +101,9 @@ function CompareTool() {
       {(loadingA || loadingB) && <Shimmer className="h-32" />}
 
       {done && !loadingA && !loadingB && (
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {[infoA, infoB].map((inf, idx) => (
-            <div key={idx} className="border border-border bg-muted/40 p-3">
+            <div key={idx} className="min-w-0 border border-border bg-muted/40 p-3">
               <p className="ip-mono num text-sm font-bold text-foreground mb-1 [overflow-wrap:anywhere]">{inf.ip}</p>
               <div className="space-y-0.5 text-xs">
                 <InfoRow label={t("country")} value={
@@ -113,12 +113,12 @@ function CompareTool() {
                   </span>
                 } />
                 <InfoRow label={t("city")} value={inf.city ?? "—"} />
-                <InfoRow label={t("isp")} value={<span className="truncate">{inf.isp ?? inf.org ?? "—"}</span>} />
+                <InfoRow label={t("isp")} value={<span className="block truncate">{inf.isp ?? inf.org ?? "—"}</span>} />
                 <InfoRow label="ASN" value={inf.asn ?? "—"} mono />
               </div>
             </div>
           ))}
-          <div className="col-span-2 flex flex-wrap items-center gap-2 text-xs">
+          <div className="sm:col-span-2 flex flex-wrap items-center gap-2 text-xs">
             <Pill>{infoA.version === infoB.version ? t("sameVersion") : t("diffVersion")}</Pill>
             <Pill>{infoA.countryCode === infoB.countryCode ? t("sameCountry") : t("diffCountry")}</Pill>
             <Pill>{infoA.isp === infoB.isp ? t("sameIsp") : t("diffIsp")}</Pill>
@@ -170,8 +170,11 @@ function subscribeHistory(onChange: () => void) {
   };
 }
 
+/** Stable empty list — getServerSnapshot must return a cached value. */
+const EMPTY_HISTORY: HistoryEntry[] = [];
+
 export function useHistory(): HistoryEntry[] {
-  return useSyncExternalStore(subscribeHistory, getHistorySnapshot, () => []);
+  return useSyncExternalStore(subscribeHistory, getHistorySnapshot, () => EMPTY_HISTORY);
 }
 
 export function pushHistory(ip: string) {

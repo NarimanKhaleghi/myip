@@ -79,7 +79,7 @@ export function Header({
           )}
           role="search"
         >
-          <div className="relative flex-1">
+          <div className="relative flex-1 min-w-0">
             <Search className="absolute start-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none" />
             <Input
               value={value}
@@ -107,7 +107,7 @@ export function Header({
             rel="noopener noreferrer"
             title={t("viewOnGitHub")}
             aria-label="GitHub — NarimanKhaleghi/myip"
-            className="grid place-items-center size-10 border border-border text-foreground transition-all duration-200 hover:border-foreground hover:bg-foreground hover:text-background hover:-translate-y-0.5"
+            className="hidden sm:grid place-items-center size-10 border border-border text-foreground transition-all duration-200 hover:border-foreground hover:bg-foreground hover:text-background hover:-translate-y-0.5"
           >
             <Github className="size-4.5" />
           </a>

@@ -4,6 +4,35 @@ All notable changes to **myip** are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.2.1] — 2026-09-15
+
+### Fixed — mobile responsive layout (cards overflowing the screen)
+
+- **Root cause:** CSS grid items default to `min-width: auto`, so a single
+  card containing a long unbreakable string inflated the whole grid track.
+  On a 390 px phone the User-Agent card forced an **826 px** track — every
+  card in the Basic-info section stretched past the left edge of the screen
+  (RTL), and long IPv6 history entries pushed the Tools cards out the same
+  way.
+  - `SectionCard` now carries `min-w-0`: every section grid keeps its cards
+    at container width on any screen; long content truncates or wraps
+    *inside* the card instead of blowing out the layout.
+  - `CopyChip` gets `min-w-0` so chips used as flex items (IP history rows,
+    InfoRow values) can shrink below their content and ellipsize.
+- **Compare tool on phones:** result blocks stack in one column below `sm`
+  (side-by-side above), the summary pills row uses `sm:col-span-2` (the old
+  unconditional `col-span-2` forced a phantom second column that squeezed
+  the two IP cards to ~97 px / ~215 px), ISP names ellipsize via
+  `block truncate` instead of painting across the card border, and both
+  inputs get `min-w-0` for very narrow screens.
+- **Header on narrow phones (≤ 360 px):** the search box can now shrink
+  (`min-w-0` on its wrapper) and the GitHub icon hides below `sm` (it stays
+  available in the hero and footer), so nothing pokes past the viewport —
+  verified at 390 px, 375 px-class and 320 px.
+- Verified: 0 layout offenders and `scrollWidth === viewport` on 390 px &
+  320 px, FA (RTL) and EN (LTR), with long-IPv6 history + IPv6 compare
+  results; desktop 1280 px unchanged (2-column grids, full-width API card).
+
 ## [1.2.0] — 2026-09-15
 
 ### Changed — single-page report (tabs removed)
