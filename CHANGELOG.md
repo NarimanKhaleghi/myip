@@ -4,6 +4,36 @@ All notable changes to **myip** are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.2.0] — 2026-09-15
+
+### Changed — single-page report (tabs removed)
+
+- **No more tab switching:** all five report sections — Overview, Geolocation,
+  Network & ISP, Security, Tools — now render stacked on ONE page, ordered by
+  importance to the visitor. Everything is visible, scrollable and printable
+  in one pass (the print/PDF export now captures the full report instead of
+  just the active tab).
+  - New `src/components/myip/report-sections.tsx` — numbered engineering
+    section headers (01–05, kicker + Lalezar display title + one-line
+    description) wrapping the existing section components unchanged.
+  - **Sticky jump-nav** below the main header: five anchor links
+    (`#info`…`#tools`) with scroll-spy highlighting, horizontal-scrollable on
+    mobile, RTL-aware. It sticks only while the report area is in view.
+    Clicking a link highlights it immediately and locks the spy for the
+    duration of the smooth scroll (dynamic content can shift section
+    positions mid-scroll).
+  - `src/components/myip/tabs.tsx` and the unused `ui/tabs.tsx` were removed;
+    per-section loading skeletons, fade-ins and all data flows are unchanged.
+  - Sections get `scroll-mt-28` so anchor jumps land below the sticky bars.
+- **Phantom-overflow guard:** `html { overflow-x: clip }` — the footer
+  marquee's animated items inside `overflow:hidden` still inflate
+  `documentElement.scrollWidth` in Chromium (RTL), which made tooling report
+  a 452px horizontal "overflow" at 390px that users could never actually
+  scroll (verified by a programmatic scroll probe). Clipping the root kills
+  even the metric.
+- README (en/fa): new "Single-page report" feature row, tab wording updated,
+  fresh monochrome screenshots of the new layout.
+
 ## [1.1.1] — 2026-09-15
 
 ### Fixed — true IPv4 detection on dual-stack networks & long-IP layout

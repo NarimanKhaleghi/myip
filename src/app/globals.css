@@ -137,6 +137,10 @@ html:not(.dark) {
   html {
     font-family: var(--f-body);
     scroll-behavior: smooth;
+    /* Phantom scrollWidth guard: the footer marquee's animated (transformed)
+       items sit inside overflow:hidden but Chromium still counts them in the
+       root scroll area — clipping the root kills even the metric. */
+    overflow-x: clip;
   }
   html.lang-en {
     font-family: var(--font-inter), var(--font-vazirmatn), system-ui, sans-serif;

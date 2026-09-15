@@ -53,6 +53,7 @@ The project is **fully open source (MIT)**, **bilingual (فارسی + English)**
 | ⚡ **Edge-native** | Runs on Cloudflare Workers (OpenNext + Next.js 16) — served from the datacenter closest to each visitor |
 | 🔢 **Full IPv4 + IPv6** | True dual-stack detection: your real public IPv4 is probed via 6 racing IPv4-only endpoints (1.1.1.1, icanhazip, ip.sb, ident.me, wtfismyip, ipify) — correct even when the browser connects over IPv6 — plus your IPv6 address, and lookups for any IPv4/IPv6 address |
 | 🧠 **Multi-source aggregation** | Merges **5 free API providers** in parallel (fail-soft), so a single dead API never breaks a lookup |
+| 📄 **Single-page report** | All five sections — Overview, Geolocation, Network & ISP, Security, Tools — stacked on one page in order of importance, with a sticky jump-nav (scroll-spy). No tab switching; everything visible & printable |
 | 🗺 **Live map & geo data** | Leaflet + OpenStreetMap (grayscale tiles), coordinates, timezone with a live local clock, currency, calling code, capital, borders |
 | 🏢 **Network intelligence** | ASN / ASN number / organization, ISP, reverse DNS (PTR), hosting vs residential classification, RIR + WHOIS + BGP links |
 | 🛡 **Security report** | Proxy / VPN / hosting / mobile detection, heuristic risk score (0–100), **6 DNSBL blacklists** (SpamCop, SORBS, Spamhaus ZEN, Barracuda, DroneBL …) via DNS-over-HTTPS |
@@ -287,7 +288,7 @@ myip is deliberately **strictly monochrome**: only `#0a0a0a` and `#f5f5f5` (plus
 | Hard shadows | `4px 4px 0` offset | hover/press states — no blur |
 | Status = pattern | filled / hatched / dashed | ok / alert / unknown — never color |
 | Blueprint grid | 72px background grid + 4% grain | the "engineering paper" feel |
-| Invert-on-hover | fg↔bg swap + `translate(-2px,-2px)` | buttons, tabs, chips |
+| Invert-on-hover | fg↔bg swap + `translate(-2px,-2px)` | buttons, section links, chips |
 | Custom cursor | dot + ring, `mix-blend-mode: difference` | desktop only, motion-safe |
 
 The full token set lives in [`src/app/globals.css`](src/app/globals.css).
@@ -362,7 +363,7 @@ No. There is no database and no request logging. The only persistence is your ow
 <details>
 <summary><b>How do I hide my IP?</b></summary>
 
-Use a reputable VPN, the Tor Browser, or a proxy — in that order of convenience. Then re-run the security tab on myip to see what still leaks (WebRTC is a common one).
+Use a reputable VPN, the Tor Browser, or a proxy — in that order of convenience. Then re-check the Security section on myip to see what still leaks (WebRTC is a common one).
 </details>
 
 <details>

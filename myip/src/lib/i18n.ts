@@ -45,12 +45,21 @@ export const UI = {
     timezone: "منطقه زمانی",
     unknown: "نامشخص",
 
-    // Tabs
+    // Tabs / report sections
     tabInfo: "اطلاعات پایه",
     tabGeo: "جغرافیا و نقشه",
     tabNetwork: "شبکه و ISP",
     tabSecurity: "امنیت و اعتبارسنجی",
     tabTools: "ابزارها",
+
+    // Single-page report sections
+    secReportKicker: "گزارش کامل IP",
+    secJumpTo: "پرش به بخش گزارش",
+    secInfoDesc: "مشخصات اصلی آدرس IP، فرمت‌های عددی، مرورگر و هدرهای درخواست شما — همه در یک نگاه.",
+    secGeoDesc: "موقعیت جغرافیایی روی نقشه زنده، منطقه زمانی با ساعت محلی و اطلاعات کامل کشور.",
+    secNetworkDesc: "ارائه‌دهنده اینترنت، شماره ASN، سازمان مالک و منابع خارجی WHOIS و BGP.",
+    secSecurityDesc: "تشخیص پروکسی و VPN، امتیاز ریسک، بلک‌لیست‌های DNSBL و تست نشت WebRTC.",
+    secToolsDesc: "مقایسه دو IP، تاریخچه استعلام‌ها، تست سرعت، خروجی گرفتن و مستندات API.",
 
     // Info tab
     basicInfo: "اطلاعات پایه IP",
@@ -251,6 +260,15 @@ export const UI = {
     tabNetwork: "Network & ISP",
     tabSecurity: "Security",
     tabTools: "Tools",
+
+    // Single-page report sections
+    secReportKicker: "FULL IP REPORT",
+    secJumpTo: "Jump to report section",
+    secInfoDesc: "Core identity of the IP address, numeric formats, your browser and request headers — all at a glance.",
+    secGeoDesc: "Geolocation on the live map, timezone with a local clock and full country details.",
+    secNetworkDesc: "Internet provider, ASN, owning organization and external WHOIS/BGP resources.",
+    secSecurityDesc: "Proxy/VPN detection, risk score, DNSBL blacklists and the WebRTC leak test.",
+    secToolsDesc: "Compare two IPs, lookup history, speed test, data export and API docs.",
 
     basicInfo: "Basic IP info",
     ipFormats: "IP display formats",

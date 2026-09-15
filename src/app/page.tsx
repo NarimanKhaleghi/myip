@@ -1,11 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useSyncExternalStore } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Header } from "@/components/myip/header";
 import { Hero } from "@/components/myip/hero";
 import { QuickStats, SourcesBar } from "@/components/myip/quick-stats";
-import { InfoTabs } from "@/components/myip/tabs";
+import { ReportSections } from "@/components/myip/report-sections";
 import { SeoContent, Faq } from "@/components/myip/seo-content";
 import { Footer } from "@/components/myip/footer";
 import { useIPInfo, useSelfIP, haversineKm } from "@/components/myip/hooks";
@@ -46,7 +46,6 @@ function navigateTarget(ip: string | null) {
 }
 
 function App() {
-  const [activeTab, setActiveTab] = useState("info");
   const target = useSyncExternalStore(
     subscribeUrl,
     getUrlTarget,
@@ -123,25 +122,25 @@ function App() {
         <QuickStats info={info} isLoading={isLoading} />
         <SourcesBar sources={info?.sourcesUsed ?? []} />
 
-        <div className="mx-auto max-w-6xl px-4 py-8 sm:py-10">
+        <div className="flex-1">
           {isError ? (
-            <div className="border-[1.5px] border-border bg-card p-8 text-center space-y-3 shadow-[8px_8px_0_var(--shadow)]">
-              <p className="font-bold">Failed to load IP data</p>
-              <button
-                onClick={() => window.location.reload()}
-                className="text-sm font-bold underline underline-offset-4"
-              >
-                Retry
-              </button>
+            <div className="mx-auto max-w-6xl px-4 py-10">
+              <div className="border-[1.5px] border-border bg-card p-8 text-center space-y-3 shadow-[8px_8px_0_var(--shadow)]">
+                <p className="font-bold">Failed to load IP data</p>
+                <button
+                  onClick={() => window.location.reload()}
+                  className="text-sm font-bold underline underline-offset-4"
+                >
+                  Retry
+                </button>
+              </div>
             </div>
           ) : (
-            <InfoTabs
+            <ReportSections
               info={info}
               isLoading={isLoading}
               userCoords={userCoords}
               distanceKm={distanceKm}
-              activeTab={activeTab}
-              onTabChange={setActiveTab}
             />
           )}
         </div>

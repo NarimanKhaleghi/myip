@@ -138,3 +138,24 @@ Stage Summary:
 - "Your IP" now always shows the visitor's real public IPv4 (like ipnumberia/ipmyp) even on dual-stack networks where the browser connects over IPv6; IPv6 shown as secondary line; IPv6-only networks fall back to server connection IP.
 - Long IPv6 addresses wrap inside the hero card — no more horizontal overflow / broken layout (desktop + mobile RTL verified).
 - Deliverables refreshed: /home/z/my-project/download/myip/ + myip-github-repo.zip (v1.1.1, worker + static builds re-validated).
+
+---
+Task ID: 6
+Agent: Super Z (main)
+Task: Remove the tab-based report UI — render all five sections (Overview, Geolocation, Network & ISP, Security, Tools) on ONE clean, ordered single page per user request.
+
+Work Log:
+- Replaced tabs with a continuous single-page report: new src/components/myip/report-sections.tsx with numbered engineering headers (01–05 kicker + Lalezar display title + one-line FA/EN description) wrapping the five existing section components unchanged (zero changes to their internals → zero data-flow regressions). Sections ordered by user importance: info → geo → network → security → tools, spaced space-y-14/16, anchor ids #info…#tools with scroll-mt-28.
+- Sticky jump-nav under the main header (top-16, sticks only while report area in view): 5 anchor links, numbered mono chips, invert-on-active, scroll-spy (rAF-throttled passive scroll listener, line = scrollY+150), horizontal scroll on mobile, RTL-aware, aria-label. Click → immediate active + 900ms spy lock (dynamic map/DNSBL content shifts sections mid-smooth-scroll; verified toolsTop landed exactly 112px = scroll-mt-28).
+- Removed myip/tabs.tsx + unused ui/tabs.tsx (verified no other importers); page.tsx lost activeTab state, error block restyled into the new flow.
+- i18n: added secReportKicker/secJumpTo/secInfoDesc…secToolsDesc (fa+en); tab* keys reused as section titles.
+- Investigated mobile scrollWidth 842px @390px: NOT a real overflow — DOM walk found 0 unclipped offenders; programmatic scrollBy probe moved 0px; cause = footer marquee's transformed items inside overflow:hidden inflating documentElement.scrollWidth (Chromium RTL quirk). Added html{overflow-x:clip} guard (metric hygiene; body clip already prevented user scrolling).
+- E2E (agent-browser, dev server): all 5 sections + 0 [role=tab] nodes on one page; nav spy + anchor click verified (desktop + mobile 390 RTL, nav scrolls horizontally); long-IPv6 regression overflow-safe; FA↔EN toggle (EN titles: Overview/Geolocation/Network & ISP/Security/Tools, dir=ltr); no page errors. Static GitHub Pages build served at /myip/: sections render, anchor lands /myip/#security at 112px, assets OK, real IPv4 in slab.
+- VLM visual review: 8.5/10 — sections stacked cleanly with numbered headers, sticky nav visible desktop+mobile, no overlaps/cut-offs/misalignment. (Its "red 1 Issue button" note = agent-browser extension overlay, not the site. Pixel audit: visible-saturation 0.42%/0.19% = grain noise residue only, visually pure monochrome.)
+- README.md/README_FA.md: new "Single-page report / گزارش تک‌صفحه‌ای" feature row, "security tab"→section wording, design table tabs→section links; regenerated monochrome docs/screenshot-dark.png + screenshot-light.png (1280x1600, new layout).
+- Version 1.1.1 → 1.2.0; CHANGELOG 1.2.0 entry; synced root → myip/ + download/myip/ (with tabs.tsx deletions); mirror re-validated: npx opennextjs-cloudflare build SUCCESS + BUILD_TARGET=static build SUCCESS; myip-github-repo.zip regenerated (1.8 MB, 101 entries).
+
+Stage Summary:
+- Report is now a single scrollable page: every section visible at once in importance order, numbered engineering headers, sticky scroll-spy jump-nav, fully printable in one pass.
+- No tabs anywhere (component + unused shadcn tabs removed); all data flows, loading skeletons and features unchanged.
+- Both deploy targets re-validated (Workers + GitHub Pages static); deliverables refreshed at /home/z/my-project/download/myip/ + myip-github-repo.zip (v1.2.0).
