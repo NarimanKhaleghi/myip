@@ -19,6 +19,7 @@ import { SectionCard, Pill, Shimmer, CopyChip, InfoRow } from "./ui-bits";
 import { useI18n } from "./i18n-provider";
 import { useIPInfo, haversineKm } from "./hooks";
 import { isIP } from "@/lib/ip-utils";
+import { IS_STATIC_BUILD, API_BASE_URL } from "@/lib/static-mode";
 import type { IPInfo } from "./types";
 
 export function TabTools({ info, userCoords }: { info?: IPInfo; userCoords?: { lat: number; lon: number } | null }) {
@@ -240,12 +241,17 @@ function SpeedTest() {
     setPing(null);
     setSpeed(null);
 
-    // 1) Latency — 5 requests to our health endpoint, take the median
+    // 1) Latency — 5 requests, take the median. On the static build we ping
+    // the Cloudflare CDN directly (CORS enabled); on the server build we ping
+    // our own health endpoint.
+    const pingUrl = IS_STATIC_BUILD
+      ? `https://speed.cloudflare.com/__down?bytes=0&_=${Date.now()}`
+      : `/api/v1/health?_=${Date.now()}`;
     const pings: number[] = [];
     for (let i = 0; i < 5; i++) {
       const t0 = performance.now();
       try {
-        await fetch(`/api/v1/health?_=${Date.now()}`, { cache: "no-store" });
+        await fetch(pingUrl, { cache: "no-store" });
         pings.push(performance.now() - t0);
       } catch {
         /* ignore */
@@ -276,7 +282,9 @@ function SpeedTest() {
 
   return (
     <SectionCard title={t("toolSpeed")} icon={<Gauge className="size-4" />} className="fade-in fade-in-2">
-      <p className="text-[11px] text-muted-foreground mb-3">{t("speedHint")}</p>
+      <p className="text-[11px] text-muted-foreground mb-3">
+        {IS_STATIC_BUILD ? t("speedHintStatic") : t("speedHint")}
+      </p>
       <Button onClick={run} disabled={state === "running"} size="sm" className="gap-2 mb-4">
         <Gauge className={`size-4 ${state === "running" ? "animate-pulse" : ""}`} />
         {state === "running" ? t("testing") : t("startTest")}
@@ -419,15 +427,16 @@ function ApiDocs({ info }: { info?: IPInfo }) {
     : "{ … }";
 
   const endpoints = [
-    { method: "GET", path: "/api/v1/ip", desc: t("yourIp") },
-    { method: "GET", path: `/api/v1/ip/${info?.ip ?? "{address}"}`, desc: t("search") },
-    { method: "GET", path: `/api/v1/dnsbl/${info?.ip ?? "{address}"}`, desc: t("blacklistCheck") },
-    { method: "GET", path: "/api/v1/health", desc: "status" },
+    { method: "GET", path: `${API_BASE_URL}/api/v1/ip`, desc: t("yourIp") },
+    { method: "GET", path: `${API_BASE_URL}/api/v1/ip/${info?.ip ?? "{address}"}`, desc: t("search") },
+    { method: "GET", path: `${API_BASE_URL}/api/v1/dnsbl/${info?.ip ?? "{address}"}`, desc: t("blacklistCheck") },
+    { method: "GET", path: `${API_BASE_URL}/api/v1/health`, desc: "status" },
   ];
 
   return (
     <SectionCard title={t("apiTitle")} icon={<Braces className="size-4" />} className="fade-in fade-in-4 md:col-span-2">
       <p className="text-xs text-muted-foreground mb-3">
+        {IS_STATIC_BUILD && <span className="block mb-1">{t("apiStaticNote")}</span>}
         {t("apiDesc")} <span className="tag--ok">{t("apiNoKey")}</span>
       </p>
       <div className="grid gap-3 md:grid-cols-2">

@@ -71,6 +71,7 @@ export const UI = {
     touch: "صفحه لمسی",
     httpHeaders: "هدرهای HTTP درخواست شما",
     headersHint: "این هدرها مرورگر شما هنگام اتصال به سرور ارسال می‌کند",
+    headersStaticNote: "نسخهٔ استاتیک گیت‌هاب پیج — این اطلاعات مستقیماً از مرورگر شما خوانده می‌شود (بدون سرور)",
 
     // Geo tab
     geoDetails: "جزئیات جغرافیایی",
@@ -163,12 +164,14 @@ export const UI = {
     startTest: "شروع تست",
     testing: "در حال تست…",
     speedHint: "تست تأخیر به سرور و سرعت دانلود از CDN کلادفلر انجام می‌شود",
+    speedHintStatic: "تأخیر و سرعت دانلود مستقیماً از CDN کلادفلر اندازه‌گیری می‌شود",
     apiDocs: "مستندات API عمومی",
 
     // API docs
     apiTitle: "API رایگان و عمومی",
     apiDesc: "می‌توانید از این API در ابزارهای خود استفاده کنید:",
     apiNoKey: "بدون نیاز به کلید API",
+    apiStaticNote: "نمونه‌های زیر مربوط به نسخهٔ اصلی روی Cloudflare Workers هستند:",
     apiExample: "نمونه پاسخ",
 
     // SEO content
@@ -267,6 +270,7 @@ export const UI = {
     touch: "Touchscreen",
     httpHeaders: "Your HTTP request headers",
     headersHint: "These headers are sent by your browser when connecting to the server",
+    headersStaticNote: "GitHub Pages static build — this information is read directly from your browser (no server involved)",
 
     geoDetails: "Geographic details",
     continent: "Continent",
@@ -355,11 +359,13 @@ export const UI = {
     startTest: "Start test",
     testing: "Testing…",
     speedHint: "Latency is measured against our server, download speed against the Cloudflare CDN",
+    speedHintStatic: "Latency and download speed are measured directly against the Cloudflare CDN",
     apiDocs: "Public API documentation",
 
     apiTitle: "Free public API",
     apiDesc: "You can use this API in your own tools:",
     apiNoKey: "No API key required",
+    apiStaticNote: "The examples below refer to the canonical deployment on Cloudflare Workers:",
     apiExample: "Sample response",
 
     articlesTitle: "The complete IP guide",

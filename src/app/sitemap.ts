@@ -1,5 +1,8 @@
 import type { MetadataRoute } from "next";
 
+// Required for the GitHub Pages static export (output: "export").
+export const dynamic = "force-static";
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = "https://myip.thepm.ir";
   const now = new Date();

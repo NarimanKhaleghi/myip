@@ -1,0 +1,23 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: "chore(deps): "
+    groups:
+      radix:
+        patterns: ["@radix-ui/*"]
+      next:
+        patterns: ["next", "eslint-config-next"]
+    ignore:
+      # Next.js must stay within the range supported by @opennextjs/cloudflare
+      - dependency-name: next
+        update-types: ["version-update:minor"]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: "chore(ci): "

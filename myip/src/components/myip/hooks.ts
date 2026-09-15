@@ -3,6 +3,12 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import type { IPExtra, IPInfo, HeadersInfo, DualStack } from "./types";
+import { IS_STATIC_BUILD } from "@/lib/static-mode";
+import {
+  clientLookupIP,
+  clientLookupExtra,
+  clientBrowserHeaders,
+} from "@/lib/client-lookup";
 
 /** Aggregated lookup for a given IP (or the caller's own IP when null). */
 export function useIPInfo(
@@ -12,6 +18,10 @@ export function useIPInfo(
   return useQuery<IPInfo>({
     queryKey: ["ip-info", target ?? "self"],
     queryFn: async () => {
+      // Static build (GitHub Pages): aggregate directly from CORS-enabled
+      // public APIs in the browser.
+      if (IS_STATIC_BUILD) return clientLookupIP(target);
+
       const url = target
         ? `/api/v1/ip/${encodeURIComponent(target)}`
         : "/api/v1/ip";
@@ -33,6 +43,9 @@ export function useIPExtra(ip: string | undefined, enabled: boolean) {
   return useQuery<IPExtra>({
     queryKey: ["ip-extra", ip],
     queryFn: async () => {
+      // Static build: DNS-over-HTTPS straight from the browser.
+      if (IS_STATIC_BUILD) return clientLookupExtra(ip!);
+
       const res = await fetch(`/api/v1/dnsbl/${encodeURIComponent(ip!)}`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       return res.json();
@@ -43,11 +56,13 @@ export function useIPExtra(ip: string | undefined, enabled: boolean) {
   });
 }
 
-/** Request headers echoed back. */
+/** Request headers echoed back (browser-visible info on the static build). */
 export function useIPHeaders() {
   return useQuery<HeadersInfo>({
     queryKey: ["ip-headers"],
     queryFn: async () => {
+      if (IS_STATIC_BUILD) return clientBrowserHeaders();
+
       const res = await fetch("/api/v1/headers");
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       return res.json();

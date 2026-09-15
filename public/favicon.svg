@@ -1,13 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#6366F1"/>
-      <stop offset="0.5" stop-color="#8B5CF6"/>
-      <stop offset="1" stop-color="#10B981"/>
-    </linearGradient>
-  </defs>
-  <rect width="64" height="64" rx="14" fill="url(#g)"/>
-  <g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round">
+  <!-- myip — pure black & white mark -->
+  <rect width="64" height="64" rx="14" fill="#0a0a0a"/>
+  <rect x="3.5" y="3.5" width="57" height="57" rx="10.5" fill="none" stroke="#f5f5f5" stroke-width="3"/>
+  <g fill="none" stroke="#f5f5f5" stroke-width="3.5" stroke-linecap="round">
     <circle cx="32" cy="32" r="17"/>
     <path d="M15 32h34"/>
     <path d="M32 15c9 9 9 25 0 34"/>

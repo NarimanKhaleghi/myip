@@ -5,6 +5,7 @@ import { Braces, Info, Binary, MonitorSmartphone } from "lucide-react";
 import { SectionCard, InfoRow, CopyChip, Shimmer } from "./ui-bits";
 import { useI18n } from "./i18n-provider";
 import { useIPHeaders } from "./hooks";
+import { IS_STATIC_BUILD } from "@/lib/static-mode";
 import type { IPInfo, HeadersInfo } from "./types";
 import {
   ipv4ToDecimal,
@@ -214,7 +215,9 @@ function HeadersCard({ data, loading }: { data?: HeadersInfo; loading: boolean }
       icon={<Braces className="size-4" />}
       className="fade-in fade-in-3"
     >
-      <p className="text-[11px] text-muted-foreground mb-3">{t("headersHint")}</p>
+      <p className="text-[11px] text-muted-foreground mb-3">
+        {IS_STATIC_BUILD ? t("headersStaticNote") : t("headersHint")}
+      </p>
       {loading ? (
         <Shimmer className="h-48" />
       ) : (

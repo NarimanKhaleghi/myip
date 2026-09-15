@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { I18nProvider } from "@/components/myip/i18n-provider";
 import { ThemeProvider } from "next-themes";
+import { withBasePath } from "@/lib/static-mode";
 
 const vazirmatn = Vazirmatn({
   variable: "--font-vazirmatn",
@@ -96,10 +97,10 @@ export const metadata: Metadata = {
     images: ["/og-image.png"],
   },
   icons: {
-    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
-    apple: "/apple-touch-icon.png",
+    icon: [{ url: withBasePath("/favicon.svg"), type: "image/svg+xml" }],
+    apple: withBasePath("/apple-touch-icon.png"),
   },
-  manifest: "/manifest.webmanifest",
+  manifest: withBasePath("/manifest.webmanifest"),
   applicationName: "myip.thepm.ir",
   category: "technology",
 };

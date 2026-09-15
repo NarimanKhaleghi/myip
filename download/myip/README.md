@@ -19,12 +19,14 @@
 [![GitHub last commit](https://img.shields.io/github/last-commit/NarimanKhaleghi/myip)](https://github.com/NarimanKhaleghi/myip/commits/main)
 [![License](https://img.shields.io/badge/license-MIT-black?style=flat-square)](https://github.com/NarimanKhaleghi/myip/blob/main/LICENSE)
 [![Cloudflare Workers](https://img.shields.io/badge/Cloudflare-Workers-000000?style=flat-square&logo=cloudflare&logoColor=white)](https://developers.cloudflare.com/workers/)
+[![GitHub Pages](https://img.shields.io/badge/GitHub-Pages-000000?style=flat-square&logo=githubpages&logoColor=white)](https://pages.github.com/)
 [![Next.js 16](https://img.shields.io/badge/Next.js-16-000000?style=flat-square)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-000000?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS 4](https://img.shields.io/badge/Tailwind_CSS-4-000000?style=flat-square)](https://tailwindcss.com/)
 [![OpenNext](https://img.shields.io/badge/OpenNext-Cloudflare-000000?style=flat-square)](https://opennext.js.org/cloudflare)
 
-[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-myip.thepm.ir-000000?style=for-the-badge&labelColor=000000)](https://myip.thepm.ir)
+[![Live Demo — Cloudflare Workers](https://img.shields.io/badge/🌐_Live_Demo-myip.thepm.ir-000000?style=for-the-badge&labelColor=000000)](https://myip.thepm.ir)
+[![Live Demo — GitHub Pages](https://img.shields.io/badge/🐙_GitHub_Pages-myip-000000?style=for-the-badge&labelColor=000000)](https://narimankhaleghi.github.io/myip/)
 
 </div>
 
@@ -140,9 +142,15 @@ Full response in [`docs/sample-response.json`](docs/sample-response.json).
 
 </details>
 
-## 🚀 Deploy Your Own — 3 Ways
+## 🚀 Deploy Your Own — 4 Ways
 
 The whole app is **zero-config**: no database, no environment variables, no API keys. Fork it, connect it, done.
+It builds for **two targets from the same codebase**:
+
+| Target | Runtime | Mode | What you get |
+| --- | --- | --- | --- |
+| **Cloudflare Workers** ⭐ | Edge (300+ locations) | SSR + REST API | Everything: full report, `/api/v1/*`, 24h server cache |
+| **GitHub Pages** | GitHub CDN | Static, client-side | Full UI in the browser: lookups via CORS APIs, DNSBL via DNS-over-HTTPS |
 
 ### 1) Connect the GitHub repo (recommended — full CI/CD)
 
@@ -163,7 +171,7 @@ This is the intended deployment path: **push to `main` → Cloudflare rebuilds &
    git init
    git branch -M main
    git add .
-   git commit -m "feat: myip v1.0.0 — bilingual IP intelligence on Cloudflare Workers"
+   git commit -m "feat: myip v1.1.0 — bilingual IP intelligence on Cloudflare Workers + GitHub Pages"
    git remote add origin https://github.com/NarimanKhaleghi/myip.git   # ← your username
    git push -u origin main
    ```
@@ -195,12 +203,31 @@ Clicking this clones the repo into *your* Cloudflare account and sets up the sam
 ```bash
 git clone https://github.com/NarimanKhaleghi/myip.git
 cd myip
-npm install
-npx wrangler login          # opens a browser to authorize
-npm run deploy:worker       # build + deploy in one step
+bun install            # or: npm install
+npx wrangler login     # opens a browser to authorize
+bun run deploy:worker  # build + deploy in one step
 ```
 
-> **Optional power-ups** (both commented inside `wrangler.jsonc`):
+### 4) GitHub Pages (static, client-side)
+
+A ready-made workflow builds the static export on every push to `main`:
+
+1. Push the repo to GitHub (see step 1 above).
+2. Repo **Settings → Pages → Build and deployment → Source: GitHub Actions**.
+3. Done — every push to `main` (or a manual run from the **Actions** tab) publishes to
+   `https://<username>.github.io/myip/` automatically.
+
+The static build ships the full UI and runs entirely in the visitor's browser: IP data is
+aggregated directly from CORS-enabled public APIs, and DNSBL/PTR checks run over
+DNS-over-HTTPS (`dns.google` / `cloudflare-dns`). Server-only extras (the REST API, echoed
+HTTP headers) fall back gracefully — the UI links them to the canonical Workers deployment.
+To build the static export manually:
+
+```bash
+bun run build:static    # → ./out  (BUILD_TARGET=static, base path /myip)
+```
+
+> **Optional power-ups** for Workers (both commented inside `wrangler.jsonc`):
 > - a **custom domain** (`routes` block) — attach `myip.yourdomain.com`,
 > - a **KV namespace** (`kv_namespaces` block) — cross-isolate cache for even higher hit-rates.
 > The app works perfectly without either of them.
@@ -210,13 +237,14 @@ npm run deploy:worker       # build + deploy in one step
 ```bash
 git clone https://github.com/NarimanKhaleghi/myip.git
 cd myip
-npm install
+bun install            # or: npm install
 
-npm run dev             # Next.js dev server      → http://localhost:3000
-npm run lint            # ESLint (src)
-npm run typecheck       # tsc --noEmit
-npm run build:worker    # full OpenNext Workers build (no Cloudflare account needed)
-npm run preview:worker  # run the real Worker locally on workerd → http://localhost:8787
+bun run dev             # Next.js dev server      → http://localhost:3000
+bun run lint            # ESLint (src)
+bun run typecheck       # tsc --noEmit
+bun run build:worker    # full OpenNext Workers build (no Cloudflare account needed)
+bun run preview:worker  # run the real Worker locally on workerd → http://localhost:8787
+bun run build:static    # static GitHub Pages export → ./out
 ```
 
 `preview:worker` runs the **exact same runtime as production** (Cloudflare workerd) — if it works there, it works deployed.
@@ -238,7 +266,7 @@ flowchart LR
 
 | Layer | Technology |
 |:------|:-----------|
-| **Runtime** | Cloudflare Workers + OpenNext adapter (`nodejs_compat`) |
+| **Runtime** | Cloudflare Workers + OpenNext adapter (`nodejs_compat`) — or fully static on GitHub Pages |
 | **Framework** | Next.js 16 (App Router) · React 19 · TypeScript |
 | **UI** | Tailwind CSS 4 · shadcn/ui (Radix) · Leaflet + OpenStreetMap · qrcode · lucide-react |
 | **Data** | 5 free geo-IP APIs (merged field-by-field) · DoH (dns.google, cloudflare-dns) · ipify (dual-stack) · speed.cloudflare.com |
@@ -246,6 +274,8 @@ flowchart LR
 | **Typefaces** | Vazirmatn (fa) · Inter (en) · JetBrains Mono (IPs) · Lalezar (display) |
 
 Every upstream call has a timeout and **fails soft**: if a provider dies, the report is still served from the remaining sources, and `sourcesFailed` tells you what happened. No single point of failure.
+
+**Dual-target build.** The same codebase produces both artifacts — `bun run build:worker` (SSR Worker) and `bun run build:static` (static export). In the static build, `src/lib/client-lookup.ts` mirrors the server aggregation in the browser: it queries the CORS-enabled providers directly, resolves PTR + DNSBL over DoH, and derives hosting/proxy heuristics from ASN/org keywords. The deployment target is selected at build time via `BUILD_TARGET=static` + `NEXT_PUBLIC_STATIC_BUILD=1` (see `.github/workflows/deploy-pages.yml`).
 
 ## 🎨 Design System — Pure Black & White
 

@@ -83,3 +83,34 @@ Stage Summary:
 - Repo is push-and-forget: connect it in Cloudflare dashboard (build: npx opennextjs-cloudflare build / deploy: npx opennextjs-cloudflare deploy) and every push to main auto-deploys. No env vars, no DB, no keys.
 - Deploy button: https://deploy.workers.cloudflare.com/?url=https://github.com/NarimanKhaleghi/myip
 - Chat delivered 3 step-by-step Persian guides: git push from local machine, Cloudflare Workers Git connection + custom domain + optional KV, Google Search Console submission.
+
+---
+Task ID: 4
+Agent: Super Z (main)
+Task: Fix Cloudflare build failure, add full GitHub Pages support, put README/docs at repo root, full project re-review.
+
+Work Log:
+- Diagnosed CF failure from user's build log: the pushed repo was the WORKSPACE ROOT (858 deps, next 16.1.3, .env, no @opennextjs/cloudflare) → `npx opennextjs-cloudflare build` = "could not determine executable to run".
+- Made the project root itself the push-ready repo:
+  - package.json rewritten: name myip v1.1.0, 16 runtime + 11 dev deps, added @opennextjs/cloudflare 1.20.6 + wrangler (bun install OK, lockfile regenerated, 298 packages). db:push = no-op echo (sandbox dev.sh compatibility). Dev script kept for platform.
+  - Sandbox registry lacks radix-tabs 1.2.x → pinned exact verified versions (tabs 1.1.13 etc.); next 16.1.3→16.3.4 + eslint-config-next 16.3.4 (OpenNext peer >=16.3.3).
+  - Pruned 41 unused shadcn ui components + db.ts + use-mobile.ts; copied public assets (manifest/icons/og) + docs/ from mirror; added wrangler.jsonc, open-next.config.ts, LICENSE, CONTRIBUTING, SECURITY, CHANGELOG, README.md, README_FA.md, comprehensive .gitignore (excludes myip/, download/, upload/, scripts/, tests/, examples/, mini-services/, db/, prisma/, Caddyfile, worklog, .zscripts).
+  - tsconfig excludes workspace dirs (examples/skills/...).
+- GitHub Pages static mode (NEW):
+  - next.config.ts dual-target: BUILD_TARGET=static → output:export + basePath /myip + unoptimized images; else standalone.
+  - src/lib/static-mode.ts (IS_STATIC_BUILD / BASE_PATH / withBasePath / API_BASE_URL) + src/lib/client-lookup.ts (CORS sources: ipwho.is, ipwhois.app, ipinfo.io, ipapi.is — all verified ACAO:*; reuses shared normalize/merge/risk from ip-aggregator; hosting/VPN keyword heuristics; client DoH DNSBL+PTR; browser headers).
+  - hooks.ts branches for static build; tab-tools speed test pings speed.cloudflare.com in static mode, API docs prefixed with canonical URL; tab-info static headers note; footer API link → canonical; app/manifest.ts (replaces static manifest file) with base-path-aware icons/start_url; robots.ts + sitemap.ts force-static (export requirement).
+  - .github/workflows/deploy-pages.yml (bun install → rm api dir → BUILD_TARGET=static build → .nojekyll → upload-pages-artifact → deploy-pages; auto basePath = /<repo-name>).
+  - ci.yml rewritten for bun + fixed Task-3 typo (branches: ain] → [main]).
+- VALIDATION:
+  - Root: lint clean, tsc clean, dev server restarted on next 16.3.4, agent-browser server-mode regression (search 8.8.8.8: ASN 15169, FA country, sources, footer).
+  - Mirror (myip/, exact repo copy): lint+tsc clean; `npx opennextjs-cloudflare build` SUCCESS (the exact failing CF command); workerd preview: / 200, /manifest.webmanifest 200 (fa RTL), /api/v1/health ok, /api/v1/ip/78.39.200.1 full 5-source report.
+  - Static export: BUILD_TARGET=static build SUCCESS (after force-static fixes); served at /myip on :4173; agent-browser E2E: self-IP (client aggregation), search 8.8.8.8 (Google ASN), security tab (Spamhaus/SpamCop via browser DoH, PTR, WebRTC), info tab (browser headers + static note), tools (canonical API docs), geo (9 tiles + marker). All asset/manifest/icon hrefs correctly /myip-prefixed.
+- README.md + README_FA.md updated: GitHub Pages badge + demo badge, "Deploy — 4 Ways" with GH Pages path + dual-target table, architecture dual-build note, bun commands, v1.1.0. CHANGELOG 1.1.0 entry.
+- Deliverables refreshed: /home/z/my-project/download/myip/ (clean repo) + myip-github-repo.zip (2.0 MB).
+
+Stage Summary:
+- ROOT CAUSE FIXED: repo now contains @opennextjs/cloudflare + wrangler + wrangler.jsonc + open-next.config.ts + lockfile in sync → "select repo & deploy" on CF Workers Builds works with npx opennextjs-cloudflare build / deploy.
+- NEW: one-command GitHub Pages deploy via Actions (Settings → Pages → Source: GitHub Actions).
+- README.md/README_FA.md + all docs at repo root for full GitHub display.
+- Verified end-to-end: worker build, workerd runtime, static export, both data modes in browser.

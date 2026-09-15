@@ -2,6 +2,7 @@
 
 import { Globe, Github, Mail, Lock, Code2, Zap, Gift, Star, ExternalLink, FileJson } from "lucide-react";
 import { useI18n } from "./i18n-provider";
+import { API_BASE_URL } from "@/lib/static-mode";
 
 const GITHUB_URL = "https://github.com/NarimanKhaleghi/myip";
 const EMAIL = "pm@thepm.ir";
@@ -139,7 +140,7 @@ export function Footer() {
                 </span>
               </a>
               <a
-                href="/api/v1/ip"
+                href={`${API_BASE_URL}/api/v1/ip`}
                 className="flex items-center gap-2.5 text-muted-foreground hover:text-foreground transition-colors border border-transparent hover:border-border px-2 py-2 hover:bg-muted/50"
               >
                 <FileJson className="size-3.5" />

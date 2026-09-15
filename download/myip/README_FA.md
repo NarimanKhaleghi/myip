@@ -19,12 +19,14 @@
 [![GitHub last commit](https://img.shields.io/github/last-commit/NarimanKhaleghi/myip)](https://github.com/NarimanKhaleghi/myip/commits/main)
 [![License](https://img.shields.io/badge/license-MIT-black?style=flat-square)](https://github.com/NarimanKhaleghi/myip/blob/main/LICENSE)
 [![Cloudflare Workers](https://img.shields.io/badge/Cloudflare-Workers-000000?style=flat-square&logo=cloudflare&logoColor=white)](https://developers.cloudflare.com/workers/)
+[![GitHub Pages](https://img.shields.io/badge/GitHub-Pages-000000?style=flat-square&logo=githubpages&logoColor=white)](https://pages.github.com/)
 [![Next.js 16](https://img.shields.io/badge/Next.js-16-000000?style=flat-square)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-000000?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS 4](https://img.shields.io/badge/Tailwind_CSS-4-000000?style=flat-square)](https://tailwindcss.com/)
 [![OpenNext](https://img.shields.io/badge/OpenNext-Cloudflare-000000?style=flat-square)](https://opennext.js.org/cloudflare)
 
-[![دسترسی آنلاین](https://img.shields.io/badge/🌐_دسترسی_آنلاین-myip.thepm.ir-000000?style=for-the-badge&labelColor=000000)](https://myip.thepm.ir)
+[![دسترسی آنلاین — Cloudflare Workers](https://img.shields.io/badge/🌐_دسترسی_آنلاین-myip.thepm.ir-000000?style=for-the-badge&labelColor=000000)](https://myip.thepm.ir)
+[![نسخه آنلاین — GitHub Pages](https://img.shields.io/badge/🐙_GitHub_Pages-myip-000000?style=for-the-badge&labelColor=000000)](https://narimankhaleghi.github.io/myip/)
 
 </div>
 
@@ -142,9 +144,15 @@ curl https://myip.thepm.ir/api/v1/dnsbl/8.8.8.8
 
 </details>
 
-## 🚀 دیپلوی نسخه خودتان — ۳ روش
+## 🚀 دیپلوی نسخه خودتان — ۴ روش
 
 کل اپلیکیشن **بدون تنظیمات (zero-config)** است: بدون دیتابیس، بدون متغیر محیطی، بدون کلید API. فورک کنید، اتصال بدهید، تمام.
+این پروژه از یک کدبیس واحد برای **دو هدف بیلد** آماده شده است:
+
+| هدف | اجرا | حالت | چه چیزی می‌گیرید |
+| --- | --- | --- | --- |
+| **کلودفلر ورکرز** ⭐ | لبه (۳۰۰+ لوکیشن) | SSR + REST API | همه‌چیز: گزارش کامل، `/api/v1/*`، کش ۲۴ ساعته سرور |
+| **گیت‌هاب پیج** | CDN گیت‌هاب | استاتیک، سمت مرورگر | کل رابط کاربری در مرورگر: استعلام با APIهای CORS، دی‌ان‌اس‌بی‌ال با DNS-over-HTTPS |
 
 ### ۱) اتصال ریپوی گیت‌هاب (پیشنهادی — CI/CD کامل)
 
@@ -168,7 +176,7 @@ cd myip
 git init
 git branch -M main
 git add .
-git commit -m "feat: myip v1.0.0 — bilingual IP intelligence on Cloudflare Workers"
+git commit -m "feat: myip v1.1.0 — bilingual IP intelligence on Cloudflare Workers + GitHub Pages"
 
 # ۴) به ریپوی خودتان وصل و پوش کنید (NarimanKhaleghi را با یوزرنیم خودتان عوض کنید)
 git remote add origin https://github.com/NarimanKhaleghi/myip.git
@@ -208,9 +216,25 @@ gh repo create myip --public --source=. --remote=origin --push
 ```bash
 git clone https://github.com/NarimanKhaleghi/myip.git
 cd myip
-npm install
-npx wrangler login          # مرورگر برای تأیید باز می‌شود
-npm run deploy:worker       # بیلد + دیپلوی در یک مرحله
+bun install            # یا: npm install
+npx wrangler login     # مرورگر برای تأیید باز می‌شود
+bun run deploy:worker  # بیلد + دیپلوی در یک مرحله
+```
+
+### ۴) گیت‌هاب پیج (استاتیک، سمت مرورگر)
+
+یک ورک‌فلو آماده در هر push روی `main` نسخه استاتیک را بیلد و منتشر می‌کند:
+
+1. پروژه را روی گیت‌هاب پوش کنید (مرحله ۱ بالا).
+2. در ریپو: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
+3. تمام — هر push روی `main` (یا اجرای دستی از تب **Actions**) به‌صورت خودکار روی
+   `https://<username>.github.io/myip/` منتشر می‌شود.
+
+نسخه استاتیک کل رابط کاربری را دارد و کاملاً در مرورگر بازدیدکننده اجرا می‌شود: داده‌های IP مستقیماً از APIهای عمومی دارای CORS جمع‌آوری می‌شوند و بررسی‌های PTR و DNSBL از طریق DNS-over-HTTPS انجام می‌شوند (`dns.google` / `cloudflare-dns`). امکانات سمت‌سرور (REST API و هدرهای HTTP) به‌صورت هوشمند محدود می‌شوند و رابط کاربری آنها را به دیپلوی اصلی ورکرز لینک می‌دهد.
+برای بیلد دستی نسخه استاتیک:
+
+```bash
+bun run build:static    # خروجی در ./out (با BUILD_TARGET=static و مسیر پایه /myip)
 ```
 
 > **ارتقاءهای اختیاری** (هر دو داخل `wrangler.jsonc` کامنت شده‌اند):
@@ -223,13 +247,14 @@ npm run deploy:worker       # بیلد + دیپلوی در یک مرحله
 ```bash
 git clone https://github.com/NarimanKhaleghi/myip.git
 cd myip
-npm install
+bun install            # یا: npm install
 
-npm run dev             # سرور توسعه Next.js      → http://localhost:3000
-npm run lint            # ESLint (src)
-npm run typecheck       # tsc --noEmit
-npm run build:worker    # بیلد کامل Workers با OpenNext (بدون نیاز به حساب کلودفلر)
-npm run preview:worker  # اجرای ورکر واقعی به‌صورت محلی روی workerd → http://localhost:8787
+bun run dev             # سرور توسعه Next.js      → http://localhost:3000
+bun run lint            # ESLint (src)
+bun run typecheck       # tsc --noEmit
+bun run build:worker    # بیلد کامل Workers با OpenNext (بدون نیاز به حساب کلودفلر)
+bun run preview:worker  # اجرای ورکر واقعی به‌صورت محلی روی workerd → http://localhost:8787
+bun run build:static    # خروجی استاتیک گیت‌هاب پیج → ./out
 ```
 
 دستور `preview:worker` دقیقاً **همان runtime نسخه پروداکشن** (workerd کلودفلر) را اجرا می‌کند — اگر اینجا کار کرد، دیپلوی‌شده هم کار می‌کند.

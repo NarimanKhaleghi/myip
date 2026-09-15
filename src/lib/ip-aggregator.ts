@@ -73,7 +73,9 @@ function b(v: unknown): boolean | undefined {
 }
 
 /** Normalize one source payload into partial AggregatedIPInfo. */
-function normalize(src: SourceResult): Partial<AggregatedIPInfo> | null {
+export function normalizeSourceResult(
+  src: SourceResult
+): Partial<AggregatedIPInfo> | null {
   if (!src.ok || !src.data) return null;
   const d = src.data;
   switch (src.source) {
@@ -191,7 +193,7 @@ function normalize(src: SourceResult): Partial<AggregatedIPInfo> | null {
 }
 
 /** Risk score 0-100 heuristic from available signals. */
-function computeRiskScore(
+export function computeRiskScore(
   isProxy?: boolean,
   isHosting?: boolean,
   bogon: boolean = false
@@ -203,17 +205,14 @@ function computeRiskScore(
   return Math.min(100, Math.max(0, score));
 }
 
-export async function aggregateIPInfo(ip: string): Promise<AggregatedIPInfo> {
-  const results = await Promise.all(
-    ALL_SOURCES.map(async (src) => {
-      try {
-        return await src.fetch(ip);
-      } catch {
-        return { source: src.name, ok: false } as SourceResult;
-      }
-    })
-  );
-
+/**
+ * Merge per-source results into one unified record (shared by the server
+ * aggregator and the browser-side static-build aggregator).
+ */
+export function mergeSourceResults(
+  ip: string,
+  results: SourceResult[]
+): AggregatedIPInfo {
   const merged: AggregatedIPInfo = {
     ip,
     version: ipVersionOf(ip),
@@ -237,10 +236,10 @@ export async function aggregateIPInfo(ip: string): Promise<AggregatedIPInfo> {
     }
   }
 
-  // Merge with source priority (ALL_SOURCES order = priority order)
+  // Merge with source priority (input order = priority order)
   const target = merged as unknown as Record<string, unknown>;
   for (const r of results) {
-    const partial = normalize(r);
+    const partial = normalizeSourceResult(r);
     if (!partial) continue;
     for (const [key, value] of Object.entries(partial)) {
       if (value === undefined || value === null) continue;
@@ -267,4 +266,18 @@ export async function aggregateIPInfo(ip: string): Promise<AggregatedIPInfo> {
   );
 
   return merged;
+}
+
+export async function aggregateIPInfo(ip: string): Promise<AggregatedIPInfo> {
+  const results = await Promise.all(
+    ALL_SOURCES.map(async (src) => {
+      try {
+        return await src.fetch(ip);
+      } catch {
+        return { source: src.name, ok: false } as SourceResult;
+      }
+    })
+  );
+
+  return mergeSourceResults(ip, results);
 }

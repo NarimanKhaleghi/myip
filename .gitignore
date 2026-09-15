@@ -1,6 +1,6 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
+# ── dependencies ────────────────────────────────────────────────────────────
 node_modules
 /.pnp
 .pnp.*
@@ -10,45 +10,76 @@ node_modules
 !.yarn/releases
 !.yarn/versions
 
-# testing
+# ── testing ─────────────────────────────────────────────────────────────────
 /coverage
 
-# next.js
+# ── next.js ─────────────────────────────────────────────────────────────────
 /.next/
 /out/
+next-env.d.ts
+*.tsbuildinfo
 
-# production
+# ── cloudflare / opennext build output ──────────────────────────────────────
+.open-next/
+.wrangler/
+.dev.vars
+
+# ── production ──────────────────────────────────────────────────────────────
 /build
 
-# misc
+# ── misc ────────────────────────────────────────────────────────────────────
 .DS_Store
 *.pem
 
-# debug
+# ── debug logs ──────────────────────────────────────────────────────────────
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
-
-# env files (can opt-in for committing if needed)
-.env*
-
-# vercel
-.vercel
-
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-local-*
-.claude
-.z-ai-config
 *.log
 dev.log
 dev.out.log
-test
+server.log
+
+# ── env files (never commit secrets) ────────────────────────────────────────
+.env*
+
+# ── vercel ──────────────────────────────────────────────────────────────────
+.vercel
+
+# ── editors / tooling ───────────────────────────────────────────────────────
+.claude
+.z-ai-config
+.cursor
+.idea
+.vscode
+local-*
 prompt
 
-server.log
-# Skills directory
+# ── skills directory (workspace only) ───────────────────────────────────────
 /skills/
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Workspace-only files below — NOT part of the open-source repository.
+# (This project is developed inside a sandboxed workspace; these paths are
+#  local helpers and never belong in the GitHub repo.)
+# ─────────────────────────────────────────────────────────────────────────────
+
+# local database / prisma (unused by this project)
+/prisma/
+/db/
+
+# sandbox helpers, demos and experiments
+/examples/
+/mini-services/
+/scripts/
+/tests/
+/upload/
+/download/
+/myip/
+/.zscripts/
+/.zbackup/
+
+# sandbox gateway + worklog
+/Caddyfile
+/worklog.md
