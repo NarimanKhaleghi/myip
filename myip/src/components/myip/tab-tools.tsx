@@ -104,7 +104,7 @@ function CompareTool() {
         <div className="grid grid-cols-2 gap-3">
           {[infoA, infoB].map((inf, idx) => (
             <div key={idx} className="border border-border bg-muted/40 p-3">
-              <p className="ip-mono num text-sm font-bold text-foreground mb-1">{inf.ip}</p>
+              <p className="ip-mono num text-sm font-bold text-foreground mb-1 [overflow-wrap:anywhere]">{inf.ip}</p>
               <div className="space-y-0.5 text-xs">
                 <InfoRow label={t("country")} value={
                   <span className="flex items-center gap-1.5">

@@ -51,7 +51,7 @@ The project is **fully open source (MIT)**, **bilingual (فارسی + English)**
 | Feature | Description |
 |:--------|:------------|
 | ⚡ **Edge-native** | Runs on Cloudflare Workers (OpenNext + Next.js 16) — served from the datacenter closest to each visitor |
-| 🔢 **Full IPv4 + IPv6** | Dual-stack aware: detects both of your public addresses (via ipify) and looks up any IPv4/IPv6 address |
+| 🔢 **Full IPv4 + IPv6** | True dual-stack detection: your real public IPv4 is probed via 6 racing IPv4-only endpoints (1.1.1.1, icanhazip, ip.sb, ident.me, wtfismyip, ipify) — correct even when the browser connects over IPv6 — plus your IPv6 address, and lookups for any IPv4/IPv6 address |
 | 🧠 **Multi-source aggregation** | Merges **5 free API providers** in parallel (fail-soft), so a single dead API never breaks a lookup |
 | 🗺 **Live map & geo data** | Leaflet + OpenStreetMap (grayscale tiles), coordinates, timezone with a live local clock, currency, calling code, capital, borders |
 | 🏢 **Network intelligence** | ASN / ASN number / organization, ISP, reverse DNS (PTR), hosting vs residential classification, RIR + WHOIS + BGP links |
@@ -261,7 +261,7 @@ flowchart LR
     W --> S4["ipinfo.io"]
     W --> S5["ipapi.is"]
     W -->|"DNS over HTTPS"| DOH["dns.google / cloudflare-dns<br/>PTR + 6 DNSBL zones"]
-    W --> B["🖥 Browser-side extras:<br/>WebRTC leak test · ipify dual-stack · speed test"]
+    W --> B["🖥 Browser-side extras:<br/>WebRTC leak test · racing IPv4/IPv6 self-probes · speed test"]
 ```
 
 | Layer | Technology |
@@ -269,7 +269,7 @@ flowchart LR
 | **Runtime** | Cloudflare Workers + OpenNext adapter (`nodejs_compat`) — or fully static on GitHub Pages |
 | **Framework** | Next.js 16 (App Router) · React 19 · TypeScript |
 | **UI** | Tailwind CSS 4 · shadcn/ui (Radix) · Leaflet + OpenStreetMap · qrcode · lucide-react |
-| **Data** | 5 free geo-IP APIs (merged field-by-field) · DoH (dns.google, cloudflare-dns) · ipify (dual-stack) · speed.cloudflare.com |
+| **Data** | 5 free geo-IP APIs (merged field-by-field) · DoH (dns.google, cloudflare-dns) · 6+6 racing self-IP probes (v4-only/v6-only endpoints) · speed.cloudflare.com |
 | **Caching** | 24h in-memory lookup cache (per isolate) — KV optional |
 | **Typefaces** | Vazirmatn (fa) · Inter (en) · JetBrains Mono (IPs) · Lalezar (display) |
 

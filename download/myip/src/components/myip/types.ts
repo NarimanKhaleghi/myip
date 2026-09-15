@@ -59,7 +59,11 @@ export interface HeadersInfo {
   headers: Record<string, string>;
 }
 
-export interface DualStack {
+export interface SelfIPState {
   ipv4: string | null;
   ipv6: string | null;
+  /** IPv4 probe settled — the own-IP report can start. */
+  ready: boolean;
+  /** IPv6 probe settled — controls the hero's "detecting" hint. */
+  v6Ready: boolean;
 }

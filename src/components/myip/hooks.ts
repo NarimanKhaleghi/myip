@@ -2,19 +2,34 @@
 
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import type { IPExtra, IPInfo, HeadersInfo, DualStack } from "./types";
+import type { IPExtra, IPInfo, HeadersInfo, SelfIPState } from "./types";
 import { IS_STATIC_BUILD } from "@/lib/static-mode";
 import {
   clientLookupIP,
   clientLookupExtra,
   clientBrowserHeaders,
 } from "@/lib/client-lookup";
+import { detectSelfIPv4, detectSelfIPv6 } from "@/lib/self-ip";
 
-/** Aggregated lookup for a given IP (or the caller's own IP when null). */
+/**
+ * Aggregated lookup for a given IP (or the caller's own IP when null).
+ *
+ * `opts.enabled` lets the caller hold the "self" query until client-side
+ * IPv4 detection has settled, so the report is keyed to the visitor's real
+ * public IPv4 instead of whichever protocol the browser happened to use
+ * to reach us (IPv6 on dual-stack networks).
+ */
 export function useIPInfo(
   target: string | null,
-  opts?: { onlyExplicit?: boolean }
+  opts?: { onlyExplicit?: boolean; enabled?: boolean }
 ) {
+  const enabled =
+    opts?.enabled !== undefined
+      ? opts.enabled
+      : opts?.onlyExplicit
+        ? target !== null
+        : true;
+
   return useQuery<IPInfo>({
     queryKey: ["ip-info", target ?? "self"],
     queryFn: async () => {
@@ -32,7 +47,7 @@ export function useIPInfo(
       }
       return res.json();
     },
-    enabled: opts?.onlyExplicit ? target !== null : true,
+    enabled,
     staleTime: 10 * 60 * 1000,
     retry: 1,
   });
@@ -72,43 +87,39 @@ export function useIPHeaders() {
   });
 }
 
-/** Client-side dual-stack detection via ipify (v4 + v6). */
-export function useDualStack(enabled: boolean): DualStack & { loading: boolean } {
-  const [state, setState] = useState<DualStack & { loading: boolean }>({
+/**
+ * Client-side self-IP detection (multi-source racing, see lib/self-ip.ts).
+ *
+ * `ready` flips once the IPv4 probe settles — that is the signal the rest
+ * of the app waits for before firing the "own IP" report. `v6Ready` flips
+ * independently (IPv6-only probes can take the full timeout to fail on
+ * IPv4-only networks) and only drives the hero's IPv6 hint line.
+ */
+export function useSelfIP(): SelfIPState {
+  const [state, setState] = useState<SelfIPState>({
     ipv4: null,
     ipv6: null,
-    loading: true,
+    ready: false,
+    v6Ready: false,
   });
 
   useEffect(() => {
-    if (!enabled) return;
     let cancelled = false;
 
-    const fetchJSON = async (url: string): Promise<string | null> => {
-      try {
-        const c = new AbortController();
-        const t = setTimeout(() => c.abort(), 6000);
-        const res = await fetch(url, { signal: c.signal, cache: "no-store" });
-        clearTimeout(t);
-        const json = await res.json();
-        return typeof json.ip === "string" ? json.ip : null;
-      } catch {
-        return null;
-      }
-    };
+    detectSelfIPv4().then((ipv4) => {
+      if (cancelled) return;
+      setState((s) => ({ ...s, ipv4, ready: true }));
+    });
 
-    (async () => {
-      const [v4, v6] = await Promise.all([
-        fetchJSON("https://api-ipv4.ipify.org?format=json"),
-        fetchJSON("https://api-ipv6.ipify.org?format=json"),
-      ]);
-      if (!cancelled) setState({ ipv4: v4, ipv6: v6, loading: false });
-    })();
+    detectSelfIPv6().then((ipv6) => {
+      if (cancelled) return;
+      setState((s) => ({ ...s, ipv6, v6Ready: true }));
+    });
 
     return () => {
       cancelled = true;
     };
-  }, [enabled]);
+  }, []);
 
   return state;
 }

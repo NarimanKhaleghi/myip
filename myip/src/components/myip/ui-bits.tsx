@@ -96,7 +96,7 @@ export function CopyChip({
       {label && <span className="text-xs text-muted-foreground shrink-0 group-hover:text-background/70">{label}</span>}
       <span
         className={cn(
-          "text-sm truncate",
+          "text-sm truncate min-w-0",
           mono && "ip-mono num"
         )}
       >
@@ -134,7 +134,7 @@ export function InfoRow({
   return (
     <div className="flex items-center justify-between gap-3 py-2 border-b border-border/60 last:border-0">
       <span className="text-xs text-muted-foreground shrink-0">{label}</span>
-      <span className={cn("text-sm text-end font-medium", mono && "ip-mono num")}>
+      <span className={cn("text-sm text-end font-medium min-w-0 [overflow-wrap:anywhere]", mono && "ip-mono num")}>
         {value === undefined || value === null || value === "" ? "—" : value}
       </span>
     </div>

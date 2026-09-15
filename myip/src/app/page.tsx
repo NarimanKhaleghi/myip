@@ -8,7 +8,7 @@ import { QuickStats, SourcesBar } from "@/components/myip/quick-stats";
 import { InfoTabs } from "@/components/myip/tabs";
 import { SeoContent, Faq } from "@/components/myip/seo-content";
 import { Footer } from "@/components/myip/footer";
-import { useIPInfo, haversineKm } from "@/components/myip/hooks";
+import { useIPInfo, useSelfIP, haversineKm } from "@/components/myip/hooks";
 import { pushHistory } from "@/components/myip/tab-tools";
 import { CursorFx } from "@/components/myip/cursor-fx";
 import { isIP } from "@/lib/ip-utils";
@@ -53,11 +53,37 @@ function App() {
     () => null
   );
 
+  /*
+   * Self-IP detection (client-side, IPv4-only endpoints — see
+   * lib/self-ip.ts). On dual-stack networks the browser reaches us over
+   * IPv6, so the server's connection IP is the visitor's IPv6 address.
+   * The visitor's real public IPv4 is probed in the browser instead, and
+   * the whole "own IP" report is keyed to it — matching what classic IP
+   * tools (ipnumberia & co.) show.
+   *
+   * `ownIP` is tri-state:
+   *   undefined → detection still running (own-IP queries on hold)
+   *   null      → no IPv4 route (IPv6-only network) → server fallback
+   *   "1.2.3.4" → real public IPv4 → explicit lookup
+   */
+  const self = useSelfIP();
+  const ownIP = self.ready ? self.ipv4 : undefined;
+
   // The always-on "self" query powers history + distance reference.
   // React Query dedupes it with the visible query when target === null.
-  const { data: ownInfo } = useIPInfo(null);
-  const { data: info, isLoading, isError } = useIPInfo(target);
+  const { data: ownInfo } = useIPInfo(ownIP ?? null, {
+    enabled: ownIP !== undefined,
+  });
+
   const isOwn = target === null;
+  const visibleTarget = isOwn ? (ownIP ?? null) : target;
+  const { data: info, isLoading: rawLoading, isError } = useIPInfo(
+    visibleTarget,
+    { enabled: isOwn ? ownIP !== undefined : true }
+  );
+  // While self-detection is running the report is intentionally on hold so
+  // the page never flashes an IPv6-keyed report before the real IPv4 lands.
+  const isLoading = isOwn ? !self.ready || rawLoading : rawLoading;
 
   // Persist own IP into local history (pure external side effect, no setState).
   useEffect(() => {
@@ -93,7 +119,7 @@ function App() {
       <CursorFx />
       <Header onSearch={onSearch} onReset={onReset} isOwnIp={isOwn} />
       <main className="flex-1">
-        <Hero info={info} isLoading={isLoading} isOwn={isOwn} />
+        <Hero info={info} isLoading={isLoading} isOwn={isOwn} self={self} />
         <QuickStats info={info} isLoading={isLoading} />
         <SourcesBar sources={info?.sourcesUsed ?? []} />
 

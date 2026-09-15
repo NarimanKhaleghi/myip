@@ -1,6 +1,6 @@
 {
   "name": "myip",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "private": true,
   "description": "myip.thepm.ir — Free & open-source IP intelligence platform. Bilingual (فارسی/English), pure black & white design, deploys to Cloudflare Workers and GitHub Pages.",
   "scripts": {

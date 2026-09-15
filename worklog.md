@@ -114,3 +114,27 @@ Stage Summary:
 - NEW: one-command GitHub Pages deploy via Actions (Settings → Pages → Source: GitHub Actions).
 - README.md/README_FA.md + all docs at repo root for full GitHub display.
 - Verified end-to-end: worker build, workerd runtime, static export, both data modes in browser.
+
+---
+Task ID: 5
+Agent: Super Z (main)
+Task: Fix wrong IPv6 shown as "your IP" on dual-stack networks (user sees 2a01:5ec0:... instead of real IPv4 5.112.129.46) + fix page layout breaking when a long IPv6 overflows the hero card from the left (RTL).
+
+Work Log:
+- Root cause 1 (wrong IP): the whole own-IP report was keyed to the server's CF-Connecting-IP — on dual-stack networks (Irancell etc.) the browser connects over IPv6, so the report showed the visitor's IPv6. The old useDualStack (single-source ipify) only patched the hero number and ipify itself is unreachable from some networks (verified: ipify times out from this sandbox), making the UI fall back to the wrong IPv6.
+- Root cause 2 (layout): hero IP slab (text-7xl, no max-width, no wrap) could not fit a 39-char IPv6 → horizontal overflow (left side on RTL) breaking the page.
+- NEW src/lib/self-ip.ts: multi-source racing self-IP detection. IPv4 probes (IPv4-only endpoints, connection itself guarantees family): 1.1.1.1/cdn-cgi/trace (IP literal, CORS *), ipv4.icanhazip.com, api-ipv4.ip.sb, v4.ident.me, ipv4.wtfismyip.com, api-ipv4.ipify.org — all curl-verified ACAO:*. IPv6 probes: [2606:4700:4701::1111] literal trace + 5 v6-only hostnames. First valid answer wins (strict isIPv4/isIPv6 validation), losers aborted, 4s timeout, module-level promise caches, SSR-guarded.
+- hooks.ts: useDualStack → useSelfIP (ipv4-gated `ready` + independent `v6Ready`); useIPInfo gained `enabled` gate. types.ts: DualStack → SelfIPState.
+- page.tsx: tri-state ownIP (undefined=detecting/hold queries, null=no IPv4 route→server fallback, string=real IPv4→explicit /api/v1/ip/{v4} lookup) — the ENTIRE report (hero, stats, tabs, map, security, history) is now keyed to the real public IPv4; isLoading covers the detection hold so no IPv6-keyed flash.
+- hero.tsx: mainIP = self.ipv4 ?? info.ip; dynamic slab sizing by address length (≤16 / ≤30 / >30 chars) + max-w-full + [overflow-wrap:anywhere] + dir="ltr"; IPv6 line deduped vs slab; QR title wrap-safe.
+- Overflow-proofing: ui-bits CopyChip min-w-0 + InfoRow value [overflow-wrap:anywhere]; tab-tools compare card IP wrap; globals.css body overflow-x: clip (sticky-safe).
+- E2E (agent-browser, in-session dev server): self load → slab 8.212.10.159 (real IPv4), kicker IPV4, report fetched via EXPLICIT /api/v1/ip/8.212.10.159 (not bare self) ✓; long IPv6 2a01:5ec0:1004:3a64:502f:9b2f:30a4:2c1 → slabFits true + overflowX 0 on desktop 1280 AND mobile 390 RTL ✓ (VLM visual review: wraps neatly, layout intact); fallback test with ALL 7 probe domains network-blocked → falls back to bare /api/v1/ip, renders ::1 (localhost connection IP), zero errors ✓; 8.8.8.8 regression ✓.
+- Static (GitHub Pages) E2E: build:static with api/ removed (as the workflow does), out/ nested under /myip like Pages artifact → hero shows real IPv4 47.57.242.119, assetsOk true, 0 errors. Also confirmed out/ structure is correct for upload-pages-artifact (artifact root = /myip mount).
+- Mirror validation: myip/ copy — npx opennextjs-cloudflare build SUCCESS (exact CF command); BUILD_TARGET=static build SUCCESS. lint + tsc clean on root.
+- Workflow "branches: ain]" investigation: FALSE ALARM — display layer of this sandbox eats the literal sequence "[m" (ANSI-reset-like), so "[main]" RENDERS as "ain]" in tool outputs. Byte-level verification (od + char codes) proves all 6 workflow copies contain branches: [main]. Previous worklog's "typo fix ain]→ain]" was the same artifact. No real bug.
+- Version 1.1.0 → 1.1.1; CHANGELOG 1.1.1 entry; README.md + README_FA.md feature/architecture rows updated (racing self-IP probes instead of ipify). Synced root → myip/ + download/myip/; myip-github-repo.zip regenerated (1.9 MB, 102 entries).
+
+Stage Summary:
+- "Your IP" now always shows the visitor's real public IPv4 (like ipnumberia/ipmyp) even on dual-stack networks where the browser connects over IPv6; IPv6 shown as secondary line; IPv6-only networks fall back to server connection IP.
+- Long IPv6 addresses wrap inside the hero card — no more horizontal overflow / broken layout (desktop + mobile RTL verified).
+- Deliverables refreshed: /home/z/my-project/download/myip/ + myip-github-repo.zip (v1.1.1, worker + static builds re-validated).

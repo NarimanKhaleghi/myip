@@ -25,28 +25,60 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useI18n } from "./i18n-provider";
-import { useDualStack, useLocalTime } from "./hooks";
+import { useLocalTime } from "./hooks";
 import { Shimmer } from "./ui-bits";
-import type { IPInfo } from "./types";
+import type { IPInfo, SelfIPState } from "./types";
 import { toast } from "@/hooks/use-toast";
 
 const GITHUB_URL = "https://github.com/NarimanKhaleghi/myip";
 
-export function Hero({ info, isLoading, isOwn }: { info?: IPInfo; isLoading: boolean; isOwn: boolean }) {
-  const { t, lang, countryName } = useI18n();
-  const dual = useDualStack(isOwn);
+/**
+ * Long addresses (a full IPv6 is up to 39 characters) must never overflow
+ * the slab or the page — the type scales down progressively and the value
+ * is allowed to wrap inside the button.
+ */
+function ipSlabClasses(ip: string | undefined): string {
+  const len = ip?.length ?? 0;
+  if (len <= 16)
+    return "text-4xl sm:text-6xl lg:text-7xl px-6 sm:px-10"; // IPv4
+  if (len <= 30)
+    return "text-3xl sm:text-5xl lg:text-6xl px-5 sm:px-8"; // short IPv6
+  return "text-[26px] leading-snug sm:text-4xl lg:text-5xl px-4 sm:px-6"; // full IPv6
+}
 
-  // When viewing someone else's IP, the hero shows that IP without dual-stack probing.
-  const ipv4 = isOwn ? dual.ipv4 ?? info?.ip : info?.ip;
-  const ipv6 = isOwn ? dual.ipv6 : undefined;
-  const bothSame = ipv4 && ipv6 && ipv4 === ipv6;
+export function Hero({
+  info,
+  isLoading,
+  isOwn,
+  self,
+}: {
+  info?: IPInfo;
+  isLoading: boolean;
+  isOwn: boolean;
+  self: SelfIPState;
+}) {
+  const { t, lang, countryName } = useI18n();
+
+  /*
+   * Primary address = the visitor's real public IPv4, probed client-side
+   * over IPv4-only endpoints (works even when the browser reached us over
+   * IPv6 on a dual-stack network). Falls back to the report IP — an
+   * explicit lookup, or the server's connection address (IPv6) on
+   * IPv6-only networks where no IPv4 route exists.
+   */
+  const mainIP = isOwn ? self.ipv4 ?? info?.ip : info?.ip;
+
+  /* The IPv6 hint line only adds information when it differs from the slab. */
+  const ipv6Line =
+    isOwn && self.ipv6 && self.ipv6 !== mainIP ? self.ipv6 : null;
+  const v6Pending = isOwn && !self.v6Ready;
 
   const localTime = useLocalTime(info?.timezone);
 
   const copyIP = async () => {
-    if (!ipv4) return;
+    if (!mainIP) return;
     try {
-      await navigator.clipboard.writeText(ipv4);
+      await navigator.clipboard.writeText(mainIP);
       toast({ title: t("ipCopied"), duration: 1800 });
     } catch {
       /* noop */
@@ -55,7 +87,7 @@ export function Hero({ info, isLoading, isOwn }: { info?: IPInfo; isLoading: boo
 
   const share = async () => {
     const url = `${window.location.origin}${info && !isOwn ? `/?ip=${info.ip}` : "/"}`;
-    const text = `${t("shareText")} — ${ipv4 ?? ""}`;
+    const text = `${t("shareText")} — ${mainIP ?? ""}`;
     if (navigator.share) {
       try {
         await navigator.share({ title: "myip.thepm.ir", text, url });
@@ -79,17 +111,20 @@ export function Hero({ info, isLoading, isOwn }: { info?: IPInfo; isLoading: boo
           {!isOwn && info?.ip && <code>{info.version ?? ""}</code>}
         </p>
 
-        {/* The big IP — technical mono slab */}
-        <div className="fade-in fade-in-1">
-          {isLoading || (!ipv4 && isOwn && dual.loading) ? (
+        {/* The big IP — technical mono slab (wrap-safe for long IPv6) */}
+        <div className="fade-in fade-in-1 max-w-full">
+          {!mainIP && isLoading ? (
             <Shimmer className="h-20 sm:h-28 w-3/4 mx-auto" />
-          ) : ipv4 ? (
+          ) : mainIP ? (
             <button
               onClick={copyIP}
-              className="group ip-mono num mx-auto block text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-foreground border-[2px] border-foreground bg-card px-6 sm:px-10 py-4 sm:py-6 shadow-[10px_10px_0_var(--shadow)] hover:shadow-[4px_4px_0_var(--shadow)] hover:translate-x-[6px] hover:translate-y-[6px] active:shadow-none active:translate-x-[10px] active:translate-y-[10px] transition-all duration-300 cursor-pointer"
+              dir="ltr"
+              className={`group ip-mono num mx-auto block max-w-full ${ipSlabClasses(
+                mainIP
+              )} font-bold tracking-tight text-foreground border-[2px] border-foreground bg-card py-4 sm:py-6 [overflow-wrap:anywhere] shadow-[10px_10px_0_var(--shadow)] hover:shadow-[4px_4px_0_var(--shadow)] hover:translate-x-[6px] hover:translate-y-[6px] active:shadow-none active:translate-x-[10px] active:translate-y-[10px] transition-all duration-300 cursor-pointer`}
               title={t("copy")}
             >
-              {ipv4}
+              {mainIP}
             </button>
           ) : (
             <p className="text-2xl font-bold">{t("ipNotFound")}</p>
@@ -98,14 +133,14 @@ export function Hero({ info, isLoading, isOwn }: { info?: IPInfo; isLoading: boo
 
         {/* IPv6 line */}
         {isOwn && (
-          <p className="mt-5 text-xs sm:text-sm text-muted-foreground fade-in fade-in-2">
-            {dual.loading
+          <p className="mt-5 text-xs sm:text-sm text-muted-foreground fade-in fade-in-2 max-w-full [overflow-wrap:anywhere]">
+            {v6Pending
               ? t("detecting")
-              : ipv6
+              : ipv6Line
               ? `${t("yourIPv6")}: `
               : t("ipv6NotDetected")}
-            {ipv6 && (
-              <span className="ip-mono num text-foreground/85">{bothSame ? `(${ipv6})` : ipv6}</span>
+            {ipv6Line && (
+              <span className="ip-mono num text-foreground/85">{ipv6Line}</span>
             )}
           </p>
         )}
@@ -148,12 +183,12 @@ export function Hero({ info, isLoading, isOwn }: { info?: IPInfo; isLoading: boo
 
         {/* Actions */}
         <div className="mt-8 flex items-center justify-center gap-2 sm:gap-3 fade-in fade-in-4 no-print">
-          <Button onClick={copyIP} disabled={!ipv4} size="lg" className="gap-2">
+          <Button onClick={copyIP} disabled={!mainIP} size="lg" className="gap-2">
             <Copy className="size-4" />
             {t("copy")}
           </Button>
 
-          <QrDialog ip={ipv4 ?? ""} />
+          <QrDialog ip={mainIP ?? ""} />
 
           <Button onClick={share} size="lg" variant="outline" className="gap-2">
             <Share2 className="size-4" />
@@ -243,9 +278,11 @@ function QrDialog({ ip }: { ip: string }) {
       </DialogTrigger>
       <DialogContent className="sm:max-w-sm">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <QrCode className="size-5" />
-            {t("qrCode")} — <span className="ip-mono num">{ip}</span>
+          <DialogTitle className="flex items-center gap-2 flex-wrap min-w-0">
+            <QrCode className="size-5 shrink-0" />
+            <span className="min-w-0 [overflow-wrap:anywhere]">
+              {t("qrCode")} — <span className="ip-mono num">{ip}</span>
+            </span>
           </DialogTitle>
           <DialogDescription className="sr-only">QR code for IP {ip}</DialogDescription>
         </DialogHeader>

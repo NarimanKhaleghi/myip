@@ -4,6 +4,34 @@ All notable changes to **myip** are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.1.1] — 2026-09-15
+
+### Fixed — true IPv4 detection on dual-stack networks & long-IP layout
+
+- **Wrong IP on dual-stack networks:** on networks where the browser prefers
+  IPv6 (common on mobile ISPs), the whole report was keyed to the visitor's
+  IPv6 address, because the server only sees the connection address
+  (`CF-Connecting-IP`). myip now probes the visitor's **real public IPv4 in
+  the browser** via six racing IPv4-only endpoints (`1.1.1.1/cdn-cgi/trace`,
+  `ipv4.icanhazip.com`, `api-ipv4.ip.sb`, `v4.ident.me`,
+  `ipv4.wtfismyip.com`, `api-ipv4.ipify.org`) and keys the entire own-IP
+  report to it — the same behaviour as classic IP tools. The IPv6 address is
+  detected separately (six v6-only endpoints) and shown as a secondary line;
+  IPv6-only networks fall back to the server's connection address.
+  - New `src/lib/self-ip.ts` — multi-source racing detector: first valid
+    answer wins, losing requests are aborted, 4 s timeout, module-level
+    cache, strict IPv4/IPv6 validation.
+  - `useDualStack` (single-source ipify, display-only) replaced by
+    `useSelfIP`; `useIPInfo` gained an `enabled` gate so the own-IP query
+    waits for detection instead of flashing an IPv6-keyed report first.
+- **Layout overflow with long addresses:** a full IPv6 (up to 39 characters)
+  pushed the hero IP card out of the viewport (left side on RTL) and broke
+  the page structure. The IP slab now scales its type by address length,
+  wraps with `overflow-wrap: anywhere`, is capped at `max-w-full` and forced
+  `dir="ltr"`, and the page gained an `overflow-x: clip` guard. Info rows,
+  copy chips, the QR dialog title and the compare-tool cards are wrap-safe
+  as well.
+
 ## [1.1.0] — 2026-09-15
 
 ### Added — GitHub Pages support & reproducible Cloudflare builds

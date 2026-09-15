@@ -147,6 +147,9 @@ html:not(.dark) {
     font-weight: 500;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    /* Long IP literals (IPv6 up to 39 chars) must never create horizontal
+       scroll. `clip` (not `hidden`) keeps position:sticky working. */
+    overflow-x: clip;
   }
   /* Inverted selection — pure mono */
   ::selection {
