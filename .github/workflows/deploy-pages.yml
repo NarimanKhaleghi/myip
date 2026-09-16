@@ -47,7 +47,7 @@ jobs:
           NEXT_PUBLIC_STATIC_BUILD: "1"
           # Base path = /<repo-name> for project pages (e.g. /myip).
           # Override here if you rename the repo or use a custom domain.
-          NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
+          NEXT_PUBLIC_BASE_PATH: ""
         run: |
           # Route handlers (the REST API) are server-only: they are excluded
           # from the static export — the static build talks to the public
