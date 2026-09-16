@@ -38,7 +38,7 @@
 
 ## 🌟 About The Project
 
-**myip** answers one question in a thousand ways: *what does the internet know about my IP address?*
+**myip** answers one question in a thousand ways: *what does the internet know about my IP address?* 
 
 Paste nothing to see your own public IPv4/IPv6 instantly — or search any IP address and get a complete intelligence report: geolocation on a live map, ASN/ISP details, proxy/VPN/hosting detection, DNSBL blacklist status, reverse DNS, IP formats (decimal/hex/binary), WebRTC leak testing and a public JSON API. Everything runs server-side on **Cloudflare Workers** — within milliseconds of your visitors, in 300+ cities.
 
