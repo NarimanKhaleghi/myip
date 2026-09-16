@@ -1,7 +1,5 @@
 <div align="center">
-
-<img src="public/logo.svg" width="380" alt="myip — black & white wordmark" />
-
+  
 # ⚫ myip — IP Intelligence in Black & White ⚪
 
 **Free, open-source, zero-tracking IP intelligence — running on Cloudflare's global edge.**
